@@ -21,6 +21,20 @@ struct ContentView: View {
     @State private var newFolderName = ""
 
     var body: some View {
+        TabView {
+            folderNavigationView
+                .tabItem {
+                    Label("Folders", systemImage: "folder")
+                }
+
+            SearchView()
+                .tabItem {
+                    Label("Search", systemImage: "magnifyingglass")
+                }
+        }
+    }
+
+    private var folderNavigationView: some View {
         NavigationSplitView {
             List(folders, selection: $selectedFolder) { folder in
                 Label {

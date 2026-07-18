@@ -19,6 +19,8 @@
 		92B5189E300B4699009FF0CB /* AppLockManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B5189D300B4696009FF0CB /* AppLockManager.swift */; };
 		92B518A0300B46B1009FF0CB /* LockScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B5189F300B46AD009FF0CB /* LockScreenView.swift */; };
 		92B518A2300B46C4009FF0CB /* SmartFolderTemplates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B518A1300B46C1009FF0CB /* SmartFolderTemplates.swift */; };
+		92B518A4300B52CD009FF0CB /* OCRService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B518A3300B52C5009FF0CB /* OCRService.swift */; };
+		92B518A6300B5636009FF0CB /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B518A5300B5633009FF0CB /* SearchView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +39,8 @@
 		92B5189D300B4696009FF0CB /* AppLockManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLockManager.swift; sourceTree = "<group>"; };
 		92B5189F300B46AD009FF0CB /* LockScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreenView.swift; sourceTree = "<group>"; };
 		92B518A1300B46C1009FF0CB /* SmartFolderTemplates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartFolderTemplates.swift; sourceTree = "<group>"; };
+		92B518A3300B52C5009FF0CB /* OCRService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRService.swift; sourceTree = "<group>"; };
+		92B518A5300B5633009FF0CB /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +88,7 @@
 			isa = PBXGroup;
 			children = (
 				92B51882300B4197009FF0CB /* ContentView.swift */,
+				92B518A5300B5633009FF0CB /* SearchView.swift */,
 				92B5189D300B4696009FF0CB /* AppLockManager.swift */,
 				92B5189F300B46AD009FF0CB /* LockScreenView.swift */,
 				92B51895300B4635009FF0CB /* FolderDetailView.swift */,
@@ -91,6 +96,7 @@
 				92B51899300B4663009FF0CB /* AttachmentDetailView.swift */,
 				92B5189B300B4682009FF0CB /* DocumentScannerView.swift */,
 				92B518A1300B46C1009FF0CB /* SmartFolderTemplates.swift */,
+				92B518A3300B52C5009FF0CB /* OCRService.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -187,9 +193,11 @@
 				92B51896300B4639009FF0CB /* FolderDetailView.swift in Sources */,
 				92B5189C300B4685009FF0CB /* DocumentScannerView.swift in Sources */,
 				92B51898300B464E009FF0CB /* ItemDetailView.swift in Sources */,
+				92B518A4300B52CD009FF0CB /* OCRService.swift in Sources */,
 				92B518A0300B46B1009FF0CB /* LockScreenView.swift in Sources */,
 				92B5188D300B4197009FF0CB /* PersistenceController.swift in Sources */,
 				92B5189A300B4667009FF0CB /* AttachmentDetailView.swift in Sources */,
+				92B518A6300B5636009FF0CB /* SearchView.swift in Sources */,
 				92B5189E300B4699009FF0CB /* AppLockManager.swift in Sources */,
 				92B5188E300B4197009FF0CB /* VaultUltra.xcdatamodeld in Sources */,
 				92B51894300B4600009FF0CB /* VaultUltraApp.swift in Sources */,

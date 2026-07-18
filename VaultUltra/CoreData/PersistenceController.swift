@@ -13,7 +13,7 @@ struct PersistenceController {
     let container: NSPersistentCloudKitContainer
 
     init(inMemory: Bool = false) {
-        container = NSPersistentCloudKitContainer(name: "vault")
+        container = NSPersistentCloudKitContainer(name: "VaultUltra")
 
         if inMemory {
             container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
@@ -26,7 +26,7 @@ struct PersistenceController {
             description.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
 
             description.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(
-                containerIdentifier: "iCloud.com.yourname.vault"
+                containerIdentifier: "iCloud.com.cabohut.VaultUltra"
             )
         }
 

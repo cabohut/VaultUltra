@@ -39,7 +39,7 @@ struct ItemDetailView: View {
                 ForEach(attachments) { attachment in
                     NavigationLink(value: attachment) {
                         HStack {
-                            Image(systemName: "doc.fill")
+                            Image(systemName: attachment.ocrText?.isEmpty == false ? "doc.text.fill" : "doc.fill")
                             Text(attachment.fileName ?? "Attachment")
                         }
                     }
@@ -110,9 +110,13 @@ struct ItemDetailView: View {
         }
 
         selectedPhoto = nil
+
+        await runOCR(on: attachment, imageData: data)
     }
 
     private func saveScannedPages(_ imageDataArray: [Data]) {
+        var savedAttachments: [(Attachment, Data)] = []
+
         for (index, data) in imageDataArray.enumerated() {
             let attachment = Attachment(context: viewContext)
             attachment.fileName = "Scan-\(UUID().uuidString.prefix(6))-\(index + 1).jpg"
@@ -120,12 +124,30 @@ struct ItemDetailView: View {
             attachment.fileData = data
             attachment.createdDate = Date()
             attachment.item = item
+            savedAttachments.append((attachment, data))
         }
 
         do {
             try viewContext.save()
         } catch {
             print("Failed to save scanned pages: \(error)")
+        }
+
+        Task {
+            for (attachment, data) in savedAttachments {
+                await runOCR(on: attachment, imageData: data)
+            }
+        }
+    }
+    
+    private func runOCR(on attachment: Attachment, imageData: Data) async {
+        guard let text = await OCRService.recognizeText(in: imageData), !text.isEmpty else { return }
+
+        attachment.ocrText = text
+        do {
+            try viewContext.save()
+        } catch {
+            print("Failed to save OCR text: \(error)")
         }
     }
 }
