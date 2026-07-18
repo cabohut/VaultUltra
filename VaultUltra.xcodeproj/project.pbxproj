@@ -6,30 +6,38 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		92B5188A300B4197009FF0CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 92B51881300B4197009FF0CB /* Assets.xcassets */; };
+		92B5188C300B4197009FF0CB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B51882300B4197009FF0CB /* ContentView.swift */; };
+		92B5188D300B4197009FF0CB /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B51884300B4197009FF0CB /* PersistenceController.swift */; };
+		92B5188E300B4197009FF0CB /* VaultUltra.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 92B51886300B4197009FF0CB /* VaultUltra.xcdatamodeld */; };
+		92B51894300B4600009FF0CB /* VaultUltraApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B51893300B45FA009FF0CB /* VaultUltraApp.swift */; };
+		92B51896300B4639009FF0CB /* FolderDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B51895300B4635009FF0CB /* FolderDetailView.swift */; };
+		92B51898300B464E009FF0CB /* ItemDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B51897300B464C009FF0CB /* ItemDetailView.swift */; };
+		92B5189A300B4667009FF0CB /* AttachmentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B51899300B4663009FF0CB /* AttachmentDetailView.swift */; };
+		92B5189C300B4685009FF0CB /* DocumentScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B5189B300B4682009FF0CB /* DocumentScannerView.swift */; };
+		92B5189E300B4699009FF0CB /* AppLockManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B5189D300B4696009FF0CB /* AppLockManager.swift */; };
+		92B518A0300B46B1009FF0CB /* LockScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B5189F300B46AD009FF0CB /* LockScreenView.swift */; };
+		92B518A2300B46C4009FF0CB /* SmartFolderTemplates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B518A1300B46C1009FF0CB /* SmartFolderTemplates.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		92B5186B300B4182009FF0CB /* VaultUltra.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VaultUltra.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		92B51881300B4197009FF0CB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		92B51882300B4197009FF0CB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		92B51883300B4197009FF0CB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		92B51884300B4197009FF0CB /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
+		92B51885300B4197009FF0CB /* VaultUltra.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VaultUltra.entitlements; sourceTree = "<group>"; };
+		92B51889300B4197009FF0CB /* VaultUltra.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = VaultUltra.xcdatamodel; sourceTree = "<group>"; };
+		92B51893300B45FA009FF0CB /* VaultUltraApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultUltraApp.swift; sourceTree = "<group>"; };
+		92B51895300B4635009FF0CB /* FolderDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderDetailView.swift; sourceTree = "<group>"; };
+		92B51897300B464C009FF0CB /* ItemDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailView.swift; sourceTree = "<group>"; };
+		92B51899300B4663009FF0CB /* AttachmentDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentDetailView.swift; sourceTree = "<group>"; };
+		92B5189B300B4682009FF0CB /* DocumentScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentScannerView.swift; sourceTree = "<group>"; };
+		92B5189D300B4696009FF0CB /* AppLockManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLockManager.swift; sourceTree = "<group>"; };
+		92B5189F300B46AD009FF0CB /* LockScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreenView.swift; sourceTree = "<group>"; };
+		92B518A1300B46C1009FF0CB /* SmartFolderTemplates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartFolderTemplates.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		92B5187B300B4183009FF0CB /* Exceptions for "VaultUltra" folder in "VaultUltra" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = 92B5186A300B4182009FF0CB /* VaultUltra */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		92B5186D300B4182009FF0CB /* VaultUltra */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				92B5187B300B4183009FF0CB /* Exceptions for "VaultUltra" folder in "VaultUltra" target */,
-			);
-			path = VaultUltra;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		92B51868300B4182009FF0CB /* Frameworks */ = {
@@ -45,7 +53,7 @@
 		92B51862300B4182009FF0CB = {
 			isa = PBXGroup;
 			children = (
-				92B5186D300B4182009FF0CB /* VaultUltra */,
+				92B51888300B4197009FF0CB /* VaultUltra */,
 				92B5186C300B4182009FF0CB /* Products */,
 			);
 			sourceTree = "<group>";
@@ -56,6 +64,51 @@
 				92B5186B300B4182009FF0CB /* VaultUltra.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		92B51888300B4197009FF0CB /* VaultUltra */ = {
+			isa = PBXGroup;
+			children = (
+				92B51883300B4197009FF0CB /* Info.plist */,
+				92B51881300B4197009FF0CB /* Assets.xcassets */,
+				92B51885300B4197009FF0CB /* VaultUltra.entitlements */,
+				92B51886300B4197009FF0CB /* VaultUltra.xcdatamodeld */,
+				92B51892300B4262009FF0CB /* CoreData */,
+				92B51891300B41AB009FF0CB /* App */,
+				92B51890300B419E009FF0CB /* Views */,
+			);
+			path = VaultUltra;
+			sourceTree = "<group>";
+		};
+		92B51890300B419E009FF0CB /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				92B51882300B4197009FF0CB /* ContentView.swift */,
+				92B5189D300B4696009FF0CB /* AppLockManager.swift */,
+				92B5189F300B46AD009FF0CB /* LockScreenView.swift */,
+				92B51895300B4635009FF0CB /* FolderDetailView.swift */,
+				92B51897300B464C009FF0CB /* ItemDetailView.swift */,
+				92B51899300B4663009FF0CB /* AttachmentDetailView.swift */,
+				92B5189B300B4682009FF0CB /* DocumentScannerView.swift */,
+				92B518A1300B46C1009FF0CB /* SmartFolderTemplates.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		92B51891300B41AB009FF0CB /* App */ = {
+			isa = PBXGroup;
+			children = (
+				92B51893300B45FA009FF0CB /* VaultUltraApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		92B51892300B4262009FF0CB /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				92B51884300B4197009FF0CB /* PersistenceController.swift */,
+			);
+			path = CoreData;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -72,9 +125,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				92B5186D300B4182009FF0CB /* VaultUltra */,
 			);
 			name = VaultUltra;
 			packageProductDependencies = (
@@ -122,6 +172,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				92B5188A300B4197009FF0CB /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -132,6 +183,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				92B5188C300B4197009FF0CB /* ContentView.swift in Sources */,
+				92B51896300B4639009FF0CB /* FolderDetailView.swift in Sources */,
+				92B5189C300B4685009FF0CB /* DocumentScannerView.swift in Sources */,
+				92B51898300B464E009FF0CB /* ItemDetailView.swift in Sources */,
+				92B518A0300B46B1009FF0CB /* LockScreenView.swift in Sources */,
+				92B5188D300B4197009FF0CB /* PersistenceController.swift in Sources */,
+				92B5189A300B4667009FF0CB /* AttachmentDetailView.swift in Sources */,
+				92B5189E300B4699009FF0CB /* AppLockManager.swift in Sources */,
+				92B5188E300B4197009FF0CB /* VaultUltra.xcdatamodeld in Sources */,
+				92B51894300B4600009FF0CB /* VaultUltraApp.swift in Sources */,
+				92B518A2300B46C4009FF0CB /* SmartFolderTemplates.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -150,11 +212,13 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VaultUltra/Info.plist;
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "\"Vault uses Face ID to protect access to your personal information.\"";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -184,11 +248,13 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VaultUltra/Info.plist;
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "\"Vault uses Face ID to protect access to your personal information.\"";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -349,6 +415,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		92B51886300B4197009FF0CB /* VaultUltra.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				92B51889300B4197009FF0CB /* VaultUltra.xcdatamodel */,
+			);
+			currentVersion = 92B51889300B4197009FF0CB /* VaultUltra.xcdatamodel */;
+			path = VaultUltra.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 92B51863300B4182009FF0CB /* Project object */;
 }
