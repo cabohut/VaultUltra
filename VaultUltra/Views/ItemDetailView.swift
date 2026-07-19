@@ -14,9 +14,15 @@ struct ItemDetailView: View {
     @ObservedObject var item: Item
 
     @FetchRequest private var attachments: FetchedResults<Attachment>
+    @FetchRequest private var customFields: FetchedResults<CustomField>
 
     @State private var selectedPhoto: PhotosPickerItem?
     @State private var isShowingScanner = false
+    @State private var isShowingAddField = false
+
+    @State private var isExtractingFields = false
+    @State private var extractionSuggestions: [ExtractedField]?
+    @State private var extractionError: String?
 
     init(item: Item) {
         self.item = item
@@ -24,46 +30,24 @@ struct ItemDetailView: View {
             sortDescriptors: [NSSortDescriptor(keyPath: \Attachment.createdDate, ascending: true)],
             predicate: NSPredicate(format: "item == %@", item)
         )
+        _customFields = FetchRequest(
+            sortDescriptors: [NSSortDescriptor(keyPath: \CustomField.key, ascending: true)],
+            predicate: NSPredicate(format: "item == %@", item)
+        )
     }
 
     var body: some View {
         Form {
-            Section("Details") {
-                Text(item.title ?? "Untitled")
-                if let type = item.itemType, !type.isEmpty {
-                    Text(type)
-                }
-            }
-
-            Section("Attachments") {
-                ForEach(attachments) { attachment in
-                    NavigationLink(value: attachment) {
-                        HStack {
-                            Image(systemName: attachment.ocrText?.isEmpty == false ? "doc.text.fill" : "doc.fill")
-                            Text(attachment.fileName ?? "Attachment")
-                        }
-                    }
-                }
-
-                PhotosPicker(selection: $selectedPhoto, matching: .images) {
-                    Label("Add Photo", systemImage: "photo")
-                }
-
-                Button {
-                    isShowingScanner = true
-                } label: {
-                    Label("Scan Document", systemImage: "doc.viewfinder")
-                }
-            }
+            detailsSection
+            customFieldsSection
+            attachmentsSection
         }
         .navigationTitle(item.title ?? "Item")
         .navigationDestination(for: Attachment.self) { attachment in
             AttachmentDetailView(attachment: attachment)
         }
-        .onChange(of: selectedPhoto) { _, newValue in
-            Task {
-                await loadAndSavePhoto(newValue)
-            }
+        .sheet(isPresented: $isShowingAddField) {
+            AddCustomFieldView(item: item)
         }
         .sheet(isPresented: $isShowingScanner) {
             DocumentScannerView(
@@ -77,7 +61,125 @@ struct ItemDetailView: View {
             )
             .ignoresSafeArea()
         }
+        .sheet(item: extractionSheetBinding) { wrapped in
+            ExtractionReviewView(item: item, suggestions: wrapped.fields)
+        }
+        .alert("Extraction Failed", isPresented: extractionErrorBinding) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(extractionError ?? "")
+        }
+        .overlay {
+            if isExtractingFields {
+                ProgressView("Extracting...")
+                    .padding()
+                    .background(.ultraThinMaterial)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+            }
+        }
+        .onChange(of: selectedPhoto) { _, newValue in
+            Task {
+                await loadAndSavePhoto(newValue)
+            }
+        }
     }
+
+    // MARK: - Sections
+
+    private var detailsSection: some View {
+        Section("Details") {
+            TextField("Title", text: titleBinding)
+
+            if let type = item.itemType, !type.isEmpty {
+                HStack {
+                    Text("Type")
+                    Spacer()
+                    Text(type)
+                        .foregroundStyle(.secondary)
+                }
+            }
+        }
+    }
+
+    private var customFieldsSection: some View {
+        Section("Custom Fields") {
+            ForEach(customFields) { field in
+                CustomFieldRow(field: field)
+            }
+
+            Button {
+                isShowingAddField = true
+            } label: {
+                Label("Add Field", systemImage: "plus.circle")
+            }
+        }
+    }
+
+    private var attachmentsSection: some View {
+        Section("Attachments") {
+            ForEach(attachments) { attachment in
+                NavigationLink(value: attachment) {
+                    HStack {
+                        Image(systemName: attachment.ocrText?.isEmpty == false ? "doc.text.fill" : "doc.fill")
+                        Text(attachment.fileName ?? "Attachment")
+                    }
+                }
+                .swipeActions(edge: .trailing) {
+                    if let ocrText = attachment.ocrText, !ocrText.isEmpty {
+                        Button {
+                            extractFields(from: ocrText)
+                        } label: {
+                            Label("Extract Info", systemImage: "sparkles")
+                        }
+                        .tint(.purple)
+                    }
+                }
+            }
+
+            PhotosPicker(selection: $selectedPhoto, matching: .images) {
+                Label("Add Photo", systemImage: "photo")
+            }
+
+            Button {
+                isShowingScanner = true
+            } label: {
+                Label("Scan Document", systemImage: "doc.viewfinder")
+            }
+        }
+    }
+
+    // MARK: - Bindings
+
+    private var titleBinding: Binding<String> {
+        Binding(
+            get: { item.title ?? "" },
+            set: { newValue in
+                item.title = newValue
+                item.modifiedDate = Date()
+                do {
+                    try viewContext.save()
+                } catch {
+                    print("Failed to save title: \(error)")
+                }
+            }
+        )
+    }
+
+    private var extractionSheetBinding: Binding<IdentifiableSuggestions?> {
+        Binding(
+            get: { extractionSuggestions.map { IdentifiableSuggestions(fields: $0) } },
+            set: { _ in extractionSuggestions = nil }
+        )
+    }
+
+    private var extractionErrorBinding: Binding<Bool> {
+        Binding(
+            get: { extractionError != nil },
+            set: { _ in extractionError = nil }
+        )
+    }
+
+    // MARK: - Attachment saving
 
     private func loadAndSavePhoto(_ pickerItem: PhotosPickerItem?) async {
         guard let pickerItem else { return }
@@ -139,7 +241,7 @@ struct ItemDetailView: View {
             }
         }
     }
-    
+
     private func runOCR(on attachment: Attachment, imageData: Data) async {
         guard let text = await OCRService.recognizeText(in: imageData), !text.isEmpty else { return }
 
@@ -150,4 +252,34 @@ struct ItemDetailView: View {
             print("Failed to save OCR text: \(error)")
         }
     }
+
+    // MARK: - AI extraction
+
+    private func extractFields(from ocrText: String) {
+        isExtractingFields = true
+        let existingKeys = customFields.compactMap { $0.key }
+
+        Task {
+            do {
+                let results = try await ClaudeExtractionService.extractFields(
+                    from: ocrText,
+                    existingFieldKeys: existingKeys
+                )
+                await MainActor.run {
+                    isExtractingFields = false
+                    extractionSuggestions = results
+                }
+            } catch {
+                await MainActor.run {
+                    isExtractingFields = false
+                    extractionError = error.localizedDescription
+                }
+            }
+        }
+    }
+}
+
+private struct IdentifiableSuggestions: Identifiable {
+    let id = UUID()
+    let fields: [ExtractedField]
 }

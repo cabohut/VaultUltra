@@ -14,8 +14,8 @@ struct FolderDetailView: View {
 
     @FetchRequest private var items: FetchedResults<Item>
 
-    @State private var isShowingNewItemAlert = false
-    @State private var newItemTitle = ""
+    @State private var isShowingNewItemSheet = false
+    @State private var prefilledSuggestionTitle: String?
 
     init(folder: Folder) {
         self.folder = folder
@@ -36,25 +36,25 @@ struct FolderDetailView: View {
                 Section("Suggested Items") {
                     ForEach(pendingSuggestionsList, id: \.self) { suggestion in
                         Button {
-                            addItem(title: suggestion)
-                            removeSuggestion(suggestion)
+                            prefilledSuggestionTitle = suggestion
+                            isShowingNewItemSheet = true
                         } label: {
                             Label(suggestion, systemImage: "plus.circle")
+                        }
+                        .swipeActions(edge: .trailing) {
+                            Button("Skip", role: .destructive) {
+                                removeSuggestion(suggestion)
+                            }
                         }
                     }
                 }
             }
 
-            Section(folder.isSmartFolder ? "Items" : "") {
-                ForEach(items) { item in
-                    NavigationLink(value: item) {
-                        VStack(alignment: .leading) {
+            ForEach(groupedItems, id: \.type) { group in
+                Section(group.type) {
+                    ForEach(group.items) { item in
+                        NavigationLink(value: item) {
                             Text(item.title ?? "Untitled Item")
-                            if let type = item.itemType, !type.isEmpty {
-                                Text(type)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
                         }
                     }
                 }
@@ -67,23 +67,23 @@ struct FolderDetailView: View {
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {
-                    isShowingNewItemAlert = true
+                    prefilledSuggestionTitle = nil
+                    isShowingNewItemSheet = true
                 } label: {
                     Label("New Item", systemImage: "plus")
                 }
             }
         }
-        .alert("New Item", isPresented: $isShowingNewItemAlert) {
-            TextField("Item title", text: $newItemTitle)
-            Button("Cancel", role: .cancel) {
-                newItemTitle = ""
-            }
-            Button("Create") {
-                addItem(title: newItemTitle)
-                newItemTitle = ""
-            }
-        } message: {
-            Text("Enter a name for this item")
+        .sheet(isPresented: $isShowingNewItemSheet) {
+            NewItemView(
+                folder: folder,
+                prefilledTitle: prefilledSuggestionTitle,
+                onItemCreated: {
+                    if let suggestion = prefilledSuggestionTitle {
+                        removeSuggestion(suggestion)
+                    }
+                }
+            )
         }
         .overlay {
             if items.isEmpty && pendingSuggestionsList.isEmpty {
@@ -92,24 +92,6 @@ struct FolderDetailView: View {
                     systemImage: "tray",
                     description: Text("Tap + to add your first item to this folder.")
                 )
-            }
-        }
-    }
-
-    private func addItem(title: String) {
-        let trimmed = title.trimmingCharacters(in: .whitespaces)
-        guard !trimmed.isEmpty else { return }
-        withAnimation {
-            let item = Item(context: viewContext)
-            item.title = trimmed
-            item.createdDate = Date()
-            item.modifiedDate = Date()
-            item.addToFolders(folder)
-
-            do {
-                try viewContext.save()
-            } catch {
-                print("Failed to save item: \(error)")
             }
         }
     }
@@ -123,5 +105,18 @@ struct FolderDetailView: View {
         } catch {
             print("Failed to update suggestions: \(error)")
         }
+    }
+    
+    private var groupedItems: [(type: String, items: [Item])] {
+        let grouped = Dictionary(grouping: items) { item in
+            item.itemType?.isEmpty == false ? item.itemType! : "Other"
+        }
+        return grouped
+            .sorted { lhs, rhs in
+                if lhs.key == "Other" { return false }
+                if rhs.key == "Other" { return true }
+                return lhs.key < rhs.key
+            }
+            .map { (type: $0.key, items: $0.value.sorted { ($0.title ?? "") < ($1.title ?? "") }) }
     }
 }

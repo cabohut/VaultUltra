@@ -2,17 +2,18 @@
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="24902" systemVersion="25E253" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
     <entity name="Attachment" representedClassName="Attachment" syncable="YES" codeGenerationType="class">
         <attribute name="createdDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="fileData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="fileData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" allowsCloudEncryption="YES"/>
         <attribute name="fileName" optional="YES" attributeType="String"/>
         <attribute name="mimeType" optional="YES" attributeType="String"/>
-        <attribute name="ocrText" optional="YES" attributeType="String"/>
+        <attribute name="ocrText" optional="YES" attributeType="String" allowsCloudEncryption="YES"/>
         <attribute name="thumbnailData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <relationship name="item" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Item" inverseName="attachments" inverseEntity="Item"/>
     </entity>
     <entity name="CustomField" representedClassName="CustomField" syncable="YES" codeGenerationType="class">
         <attribute name="fieldType" optional="YES" attributeType="String"/>
+        <attribute name="isSensitive" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="key" optional="YES" attributeType="String"/>
-        <attribute name="stringValue" optional="YES" attributeType="String"/>
+        <attribute name="stringValue" optional="YES" attributeType="String" allowsCloudEncryption="YES"/>
         <relationship name="item" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Item" inverseName="customFields" inverseEntity="Item"/>
     </entity>
     <entity name="Folder" representedClassName="Folder" syncable="YES" codeGenerationType="class">
@@ -28,8 +29,8 @@
         <attribute name="createdDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="itemType" optional="YES" attributeType="String"/>
         <attribute name="modifiedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="notes" optional="YES" attributeType="String"/>
-        <attribute name="title" optional="YES" attributeType="String"/>
+        <attribute name="notes" optional="YES" attributeType="String" allowsCloudEncryption="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" allowsCloudEncryption="YES"/>
         <relationship name="attachments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Attachment" inverseName="item" inverseEntity="Attachment"/>
         <relationship name="customFields" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CustomField" inverseName="item" inverseEntity="CustomField"/>
         <relationship name="folders" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Folder" inverseName="items" inverseEntity="Folder"/>

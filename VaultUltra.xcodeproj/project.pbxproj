@@ -21,6 +21,16 @@
 		92B518A2300B46C4009FF0CB /* SmartFolderTemplates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B518A1300B46C1009FF0CB /* SmartFolderTemplates.swift */; };
 		92B518A4300B52CD009FF0CB /* OCRService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B518A3300B52C5009FF0CB /* OCRService.swift */; };
 		92B518A6300B5636009FF0CB /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B518A5300B5633009FF0CB /* SearchView.swift */; };
+		92B518A8300B5C5D009FF0CB /* CustomFieldType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B518A7300B5C52009FF0CB /* CustomFieldType.swift */; };
+		92B518AA300B5C76009FF0CB /* CustomField+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B518A9300B5C72009FF0CB /* CustomField+Extensions.swift */; };
+		92B518AC300B5C96009FF0CB /* CustomFieldRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B518AB300B5C93009FF0CB /* CustomFieldRow.swift */; };
+		92B518AE300B5CAB009FF0CB /* AddCustomFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B518AD300B5CA8009FF0CB /* AddCustomFieldView.swift */; };
+		92B518B0300B5FDF009FF0CB /* ItemTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B518AF300B5FDC009FF0CB /* ItemTemplate.swift */; };
+		92B518B2300B6004009FF0CB /* NewItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B518B1300B6001009FF0CB /* NewItemView.swift */; };
+		92B518B6300B68EE009FF0CB /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B518B5300B68EC009FF0CB /* KeychainService.swift */; };
+		92B518B8300B6931009FF0CB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B518B7300B692E009FF0CB /* SettingsView.swift */; };
+		92B518BA300C842F009FF0CB /* ClaudeExtractionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B518B9300C842C009FF0CB /* ClaudeExtractionService.swift */; };
+		92B518BC300C8471009FF0CB /* ExtractionReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B518BB300C846C009FF0CB /* ExtractionReviewView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +51,16 @@
 		92B518A1300B46C1009FF0CB /* SmartFolderTemplates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartFolderTemplates.swift; sourceTree = "<group>"; };
 		92B518A3300B52C5009FF0CB /* OCRService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRService.swift; sourceTree = "<group>"; };
 		92B518A5300B5633009FF0CB /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		92B518A7300B5C52009FF0CB /* CustomFieldType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFieldType.swift; sourceTree = "<group>"; };
+		92B518A9300B5C72009FF0CB /* CustomField+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CustomField+Extensions.swift"; sourceTree = "<group>"; };
+		92B518AB300B5C93009FF0CB /* CustomFieldRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFieldRow.swift; sourceTree = "<group>"; };
+		92B518AD300B5CA8009FF0CB /* AddCustomFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCustomFieldView.swift; sourceTree = "<group>"; };
+		92B518AF300B5FDC009FF0CB /* ItemTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemTemplate.swift; sourceTree = "<group>"; };
+		92B518B1300B6001009FF0CB /* NewItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewItemView.swift; sourceTree = "<group>"; };
+		92B518B5300B68EC009FF0CB /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
+		92B518B7300B692E009FF0CB /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		92B518B9300C842C009FF0CB /* ClaudeExtractionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeExtractionService.swift; sourceTree = "<group>"; };
+		92B518BB300C846C009FF0CB /* ExtractionReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtractionReviewView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +107,7 @@
 		92B51890300B419E009FF0CB /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				92B518B7300B692E009FF0CB /* SettingsView.swift */,
 				92B51882300B4197009FF0CB /* ContentView.swift */,
 				92B518A5300B5633009FF0CB /* SearchView.swift */,
 				92B5189D300B4696009FF0CB /* AppLockManager.swift */,
@@ -95,8 +116,7 @@
 				92B51897300B464C009FF0CB /* ItemDetailView.swift */,
 				92B51899300B4663009FF0CB /* AttachmentDetailView.swift */,
 				92B5189B300B4682009FF0CB /* DocumentScannerView.swift */,
-				92B518A1300B46C1009FF0CB /* SmartFolderTemplates.swift */,
-				92B518A3300B52C5009FF0CB /* OCRService.swift */,
+				92B518B1300B6001009FF0CB /* NewItemView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -104,7 +124,17 @@
 		92B51891300B41AB009FF0CB /* App */ = {
 			isa = PBXGroup;
 			children = (
+				92B518BB300C846C009FF0CB /* ExtractionReviewView.swift */,
+				92B518B9300C842C009FF0CB /* ClaudeExtractionService.swift */,
+				92B518B5300B68EC009FF0CB /* KeychainService.swift */,
 				92B51893300B45FA009FF0CB /* VaultUltraApp.swift */,
+				92B518AD300B5CA8009FF0CB /* AddCustomFieldView.swift */,
+				92B518A7300B5C52009FF0CB /* CustomFieldType.swift */,
+				92B518A9300B5C72009FF0CB /* CustomField+Extensions.swift */,
+				92B518AB300B5C93009FF0CB /* CustomFieldRow.swift */,
+				92B518A3300B52C5009FF0CB /* OCRService.swift */,
+				92B518A1300B46C1009FF0CB /* SmartFolderTemplates.swift */,
+				92B518AF300B5FDC009FF0CB /* ItemTemplate.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -189,15 +219,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				92B518B8300B6931009FF0CB /* SettingsView.swift in Sources */,
 				92B5188C300B4197009FF0CB /* ContentView.swift in Sources */,
 				92B51896300B4639009FF0CB /* FolderDetailView.swift in Sources */,
 				92B5189C300B4685009FF0CB /* DocumentScannerView.swift in Sources */,
+				92B518BA300C842F009FF0CB /* ClaudeExtractionService.swift in Sources */,
 				92B51898300B464E009FF0CB /* ItemDetailView.swift in Sources */,
 				92B518A4300B52CD009FF0CB /* OCRService.swift in Sources */,
 				92B518A0300B46B1009FF0CB /* LockScreenView.swift in Sources */,
+				92B518B2300B6004009FF0CB /* NewItemView.swift in Sources */,
+				92B518B0300B5FDF009FF0CB /* ItemTemplate.swift in Sources */,
+				92B518AC300B5C96009FF0CB /* CustomFieldRow.swift in Sources */,
+				92B518AA300B5C76009FF0CB /* CustomField+Extensions.swift in Sources */,
+				92B518AE300B5CAB009FF0CB /* AddCustomFieldView.swift in Sources */,
 				92B5188D300B4197009FF0CB /* PersistenceController.swift in Sources */,
 				92B5189A300B4667009FF0CB /* AttachmentDetailView.swift in Sources */,
+				92B518B6300B68EE009FF0CB /* KeychainService.swift in Sources */,
+				92B518BC300C8471009FF0CB /* ExtractionReviewView.swift in Sources */,
 				92B518A6300B5636009FF0CB /* SearchView.swift in Sources */,
+				92B518A8300B5C5D009FF0CB /* CustomFieldType.swift in Sources */,
 				92B5189E300B4699009FF0CB /* AppLockManager.swift in Sources */,
 				92B5188E300B4197009FF0CB /* VaultUltra.xcdatamodeld in Sources */,
 				92B51894300B4600009FF0CB /* VaultUltraApp.swift in Sources */,
