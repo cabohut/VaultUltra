@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		92989CA1300CA84C0034AD5D /* ItemFieldTemplates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92989CA0300CA8480034AD5D /* ItemFieldTemplates.swift */; };
 		92B5188A300B4197009FF0CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 92B51881300B4197009FF0CB /* Assets.xcassets */; };
 		92B5188C300B4197009FF0CB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B51882300B4197009FF0CB /* ContentView.swift */; };
 		92B5188D300B4197009FF0CB /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B51884300B4197009FF0CB /* PersistenceController.swift */; };
@@ -25,7 +26,6 @@
 		92B518AA300B5C76009FF0CB /* CustomField+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B518A9300B5C72009FF0CB /* CustomField+Extensions.swift */; };
 		92B518AC300B5C96009FF0CB /* CustomFieldRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B518AB300B5C93009FF0CB /* CustomFieldRow.swift */; };
 		92B518AE300B5CAB009FF0CB /* AddCustomFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B518AD300B5CA8009FF0CB /* AddCustomFieldView.swift */; };
-		92B518B0300B5FDF009FF0CB /* ItemTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B518AF300B5FDC009FF0CB /* ItemTemplate.swift */; };
 		92B518B2300B6004009FF0CB /* NewItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B518B1300B6001009FF0CB /* NewItemView.swift */; };
 		92B518B6300B68EE009FF0CB /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B518B5300B68EC009FF0CB /* KeychainService.swift */; };
 		92B518B8300B6931009FF0CB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B518B7300B692E009FF0CB /* SettingsView.swift */; };
@@ -34,7 +34,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		92B5186B300B4182009FF0CB /* VaultUltra.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VaultUltra.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		92989CA0300CA8480034AD5D /* ItemFieldTemplates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemFieldTemplates.swift; sourceTree = "<group>"; };
+		92989CA9300DD44D0034AD5D /* VaultUltra.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VaultUltra.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92B51881300B4197009FF0CB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		92B51882300B4197009FF0CB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		92B51883300B4197009FF0CB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -55,7 +56,6 @@
 		92B518A9300B5C72009FF0CB /* CustomField+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CustomField+Extensions.swift"; sourceTree = "<group>"; };
 		92B518AB300B5C93009FF0CB /* CustomFieldRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFieldRow.swift; sourceTree = "<group>"; };
 		92B518AD300B5CA8009FF0CB /* AddCustomFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCustomFieldView.swift; sourceTree = "<group>"; };
-		92B518AF300B5FDC009FF0CB /* ItemTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemTemplate.swift; sourceTree = "<group>"; };
 		92B518B1300B6001009FF0CB /* NewItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewItemView.swift; sourceTree = "<group>"; };
 		92B518B5300B68EC009FF0CB /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
 		92B518B7300B692E009FF0CB /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -74,20 +74,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		92989CA2300CAB7A0034AD5D /* Templates */ = {
+			isa = PBXGroup;
+			children = (
+				92B518A1300B46C1009FF0CB /* SmartFolderTemplates.swift */,
+				92B518B5300B68EC009FF0CB /* KeychainService.swift */,
+				92989CA0300CA8480034AD5D /* ItemFieldTemplates.swift */,
+			);
+			path = Templates;
+			sourceTree = "<group>";
+		};
+		92989CA4300CAB9B0034AD5D /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				92B5189D300B4696009FF0CB /* AppLockManager.swift */,
+				92B518B9300C842C009FF0CB /* ClaudeExtractionService.swift */,
+				92B518A3300B52C5009FF0CB /* OCRService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		92B51862300B4182009FF0CB = {
 			isa = PBXGroup;
 			children = (
 				92B51888300B4197009FF0CB /* VaultUltra */,
-				92B5186C300B4182009FF0CB /* Products */,
+				92989CA9300DD44D0034AD5D /* VaultUltra.app */,
 			);
-			sourceTree = "<group>";
-		};
-		92B5186C300B4182009FF0CB /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				92B5186B300B4182009FF0CB /* VaultUltra.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		92B51888300B4197009FF0CB /* VaultUltra */ = {
@@ -99,6 +111,8 @@
 				92B51886300B4197009FF0CB /* VaultUltra.xcdatamodeld */,
 				92B51892300B4262009FF0CB /* CoreData */,
 				92B51891300B41AB009FF0CB /* App */,
+				92989CA2300CAB7A0034AD5D /* Templates */,
+				92989CA4300CAB9B0034AD5D /* Services */,
 				92B51890300B419E009FF0CB /* Views */,
 			);
 			path = VaultUltra;
@@ -107,16 +121,17 @@
 		92B51890300B419E009FF0CB /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				92B518B7300B692E009FF0CB /* SettingsView.swift */,
 				92B51882300B4197009FF0CB /* ContentView.swift */,
+				92B518B7300B692E009FF0CB /* SettingsView.swift */,
 				92B518A5300B5633009FF0CB /* SearchView.swift */,
-				92B5189D300B4696009FF0CB /* AppLockManager.swift */,
 				92B5189F300B46AD009FF0CB /* LockScreenView.swift */,
 				92B51895300B4635009FF0CB /* FolderDetailView.swift */,
 				92B51897300B464C009FF0CB /* ItemDetailView.swift */,
 				92B51899300B4663009FF0CB /* AttachmentDetailView.swift */,
 				92B5189B300B4682009FF0CB /* DocumentScannerView.swift */,
 				92B518B1300B6001009FF0CB /* NewItemView.swift */,
+				92B518AD300B5CA8009FF0CB /* AddCustomFieldView.swift */,
+				92B518BB300C846C009FF0CB /* ExtractionReviewView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -124,17 +139,10 @@
 		92B51891300B41AB009FF0CB /* App */ = {
 			isa = PBXGroup;
 			children = (
-				92B518BB300C846C009FF0CB /* ExtractionReviewView.swift */,
-				92B518B9300C842C009FF0CB /* ClaudeExtractionService.swift */,
-				92B518B5300B68EC009FF0CB /* KeychainService.swift */,
 				92B51893300B45FA009FF0CB /* VaultUltraApp.swift */,
-				92B518AD300B5CA8009FF0CB /* AddCustomFieldView.swift */,
 				92B518A7300B5C52009FF0CB /* CustomFieldType.swift */,
 				92B518A9300B5C72009FF0CB /* CustomField+Extensions.swift */,
 				92B518AB300B5C93009FF0CB /* CustomFieldRow.swift */,
-				92B518A3300B52C5009FF0CB /* OCRService.swift */,
-				92B518A1300B46C1009FF0CB /* SmartFolderTemplates.swift */,
-				92B518AF300B5FDC009FF0CB /* ItemTemplate.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -166,7 +174,7 @@
 			packageProductDependencies = (
 			);
 			productName = VaultUltra;
-			productReference = 92B5186B300B4182009FF0CB /* VaultUltra.app */;
+			productReference = 92989CA9300DD44D0034AD5D /* VaultUltra.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -194,7 +202,7 @@
 			mainGroup = 92B51862300B4182009FF0CB;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 92B5186C300B4182009FF0CB /* Products */;
+			productRefGroup = 92B51862300B4182009FF0CB;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -228,7 +236,6 @@
 				92B518A4300B52CD009FF0CB /* OCRService.swift in Sources */,
 				92B518A0300B46B1009FF0CB /* LockScreenView.swift in Sources */,
 				92B518B2300B6004009FF0CB /* NewItemView.swift in Sources */,
-				92B518B0300B5FDF009FF0CB /* ItemTemplate.swift in Sources */,
 				92B518AC300B5C96009FF0CB /* CustomFieldRow.swift in Sources */,
 				92B518AA300B5C76009FF0CB /* CustomField+Extensions.swift in Sources */,
 				92B518AE300B5CAB009FF0CB /* AddCustomFieldView.swift in Sources */,
@@ -240,6 +247,7 @@
 				92B518A8300B5C5D009FF0CB /* CustomFieldType.swift in Sources */,
 				92B5189E300B4699009FF0CB /* AppLockManager.swift in Sources */,
 				92B5188E300B4197009FF0CB /* VaultUltra.xcdatamodeld in Sources */,
+				92989CA1300CA84C0034AD5D /* ItemFieldTemplates.swift in Sources */,
 				92B51894300B4600009FF0CB /* VaultUltraApp.swift in Sources */,
 				92B518A2300B46C4009FF0CB /* SmartFolderTemplates.swift in Sources */,
 			);
@@ -264,8 +272,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -300,8 +308,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

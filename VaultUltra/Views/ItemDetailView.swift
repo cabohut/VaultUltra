@@ -24,6 +24,8 @@ struct ItemDetailView: View {
     @State private var extractionSuggestions: [ExtractedField]?
     @State private var extractionError: String?
 
+    @State private var isSensitiveRevealed = false
+    
     init(item: Item) {
         self.item = item
         _attachments = FetchRequest(
@@ -39,7 +41,6 @@ struct ItemDetailView: View {
     var body: some View {
         Form {
             detailsSection
-            customFieldsSection
             attachmentsSection
         }
         .navigationTitle(item.title ?? "Item")
@@ -87,24 +88,43 @@ struct ItemDetailView: View {
     // MARK: - Sections
 
     private var detailsSection: some View {
-        Section("Details") {
+        Section {
             TextField("Title", text: titleBinding)
 
-            if let type = item.itemType, !type.isEmpty {
-                HStack {
-                    Text("Type")
-                    Spacer()
-                    Text(type)
-                        .foregroundStyle(.secondary)
+            ForEach(customFields) { field in
+                CustomFieldRow(field: field, isRevealed: isSensitiveRevealed)
+            }
+
+            Button {
+                isShowingAddField = true
+            } label: {
+                Label("Add Field", systemImage: "plus.circle")
+            }
+        } header: {
+            HStack {
+                Text(item.itemType?.isEmpty == false ? item.itemType! : "Details")
+
+                Spacer()
+
+                if hasSensitiveFields {
+                    Button {
+                        isSensitiveRevealed.toggle()
+                    } label: {
+                        Image(systemName: isSensitiveRevealed ? "eye.slash" : "eye")
+                    }
                 }
             }
         }
     }
-
+    
+    private var hasSensitiveFields: Bool {
+        customFields.contains { $0.isSensitive }
+    }
+    
     private var customFieldsSection: some View {
         Section("Custom Fields") {
             ForEach(customFields) { field in
-                CustomFieldRow(field: field)
+                CustomFieldRow(field: field, isRevealed: isSensitiveRevealed)
             }
 
             Button {

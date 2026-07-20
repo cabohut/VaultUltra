@@ -12,6 +12,10 @@ struct SettingsView: View {
     @State private var isKeySaved = false
     @State private var showingDeleteConfirmation = false
 
+    #if DEBUG
+    @State private var showingResetConfirmation = false
+    #endif
+
     var body: some View {
         NavigationStack {
             Form {
@@ -37,6 +41,18 @@ struct SettingsView: View {
                 } footer: {
                     Text("Used only for AI-assisted field extraction from scanned documents. Stored securely on this device and never leaves it except to call Anthropic's API directly.")
                 }
+
+                #if DEBUG
+                Section {
+                    Button("Reset All Data", role: .destructive) {
+                        showingResetConfirmation = true
+                    }
+                } header: {
+                    Text("Debug")
+                } footer: {
+                    Text("Deletes all folders, items, attachments, and fields — locally and in CloudKit. Debug builds only.")
+                }
+                #endif
             }
             .navigationTitle("Settings")
             .onAppear {
@@ -53,6 +69,20 @@ struct SettingsView: View {
                 }
                 Button("Cancel", role: .cancel) {}
             }
+            #if DEBUG
+            .confirmationDialog(
+                "Delete all data?",
+                isPresented: $showingResetConfirmation,
+                titleVisibility: .visible
+            ) {
+                Button("Delete Everything", role: .destructive) {
+                    PersistenceController.shared.resetAllData()
+                }
+                Button("Cancel", role: .cancel) {}
+            } message: {
+                Text("This cannot be undone.")
+            }
+            #endif
         }
     }
 }

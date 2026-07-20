@@ -12,22 +12,30 @@ struct FolderDetailView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @ObservedObject var folder: Folder
 
-    @FetchRequest private var items: FetchedResults<Item>
-
     @State private var isShowingNewItemSheet = false
-    @State private var prefilledSuggestionTitle: String?
+    @State private var navigateToItem: Item?
 
-    init(folder: Folder) {
-        self.folder = folder
-        _items = FetchRequest(
-            sortDescriptors: [NSSortDescriptor(keyPath: \Item.title, ascending: true)],
-            predicate: NSPredicate(format: "ANY folders == %@", folder)
-        )
+    private var items: [Item] {
+        let set = folder.items as? Set<Item> ?? []
+        return set.sorted { ($0.title ?? "") < ($1.title ?? "") }
     }
 
     private var pendingSuggestionsList: [String] {
         guard let pending = folder.pendingSuggestions, !pending.isEmpty else { return [] }
         return pending.split(separator: ",").map(String.init)
+    }
+
+    private var groupedItems: [(type: String, items: [Item])] {
+        let grouped = Dictionary(grouping: items) { item in
+            item.itemType?.isEmpty == false ? item.itemType! : "Other"
+        }
+        return grouped
+            .sorted { lhs, rhs in
+                if lhs.key == "Other" { return false }
+                if rhs.key == "Other" { return true }
+                return lhs.key < rhs.key
+            }
+            .map { (type: $0.key, items: $0.value.sorted { ($0.title ?? "") < ($1.title ?? "") }) }
     }
 
     var body: some View {
@@ -36,8 +44,7 @@ struct FolderDetailView: View {
                 Section("Suggested Items") {
                     ForEach(pendingSuggestionsList, id: \.self) { suggestion in
                         Button {
-                            prefilledSuggestionTitle = suggestion
-                            isShowingNewItemSheet = true
+                            createItemFromSuggestion(suggestion)
                         } label: {
                             Label(suggestion, systemImage: "plus.circle")
                         }
@@ -53,21 +60,26 @@ struct FolderDetailView: View {
             ForEach(groupedItems, id: \.type) { group in
                 Section(group.type) {
                     ForEach(group.items) { item in
-                        NavigationLink(value: item) {
+                        Button {
+                            navigateToItem = item
+                        } label: {
                             Text(item.title ?? "Untitled Item")
+                                .foregroundStyle(.primary)
                         }
+                    }
+                    .onDelete { offsets in
+                        deleteItems(offsets, from: group.items)
                     }
                 }
             }
         }
         .navigationTitle(folder.name ?? "Folder")
-        .navigationDestination(for: Item.self) { item in
+        .navigationDestination(item: $navigateToItem) { item in
             ItemDetailView(item: item)
         }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {
-                    prefilledSuggestionTitle = nil
                     isShowingNewItemSheet = true
                 } label: {
                     Label("New Item", systemImage: "plus")
@@ -75,15 +87,9 @@ struct FolderDetailView: View {
             }
         }
         .sheet(isPresented: $isShowingNewItemSheet) {
-            NewItemView(
-                folder: folder,
-                prefilledTitle: prefilledSuggestionTitle,
-                onItemCreated: {
-                    if let suggestion = prefilledSuggestionTitle {
-                        removeSuggestion(suggestion)
-                    }
-                }
-            )
+            NewItemView(folder: folder) { createdItem in
+                navigateToItem = createdItem
+            }
         }
         .overlay {
             if items.isEmpty && pendingSuggestionsList.isEmpty {
@@ -93,6 +99,25 @@ struct FolderDetailView: View {
                     description: Text("Tap + to add your first item to this folder.")
                 )
             }
+        }
+    }
+
+    private func createItemFromSuggestion(_ suggestionTitle: String) {
+        let item = Item(context: viewContext)
+        item.title = ""
+        item.itemType = suggestionTitle
+        item.createdDate = Date()
+        item.modifiedDate = Date()
+        item.addToFolders(folder)
+
+        ItemFieldTemplates.applyFields(for: suggestionTitle, to: item, context: viewContext)
+
+        do {
+            try viewContext.save()
+            removeSuggestion(suggestionTitle)
+            navigateToItem = item
+        } catch {
+            print("Failed to create item from suggestion: \(error)")
         }
     }
 
@@ -106,17 +131,15 @@ struct FolderDetailView: View {
             print("Failed to update suggestions: \(error)")
         }
     }
-    
-    private var groupedItems: [(type: String, items: [Item])] {
-        let grouped = Dictionary(grouping: items) { item in
-            item.itemType?.isEmpty == false ? item.itemType! : "Other"
+
+    private func deleteItems(_ offsets: IndexSet, from groupItems: [Item]) {
+        for index in offsets {
+            viewContext.delete(groupItems[index])
         }
-        return grouped
-            .sorted { lhs, rhs in
-                if lhs.key == "Other" { return false }
-                if rhs.key == "Other" { return true }
-                return lhs.key < rhs.key
-            }
-            .map { (type: $0.key, items: $0.value.sorted { ($0.title ?? "") < ($1.title ?? "") }) }
+        do {
+            try viewContext.save()
+        } catch {
+            print("Failed to delete item: \(error)")
+        }
     }
 }

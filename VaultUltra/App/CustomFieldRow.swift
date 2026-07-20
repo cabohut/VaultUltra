@@ -10,7 +10,7 @@ import CoreData
 
 struct CustomFieldRow: View {
     @ObservedObject var field: CustomField
-    @State private var isRevealed = false
+    let isRevealed: Bool
 
     var body: some View {
         HStack {
@@ -23,18 +23,8 @@ struct CustomFieldRow: View {
                 SecureField("", text: bindingForField)
                     .multilineTextAlignment(.trailing)
             } else {
-                TextField("Value", text: bindingForField)
+                TextField("", text: bindingForField)
                     .multilineTextAlignment(.trailing)
-            }
-
-            if field.isSensitive {
-                Button {
-                    isRevealed.toggle()
-                } label: {
-                    Image(systemName: isRevealed ? "eye.slash" : "eye")
-                        .foregroundStyle(.secondary)
-                }
-                .buttonStyle(.plain)
             }
         }
     }

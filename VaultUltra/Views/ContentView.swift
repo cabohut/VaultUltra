@@ -41,23 +41,26 @@ struct ContentView: View {
 
     private var folderNavigationView: some View {
         NavigationSplitView {
-            List(folders, selection: $selectedFolder) { folder in
-                Label {
-                    VStack(alignment: .leading) {
-                        Text(folder.name ?? "Untitled Folder")
-                        if folder.isSmartFolder, let pending = folder.pendingSuggestions, !pending.isEmpty {
-                            let remaining = pending.split(separator: ",").count
-                            Text("\(remaining) suggested item\(remaining == 1 ? "" : "s") remaining")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
+            List(selection: $selectedFolder) {
+                ForEach(folders) { folder in
+                    Label {
+                        VStack(alignment: .leading) {
+                            Text(folder.name ?? "Untitled Folder")
+                            if folder.isSmartFolder, let pending = folder.pendingSuggestions, !pending.isEmpty {
+                                let remaining = pending.split(separator: ",").count
+                                Text("\(remaining) suggested item\(remaining == 1 ? "" : "s") remaining")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
                         }
+                    } icon: {
+                        Image(systemName: folder.icon ?? "folder")
                     }
-                } icon: {
-                    Image(systemName: folder.icon ?? "folder")
+                    .tag(folder)
                 }
-                .tag(folder)
+                .onDelete(perform: deleteFolder)
             }
-            .navigationTitle("Folders")
+           .navigationTitle("Folders")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
@@ -105,6 +108,17 @@ struct ContentView: View {
             } catch {
                 print("Failed to save folder: \(error)")
             }
+        }
+    }
+    
+    private func deleteFolder(at offsets: IndexSet) {
+        for index in offsets {
+            viewContext.delete(folders[index])
+        }
+        do {
+            try viewContext.save()
+        } catch {
+            print("Failed to delete folder: \(error)")
         }
     }
 }

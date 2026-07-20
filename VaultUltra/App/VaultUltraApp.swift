@@ -16,7 +16,7 @@ struct VaultUltraApp: App {
     init() {
         PersistenceController.shared.seedSmartFoldersIfNeeded()
     }
-
+    
     var body: some Scene {
         WindowGroup {
             ZStack {

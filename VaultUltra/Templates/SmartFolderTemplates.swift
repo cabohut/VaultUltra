@@ -46,4 +46,8 @@ enum SmartFolderTemplates {
             suggestedItems: ["Emergency Contacts", "Last Wishes", "Digital Accounts List", "Safe Deposit Box Info"]
         )
     ]
+    
+    static func template(forFolderName name: String) -> SmartFolderTemplate? {
+        all.first { $0.name == name }
+    }
 }
