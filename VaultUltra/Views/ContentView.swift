@@ -10,6 +10,7 @@ import CoreData
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    @EnvironmentObject private var persistenceController: PersistenceController
 
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Folder.sortOrder, ascending: true)],
@@ -19,6 +20,8 @@ struct ContentView: View {
     @State private var selectedFolder: Folder?
     @State private var isShowingNewFolderAlert = false
     @State private var newFolderName = ""
+    @State private var shareButtonFrame: CGRect = .zero
+    @State private var navigationPath = NavigationPath()
 
     var body: some View {
         TabView {
@@ -43,24 +46,12 @@ struct ContentView: View {
         NavigationSplitView {
             List(selection: $selectedFolder) {
                 ForEach(folders) { folder in
-                    Label {
-                        VStack(alignment: .leading) {
-                            Text(folder.name ?? "Untitled Folder")
-                            if folder.isSmartFolder, let pending = folder.pendingSuggestions, !pending.isEmpty {
-                                let remaining = pending.split(separator: ",").count
-                                Text("\(remaining) suggested item\(remaining == 1 ? "" : "s") remaining")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
-                    } icon: {
-                        Image(systemName: folder.icon ?? "folder")
-                    }
-                    .tag(folder)
+                    folderRow(folder)
+                        .tag(folder)
                 }
-                .onDelete(perform: deleteFolder)
+                .onDelete(perform: deleteFolders)
             }
-           .navigationTitle("Folders")
+            .navigationTitle("Folders")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
@@ -81,14 +72,57 @@ struct ContentView: View {
                 }
             }
         } detail: {
-            NavigationStack {
+            NavigationStack(path: $navigationPath) {
                 if let selectedFolder {
-                    FolderDetailView(folder: selectedFolder)
+                    FolderDetailView(folder: selectedFolder, navigationPath: $navigationPath)
                 } else {
                     Text("Select a folder")
                         .foregroundStyle(.secondary)
                 }
             }
+            .onChange(of: selectedFolder) { _, _ in
+                navigationPath = NavigationPath()
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func folderRow(_ folder: Folder) -> some View {
+        HStack {
+            Label {
+                VStack(alignment: .leading) {
+                    Text(folder.name ?? "Untitled Folder")
+                    if folder.isSmartFolder, let pending = folder.pendingSuggestions, !pending.isEmpty {
+                        let remaining = pending.split(separator: ",").count
+                        Text("\(remaining) suggested item\(remaining == 1 ? "" : "s") remaining")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            } icon: {
+                Image(systemName: folder.icon ?? "folder")
+            }
+
+            Spacer()
+
+            Button {
+                CloudSharingPresenter.present(
+                    folder: folder,
+                    persistentContainer: persistenceController.container,
+                    sourceRect: shareButtonFrame
+                )
+            } label: {
+                Image(systemName: "person.crop.circle.badge.plus")
+            }
+            .buttonStyle(.plain)
+            .background(
+                GeometryReader { geo in
+                    Color.clear
+                        .onAppear {
+                            shareButtonFrame = geo.frame(in: .global)
+                        }
+                }
+            )
         }
     }
 
@@ -110,8 +144,8 @@ struct ContentView: View {
             }
         }
     }
-    
-    private func deleteFolder(at offsets: IndexSet) {
+
+    private func deleteFolders(at offsets: IndexSet) {
         for index in offsets {
             viewContext.delete(folders[index])
         }

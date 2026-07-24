@@ -11,12 +11,15 @@ import CoreData
 struct SearchView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @State private var searchText = ""
+    @State private var navigationPath = NavigationPath()
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $navigationPath) {
             List {
                 ForEach(searchResults) { item in
-                    NavigationLink(value: item) {
+                    Button {
+                        navigationPath.append(item)
+                    } label: {
                         VStack(alignment: .leading) {
                             Text(item.title ?? "Untitled Item")
                             if let matchingSnippet = matchSnippet(for: item) {
@@ -27,11 +30,15 @@ struct SearchView: View {
                             }
                         }
                     }
+                    .buttonStyle(.plain)
                 }
             }
             .navigationTitle("Search")
             .navigationDestination(for: Item.self) { item in
-                ItemDetailView(item: item)
+                ItemDetailView(item: item, navigationPath: $navigationPath)
+            }
+            .navigationDestination(for: Attachment.self) { attachment in
+                AttachmentDetailView(attachment: attachment)
             }
             .searchable(text: $searchText, prompt: "Search items and documents")
             .overlay {

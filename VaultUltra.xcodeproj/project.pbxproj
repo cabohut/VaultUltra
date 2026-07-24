@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		92989CA1300CA84C0034AD5D /* ItemFieldTemplates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92989CA0300CA8480034AD5D /* ItemFieldTemplates.swift */; };
+		92989CC13011DDFC0034AD5D /* SharingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92989CC03011DDF60034AD5D /* SharingService.swift */; };
+		92989CC33011DE140034AD5D /* CloudSharingPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92989CC23011DE120034AD5D /* CloudSharingPresenter.swift */; };
+		92989CC53011DE2C0034AD5D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92989CC43011DE2A0034AD5D /* AppDelegate.swift */; };
+		92989CC73011E3470034AD5D /* ItemRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92989CC63011E3400034AD5D /* ItemRowView.swift */; };
+		92989CC93011E57C0034AD5D /* QuickLookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92989CC83011E5790034AD5D /* QuickLookView.swift */; };
 		92B5188A300B4197009FF0CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 92B51881300B4197009FF0CB /* Assets.xcassets */; };
 		92B5188C300B4197009FF0CB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B51882300B4197009FF0CB /* ContentView.swift */; };
 		92B5188D300B4197009FF0CB /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B51884300B4197009FF0CB /* PersistenceController.swift */; };
@@ -36,6 +41,11 @@
 /* Begin PBXFileReference section */
 		92989CA0300CA8480034AD5D /* ItemFieldTemplates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemFieldTemplates.swift; sourceTree = "<group>"; };
 		92989CA9300DD44D0034AD5D /* VaultUltra.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VaultUltra.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		92989CC03011DDF60034AD5D /* SharingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharingService.swift; sourceTree = "<group>"; };
+		92989CC23011DE120034AD5D /* CloudSharingPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSharingPresenter.swift; sourceTree = "<group>"; };
+		92989CC43011DE2A0034AD5D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		92989CC63011E3400034AD5D /* ItemRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemRowView.swift; sourceTree = "<group>"; };
+		92989CC83011E5790034AD5D /* QuickLookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLookView.swift; sourceTree = "<group>"; };
 		92B51881300B4197009FF0CB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		92B51882300B4197009FF0CB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		92B51883300B4197009FF0CB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -87,6 +97,8 @@
 		92989CA4300CAB9B0034AD5D /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				92989CC23011DE120034AD5D /* CloudSharingPresenter.swift */,
+				92989CC03011DDF60034AD5D /* SharingService.swift */,
 				92B5189D300B4696009FF0CB /* AppLockManager.swift */,
 				92B518B9300C842C009FF0CB /* ClaudeExtractionService.swift */,
 				92B518A3300B52C5009FF0CB /* OCRService.swift */,
@@ -127,10 +139,12 @@
 				92B5189F300B46AD009FF0CB /* LockScreenView.swift */,
 				92B51895300B4635009FF0CB /* FolderDetailView.swift */,
 				92B51897300B464C009FF0CB /* ItemDetailView.swift */,
+				92989CC63011E3400034AD5D /* ItemRowView.swift */,
 				92B51899300B4663009FF0CB /* AttachmentDetailView.swift */,
 				92B5189B300B4682009FF0CB /* DocumentScannerView.swift */,
 				92B518B1300B6001009FF0CB /* NewItemView.swift */,
 				92B518AD300B5CA8009FF0CB /* AddCustomFieldView.swift */,
+				92989CC83011E5790034AD5D /* QuickLookView.swift */,
 				92B518BB300C846C009FF0CB /* ExtractionReviewView.swift */,
 			);
 			path = Views;
@@ -139,6 +153,7 @@
 		92B51891300B41AB009FF0CB /* App */ = {
 			isa = PBXGroup;
 			children = (
+				92989CC43011DE2A0034AD5D /* AppDelegate.swift */,
 				92B51893300B45FA009FF0CB /* VaultUltraApp.swift */,
 				92B518A7300B5C52009FF0CB /* CustomFieldType.swift */,
 				92B518A9300B5C72009FF0CB /* CustomField+Extensions.swift */,
@@ -230,15 +245,20 @@
 				92B518B8300B6931009FF0CB /* SettingsView.swift in Sources */,
 				92B5188C300B4197009FF0CB /* ContentView.swift in Sources */,
 				92B51896300B4639009FF0CB /* FolderDetailView.swift in Sources */,
+				92989CC93011E57C0034AD5D /* QuickLookView.swift in Sources */,
 				92B5189C300B4685009FF0CB /* DocumentScannerView.swift in Sources */,
+				92989CC33011DE140034AD5D /* CloudSharingPresenter.swift in Sources */,
 				92B518BA300C842F009FF0CB /* ClaudeExtractionService.swift in Sources */,
 				92B51898300B464E009FF0CB /* ItemDetailView.swift in Sources */,
 				92B518A4300B52CD009FF0CB /* OCRService.swift in Sources */,
+				92989CC53011DE2C0034AD5D /* AppDelegate.swift in Sources */,
 				92B518A0300B46B1009FF0CB /* LockScreenView.swift in Sources */,
 				92B518B2300B6004009FF0CB /* NewItemView.swift in Sources */,
+				92989CC73011E3470034AD5D /* ItemRowView.swift in Sources */,
 				92B518AC300B5C96009FF0CB /* CustomFieldRow.swift in Sources */,
 				92B518AA300B5C76009FF0CB /* CustomField+Extensions.swift in Sources */,
 				92B518AE300B5CAB009FF0CB /* AddCustomFieldView.swift in Sources */,
+				92989CC13011DDFC0034AD5D /* SharingService.swift in Sources */,
 				92B5188D300B4197009FF0CB /* PersistenceController.swift in Sources */,
 				92B5189A300B4667009FF0CB /* AttachmentDetailView.swift in Sources */,
 				92B518B6300B68EE009FF0CB /* KeychainService.swift in Sources */,
@@ -268,6 +288,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VaultUltra/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = NSCameraUsageDescription;
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "\"Vault uses Face ID to protect access to your personal information.\"";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -304,6 +325,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VaultUltra/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = NSCameraUsageDescription;
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "\"Vault uses Face ID to protect access to your personal information.\"";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

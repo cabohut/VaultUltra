@@ -11,9 +11,9 @@ import CoreData
 struct FolderDetailView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @ObservedObject var folder: Folder
+    @Binding var navigationPath: NavigationPath
 
     @State private var isShowingNewItemSheet = false
-    @State private var navigateToItem: Item?
 
     private var items: [Item] {
         let set = folder.items as? Set<Item> ?? []
@@ -61,10 +61,9 @@ struct FolderDetailView: View {
                 Section(group.type) {
                     ForEach(group.items) { item in
                         Button {
-                            navigateToItem = item
+                            navigationPath.append(item)
                         } label: {
-                            Text(item.title ?? "Untitled Item")
-                                .foregroundStyle(.primary)
+                            ItemRowView(item: item)
                         }
                     }
                     .onDelete { offsets in
@@ -74,9 +73,6 @@ struct FolderDetailView: View {
             }
         }
         .navigationTitle(folder.name ?? "Folder")
-        .navigationDestination(item: $navigateToItem) { item in
-            ItemDetailView(item: item)
-        }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {
@@ -88,7 +84,7 @@ struct FolderDetailView: View {
         }
         .sheet(isPresented: $isShowingNewItemSheet) {
             NewItemView(folder: folder) { createdItem in
-                navigateToItem = createdItem
+                navigationPath.append(createdItem)
             }
         }
         .overlay {
@@ -99,6 +95,12 @@ struct FolderDetailView: View {
                     description: Text("Tap + to add your first item to this folder.")
                 )
             }
+        }
+        .navigationDestination(for: Item.self) { item in
+            ItemDetailView(item: item, navigationPath: $navigationPath)
+        }
+        .navigationDestination(for: Attachment.self) { attachment in
+            AttachmentDetailView(attachment: attachment)
         }
     }
 
@@ -115,7 +117,7 @@ struct FolderDetailView: View {
         do {
             try viewContext.save()
             removeSuggestion(suggestionTitle)
-            navigateToItem = item
+            navigationPath.append(item)
         } catch {
             print("Failed to create item from suggestion: \(error)")
         }

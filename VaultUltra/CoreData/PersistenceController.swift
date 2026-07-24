@@ -9,6 +9,8 @@ import CoreData
 import Combine
 
 final class PersistenceController: ObservableObject {
+    let objectWillChange = ObservableObjectPublisher()
+
     static let shared = PersistenceController()
 
     let container: NSPersistentCloudKitContainer
@@ -82,7 +84,39 @@ final class PersistenceController: ObservableObject {
             print("Failed to seed smart folders: \(error)")
         }
     }
-    
+
+    #if DEBUG
+    func resetAllData() {
+        let context = container.viewContext
+
+        let entityNames = ["Folder", "Item", "Attachment", "CustomField"]
+
+        for entityName in entityNames {
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
+            let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+            deleteRequest.resultType = .resultTypeObjectIDs
+
+            do {
+                let result = try context.execute(deleteRequest) as? NSBatchDeleteResult
+                if let objectIDs = result?.result as? [NSManagedObjectID] {
+                    let changes = [NSDeletedObjectsKey: objectIDs]
+                    NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [context])
+                }
+            } catch {
+                print("Failed to batch delete \(entityName): \(error)")
+            }
+        }
+
+        do {
+            try context.save()
+        } catch {
+            print("Failed to save after reset: \(error)")
+        }
+
+        performSeedCheck()
+    }
+    #endif
+
     static var preview: PersistenceController = {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
@@ -102,36 +136,4 @@ final class PersistenceController: ObservableObject {
         }
         return result
     }()
-    
-#if DEBUG
-func resetAllData() {
-    let context = container.viewContext
-
-    let entityNames = ["Folder", "Item", "Attachment", "CustomField"]
-
-    for entityName in entityNames {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
-        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-        deleteRequest.resultType = .resultTypeObjectIDs
-
-        do {
-            let result = try context.execute(deleteRequest) as? NSBatchDeleteResult
-            if let objectIDs = result?.result as? [NSManagedObjectID] {
-                let changes = [NSDeletedObjectsKey: objectIDs]
-                NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [context])
-            }
-        } catch {
-            print("Failed to batch delete \(entityName): \(error)")
-        }
-    }
-
-    do {
-        try context.save()
-    } catch {
-        print("Failed to save after reset: \(error)")
-    }
-    
-    performSeedCheck()
-}
-#endif
 }

@@ -9,19 +9,21 @@ import SwiftUI
 import CoreData
 
 @main
-struct VaultUltraApp: App {
+struct VaultApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @StateObject private var lockManager = AppLockManager()
     @Environment(\.scenePhase) private var scenePhase
 
     init() {
         PersistenceController.shared.seedSmartFoldersIfNeeded()
     }
-    
+
     var body: some Scene {
         WindowGroup {
             ZStack {
                 ContentView()
                     .environment(\.managedObjectContext, PersistenceController.shared.container.viewContext)
+                    .environmentObject(PersistenceController.shared)
 
                 if !lockManager.isUnlocked {
                     LockScreenView(lockManager: lockManager)
