@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9258AE0E3034191E008993A5 /* user-guide.md in Resources */ = {isa = PBXBuildFile; fileRef = 9258AE0D3034191E008993A5 /* user-guide.md */; };
+		9258AE103034196A008993A5 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9258AE0F30341960008993A5 /* AboutView.swift */; };
 		92989CA1300CA84C0034AD5D /* ItemFieldTemplates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92989CA0300CA8480034AD5D /* ItemFieldTemplates.swift */; };
 		92989CC13011DDFC0034AD5D /* SharingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92989CC03011DDF60034AD5D /* SharingService.swift */; };
 		92989CC33011DE140034AD5D /* CloudSharingPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92989CC23011DE120034AD5D /* CloudSharingPresenter.swift */; };
@@ -39,8 +41,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9258AE0D3034191E008993A5 /* user-guide.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "user-guide.md"; sourceTree = "<group>"; };
+		9258AE0F30341960008993A5 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
+		9258AE1130396DC1008993A5 /* VaultUltra.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VaultUltra.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92989CA0300CA8480034AD5D /* ItemFieldTemplates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemFieldTemplates.swift; sourceTree = "<group>"; };
-		92989CA9300DD44D0034AD5D /* VaultUltra.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VaultUltra.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92989CC03011DDF60034AD5D /* SharingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharingService.swift; sourceTree = "<group>"; };
 		92989CC23011DE120034AD5D /* CloudSharingPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSharingPresenter.swift; sourceTree = "<group>"; };
 		92989CC43011DE2A0034AD5D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -110,7 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				92B51888300B4197009FF0CB /* VaultUltra */,
-				92989CA9300DD44D0034AD5D /* VaultUltra.app */,
+				9258AE1130396DC1008993A5 /* VaultUltra.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -121,6 +125,7 @@
 				92B51881300B4197009FF0CB /* Assets.xcassets */,
 				92B51885300B4197009FF0CB /* VaultUltra.entitlements */,
 				92B51886300B4197009FF0CB /* VaultUltra.xcdatamodeld */,
+				9258AE0D3034191E008993A5 /* user-guide.md */,
 				92B51892300B4262009FF0CB /* CoreData */,
 				92B51891300B41AB009FF0CB /* App */,
 				92989CA2300CAB7A0034AD5D /* Templates */,
@@ -136,6 +141,7 @@
 				92B51882300B4197009FF0CB /* ContentView.swift */,
 				92B518B7300B692E009FF0CB /* SettingsView.swift */,
 				92B518A5300B5633009FF0CB /* SearchView.swift */,
+				9258AE0F30341960008993A5 /* AboutView.swift */,
 				92B5189F300B46AD009FF0CB /* LockScreenView.swift */,
 				92B51895300B4635009FF0CB /* FolderDetailView.swift */,
 				92B51897300B464C009FF0CB /* ItemDetailView.swift */,
@@ -189,7 +195,7 @@
 			packageProductDependencies = (
 			);
 			productName = VaultUltra;
-			productReference = 92989CA9300DD44D0034AD5D /* VaultUltra.app */;
+			productReference = 9258AE1130396DC1008993A5 /* VaultUltra.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -200,7 +206,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2660;
-				LastUpgradeCheck = 2660;
+				LastUpgradeCheck = 2710;
 				TargetAttributes = {
 					92B5186A300B4182009FF0CB = {
 						CreatedOnToolsVersion = 26.6;
@@ -231,6 +237,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9258AE0E3034191E008993A5 /* user-guide.md in Resources */,
 				92B5188A300B4197009FF0CB /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -245,6 +252,7 @@
 				92B518B8300B6931009FF0CB /* SettingsView.swift in Sources */,
 				92B5188C300B4197009FF0CB /* ContentView.swift in Sources */,
 				92B51896300B4639009FF0CB /* FolderDetailView.swift in Sources */,
+				9258AE103034196A008993A5 /* AboutView.swift in Sources */,
 				92989CC93011E57C0034AD5D /* QuickLookView.swift in Sources */,
 				92B5189C300B4685009FF0CB /* DocumentScannerView.swift in Sources */,
 				92989CC33011DE140034AD5D /* CloudSharingPresenter.swift in Sources */,
@@ -288,13 +296,13 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VaultUltra/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Family Vault";
 				INFOPLIST_KEY_NSCameraUsageDescription = NSCameraUsageDescription;
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "\"Vault uses Face ID to protect access to your personal information.\"";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -325,13 +333,13 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VaultUltra/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Family Vault";
 				INFOPLIST_KEY_NSCameraUsageDescription = NSCameraUsageDescription;
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "\"Vault uses Face ID to protect access to your personal information.\"";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -409,6 +417,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -466,6 +475,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};

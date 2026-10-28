@@ -100,6 +100,11 @@ struct ItemDetailView: View {
 
             ForEach(customFields) { field in
                 CustomFieldRow(field: field, isRevealed: isSensitiveRevealed)
+                    .swipeActions(edge: .trailing) {
+                        Button("Delete", role: .destructive) {
+                            deleteCustomField(field)
+                        }
+                    }
             }
 
             Button {
@@ -201,6 +206,16 @@ struct ItemDetailView: View {
         )
     }
 
+    // MARK: - delete custom field
+    private func deleteCustomField(_ field: CustomField) {
+        viewContext.delete(field)
+        do {
+            try viewContext.save()
+        } catch {
+            print("Failed to delete custom field: \(error)")
+        }
+    }
+    
     // MARK: - Attachment saving
 
     private func loadAndSavePhoto(_ pickerItem: PhotosPickerItem?) async {

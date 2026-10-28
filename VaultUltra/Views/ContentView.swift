@@ -22,7 +22,9 @@ struct ContentView: View {
     @State private var newFolderName = ""
     @State private var shareButtonFrame: CGRect = .zero
     @State private var navigationPath = NavigationPath()
-
+    @State private var shareButtonFrames: [NSManagedObjectID: CGRect] = [:]
+    @State private var isPreparingShare = false
+    
     var body: some View {
         TabView {
             folderNavigationView
@@ -40,6 +42,23 @@ struct ContentView: View {
                     Label("Settings", systemImage: "gear")
                 }
         }
+        .overlay {
+            if isPreparingShare {
+                ZStack {
+                    Color.black.opacity(0.25).ignoresSafeArea()
+                    VStack(spacing: 12) {
+                        ProgressView()
+                        Text("Preparing share…")
+                            .font(.callout)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(16)
+                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                }
+                .transition(.opacity)
+            }
+        }
+        .animation(.default, value: isPreparingShare)
     }
 
     private var folderNavigationView: some View {
@@ -50,8 +69,8 @@ struct ContentView: View {
                         .tag(folder)
                 }
                 .onDelete(perform: deleteFolders)
+                .onMove(perform: moveFolders)
             }
-            .navigationTitle("Folders")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
@@ -59,6 +78,9 @@ struct ContentView: View {
                     } label: {
                         Label("New Folder", systemImage: "plus")
                     }
+                }
+                ToolbarItem(placement: .navigation) {
+                    EditButton()
                 }
             }
             .alert("New Folder", isPresented: $isShowingNewFolderAlert) {
@@ -101,25 +123,34 @@ struct ContentView: View {
                 }
             } icon: {
                 Image(systemName: folder.icon ?? "folder")
+                    .foregroundColor(.orange)
             }
 
             Spacer()
 
             Button {
+                isPreparingShare = true
+                let rect = shareButtonFrames[folder.objectID] ?? fallbackSourceRect()
                 CloudSharingPresenter.present(
                     folder: folder,
                     persistentContainer: persistenceController.container,
-                    sourceRect: shareButtonFrame
-                )
+                    sourceRect: rect
+                ) {
+                    isPreparingShare = false
+                }
             } label: {
                 Image(systemName: "person.crop.circle.badge.plus")
             }
+            .accessibilityLabel(Text("Share folder"))
             .buttonStyle(.plain)
             .background(
                 GeometryReader { geo in
                     Color.clear
                         .onAppear {
-                            shareButtonFrame = geo.frame(in: .global)
+                            shareButtonFrames[folder.objectID] = geo.frame(in: .global)
+                        }
+                        .onChange(of: geo.frame(in: .global)) { _, newFrame in
+                            shareButtonFrames[folder.objectID] = newFrame
                         }
                 }
             )
@@ -154,6 +185,29 @@ struct ContentView: View {
         } catch {
             print("Failed to delete folder: \(error)")
         }
+    }
+    
+    private func moveFolders(from source: IndexSet, to destination: Int) {
+        var reordered = folders.map { $0 }
+        reordered.move(fromOffsets: source, toOffset: destination)
+
+        for (index, folder) in reordered.enumerated() {
+            folder.sortOrder = Int16(index)
+        }
+
+        do {
+            try viewContext.save()
+        } catch {
+            print("Failed to save folder order: \(error)")
+        }
+    }
+    
+    private func fallbackSourceRect() -> CGRect {
+        UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .first?.windows
+            .first(where: { $0.isKeyWindow })?
+            .bounds ?? CGRect(x: 0, y: 0, width: 400, height: 800)
     }
 }
 

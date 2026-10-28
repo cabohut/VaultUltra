@@ -20,6 +20,12 @@ struct SettingsView: View {
         NavigationStack {
             Form {
                 Section {
+                    NavigationLink("Getting Started") {
+                        AboutView()
+                    }
+                }
+                
+                Section {
                     SecureField("sk-ant-...", text: $apiKey)
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()
