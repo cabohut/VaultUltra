@@ -1,4 +1,4 @@
-# FamilyVaultUltra User Guide
+# Family Vault Ultra User Guide
 
 ## Getting Started
 

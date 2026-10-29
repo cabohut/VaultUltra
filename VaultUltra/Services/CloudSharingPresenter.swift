@@ -100,6 +100,12 @@ enum CloudSharingPresenter {
             }
 
             func proceedToCreateShare() {
+                // CHANGED: read everything we need from `folder` here, before the
+                // @Sendable completion handler below. Only these plain values are
+                // captured by the closure, never the Folder object itself.
+                let folderName = folder.name
+                let owningContext = folder.managedObjectContext ?? persistentContainer.viewContext
+
                 persistentContainer.share([folder], to: nil) { _, share, container, error in
                     if let error {
                         print("Error creating share: \(error)")
@@ -113,13 +119,15 @@ enum CloudSharingPresenter {
                     }
 
                     // Set metadata
-                    share[CKShare.SystemFieldKey.title] = folder.name as CKRecordValue?
+                    // CHANGED: uses the captured folderName instead of folder.name
+                    share[CKShare.SystemFieldKey.title] = folderName as CKRecordValue?
 
                     // Set private invites only
                     share.publicPermission = .none
 
                     // Save the owning context to persist the relationship
-                    let owningContext = folder.managedObjectContext ?? persistentContainer.viewContext
+                    // CHANGED: owningContext is now captured from above rather than
+                    // derived from `folder` inside this closure
                     owningContext.perform {
                         do {
                             if owningContext.hasChanges {
