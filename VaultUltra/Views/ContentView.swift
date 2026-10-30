@@ -129,18 +129,16 @@ struct ContentView: View {
             Spacer()
 
             Button {
-                isPreparingShare = true
                 let rect = shareButtonFrames[folder.objectID] ?? fallbackSourceRect()
                 CloudSharingPresenter.present(
                     folder: folder,
                     persistentContainer: persistenceController.container,
                     sourceRect: rect
-                ) {
-                    isPreparingShare = false
-                }
+                )
             } label: {
                 Image(systemName: "person.crop.circle.badge.plus")
             }
+            .buttonStyle(.plain)
             .accessibilityLabel(Text("Share folder"))
             .buttonStyle(.plain)
             .background(

@@ -297,8 +297,9 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VaultUltra/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Family Vault";
-				INFOPLIST_KEY_NSCameraUsageDescription = NSCameraUsageDescription;
-				INFOPLIST_KEY_NSFaceIDUsageDescription = "\"Vault uses Face ID to protect access to your personal information.\"";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_NSCameraUsageDescription = "\"Family Vault Ultra needs camera access to scan documents.\"";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "\"Family Vault Ultra uses Face ID to securly unlock the app";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -334,8 +335,9 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VaultUltra/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Family Vault";
-				INFOPLIST_KEY_NSCameraUsageDescription = NSCameraUsageDescription;
-				INFOPLIST_KEY_NSFaceIDUsageDescription = "\"Vault uses Face ID to protect access to your personal information.\"";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_NSCameraUsageDescription = "\"Family Vault Ultra needs camera access to scan documents.\"";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "\"Family Vault Ultra uses Face ID to securly unlock the app";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

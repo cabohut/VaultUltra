@@ -3,7 +3,7 @@
 //  VaultUltra
 //
 //  Created by bugs on 7/17/26.
-//
+//      10-30-2026 - added "Done" button
 
 import SwiftUI
 import CoreData
@@ -47,6 +47,15 @@ struct ItemDetailView: View {
             attachmentsSection
         }
         .navigationTitle(item.title?.isEmpty == false ? item.title! : "New Item")
+        .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+                Button("Done") {
+                    if !navigationPath.isEmpty {
+                        navigationPath.removeLast()
+                    }
+                }
+            }
+        }
         .sheet(isPresented: $isShowingAddField) {
             AddCustomFieldView(item: item)
         }

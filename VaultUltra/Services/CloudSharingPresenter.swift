@@ -3,7 +3,7 @@
 //  VaultUltra
 //
 //  Created by bugs on 7/22/26.
-//
+//      10-30-2026 - updated to fix sharing and to use a new sharing dialogue sheet
 
 import UIKit
 import CloudKit
@@ -15,8 +15,7 @@ enum CloudSharingPresenter {
     static func present(
         folder: Folder,
         persistentContainer: NSPersistentCloudKitContainer,
-        sourceRect: CGRect,
-        completion: @escaping () -> Void
+        sourceRect: CGRect
     ) {
         guard let windowScene = UIApplication.shared.connectedScenes
             .compactMap({ $0 as? UIWindowScene })
@@ -24,172 +23,80 @@ enum CloudSharingPresenter {
             let rootViewController = windowScene.windows.first(where: { $0.isKeyWindow })?.rootViewController
         else {
             print("Could not find root view controller to present sharing UI")
-            completion()
             return
         }
-        
-        // Diagnostic: Check CK account status before presenting share UI
-        if let containerID = persistentContainer.persistentStoreDescriptions.first?.cloudKitContainerOptions?.containerIdentifier {
-            let ckContainer = CKContainer(identifier: containerID)
-            ckContainer.accountStatus { status, err in
-                DispatchQueue.main.async {
-                    if let err = err {
-                        print("CK account status error: \(err)")
-                    } else {
-                        print("CK account status: \(status.rawValue)")
-                    }
-                }
-            }
-        } else {
-            print("No CloudKit container identifier found in persistent store description.")
-        }
 
-        // Determine container identifier for consistency
-        let containerID = persistentContainer.persistentStoreDescriptions.first?.cloudKitContainerOptions?.containerIdentifier ?? ""
-        let ckContainer = CKContainer(identifier: containerID)
+        let folderTitle = folder.name ?? "Vault Folder"
+        let thumbnailData = UIImage(named: "ShareThumbnail")?.pngData()
 
-        // Build or fetch a share before creating the controller
-        var sharingController: UICloudSharingController!
+        let sharingController: UICloudSharingController
 
         if let existingShare = SharingService.existingShare(for: folder, in: persistentContainer) {
-            print("Using existing share for folder: \(folder.objectID)")
+            let containerID = persistentContainer.persistentStoreDescriptions.first?.cloudKitContainerOptions?.containerIdentifier ?? ""
+            let ckContainer = CKContainer(identifier: containerID)
             sharingController = UICloudSharingController(share: existingShare, container: ckContainer)
-            
-            let sharingCoordinator = Coordinator()
-            coordinator = sharingCoordinator
-
-            sharingController.delegate = sharingCoordinator
-            sharingController.availablePermissions = [.allowReadWrite, .allowPrivate]
-
-            var presenter = rootViewController
-            while let presented = presenter.presentedViewController {
-                presenter = presented
-            }
-
-            sharingController.modalPresentationStyle = .popover
-            if let popover = sharingController.popoverPresentationController {
-                popover.sourceView = presenter.view
-                popover.sourceRect = sourceRect
-                popover.delegate = sharingCoordinator
-            }
-
-            // Log and present on next run loop tick to avoid presentation conflicts
-            print("Presenting UICloudSharingController now…")
-            DispatchQueue.main.async {
-                presenter.present(sharingController, animated: true)
-                completion()
-            }
         } else {
-            print("No existing share. Creating a new share for folder: \(folder.objectID)")
-
-            // Preflight: ensure the folder has a permanent ID
-            if folder.objectID.isTemporaryID {
-                let ctx = folder.managedObjectContext ?? persistentContainer.viewContext
-                ctx.perform {
-                    do {
-                        try ctx.obtainPermanentIDs(for: [folder])
-                        if ctx.hasChanges { try ctx.save() }
-                        proceedToCreateShare()
-                    } catch {
-                        print("Failed to obtain permanent ID/save before sharing: \(error)")
-                        completion()
-                    }
-                }
-            } else {
-                proceedToCreateShare()
-            }
-
-            func proceedToCreateShare() {
-                // CHANGED: read everything we need from `folder` here, before the
-                // @Sendable completion handler below. Only these plain values are
-                // captured by the closure, never the Folder object itself.
-                let folderName = folder.name
-                let owningContext = folder.managedObjectContext ?? persistentContainer.viewContext
-
+            sharingController = UICloudSharingController { _, completion in
                 persistentContainer.share([folder], to: nil) { _, share, container, error in
-                    if let error {
-                        print("Error creating share: \(error)")
-                        DispatchQueue.main.async { completion() }
-                        return
-                    }
-                    guard let share, let container else {
-                        print("Share creation did not produce a share instance.")
-                        DispatchQueue.main.async { completion() }
-                        return
-                    }
-
-                    // Set metadata
-                    // CHANGED: uses the captured folderName instead of folder.name
-                    share[CKShare.SystemFieldKey.title] = folderName as CKRecordValue?
-
-                    // Set private invites only
-                    share.publicPermission = .none
-
-                    // Save the owning context to persist the relationship
-                    // CHANGED: owningContext is now captured from above rather than
-                    // derived from `folder` inside this closure
-                    owningContext.perform {
-                        do {
-                            if owningContext.hasChanges {
-                                try owningContext.save()
-                                print("Owning context saved after share creation.")
-                            } else {
-                                print("Owning context had no changes after share creation.")
-                            }
-
-                            // Optionally flush viewContext if it has pending changes
-                            let viewCtx = persistentContainer.viewContext
-                            if viewCtx !== owningContext, viewCtx.hasChanges {
-                                try viewCtx.save()
-                                print("viewContext saved post share creation.")
-                            }
-
-                            DispatchQueue.main.async {
-                                let controller = UICloudSharingController(share: share, container: container)
-                                finalizePresent(controller)
-                            }
-                        } catch {
-                            print("Failed to save owning/view context after share creation: \(error)")
-                            DispatchQueue.main.async { completion() }
+                    DispatchQueue.main.async {
+                        if let error {
+                            completion(nil, nil, error)
+                            return
                         }
+                        guard let share, let container else {
+                            completion(nil, nil, NSError(
+                                domain: "SharingService",
+                                code: -1,
+                                userInfo: [NSLocalizedDescriptionKey: "No share returned"]
+                            ))
+                            return
+                        }
+                        share[CKShare.SystemFieldKey.title] = folderTitle as CKRecordValue
+                        if let thumbnailData {
+                            share[CKShare.SystemFieldKey.thumbnailImageData] = thumbnailData as CKRecordValue
+                        }
+                        completion(share, container, nil)
                     }
-                }
-            }
-
-            func finalizePresent(_ controller: UICloudSharingController) {
-                sharingController = controller
-                
-                let sharingCoordinator = Coordinator()
-                coordinator = sharingCoordinator
-
-                sharingController.delegate = sharingCoordinator
-                sharingController.availablePermissions = [.allowReadWrite, .allowPrivate]
-
-                var presenter = rootViewController
-                while let presented = presenter.presentedViewController {
-                    presenter = presented
-                }
-
-                sharingController.modalPresentationStyle = .popover
-                if let popover = sharingController.popoverPresentationController {
-                    popover.sourceView = presenter.view
-                    popover.sourceRect = sourceRect
-                    popover.delegate = sharingCoordinator
-                }
-
-                // Log and present on next run loop tick to avoid presentation conflicts
-                print("Presenting UICloudSharingController now…")
-                DispatchQueue.main.async {
-                    presenter.present(sharingController, animated: true)
-                    completion()
                 }
             }
         }
+
+        let sharingCoordinator = Coordinator(title: folderTitle, thumbnailData: thumbnailData)
+        coordinator = sharingCoordinator
+
+        sharingController.delegate = sharingCoordinator
+        sharingController.availablePermissions = [.allowReadWrite, .allowPrivate]
+
+        var presenter = rootViewController
+        while let presented = presenter.presentedViewController {
+            presenter = presented
+        }
+
+        sharingController.modalPresentationStyle = .popover
+        if let popover = sharingController.popoverPresentationController {
+            popover.sourceView = presenter.view
+            popover.sourceRect = sourceRect
+            popover.delegate = sharingCoordinator
+        }
+
+        presenter.present(sharingController, animated: true)
     }
 
     class Coordinator: NSObject, UICloudSharingControllerDelegate, UIPopoverPresentationControllerDelegate {
+        private let title: String
+        private let thumbnailData: Data?
+
+        init(title: String, thumbnailData: Data?) {
+            self.title = title
+            self.thumbnailData = thumbnailData
+        }
+
         func itemTitle(for csc: UICloudSharingController) -> String? {
-            "Vault Folder"
+            title
+        }
+
+        func itemThumbnailData(for csc: UICloudSharingController) -> Data? {
+            thumbnailData
         }
 
         func itemType(for csc: UICloudSharingController) -> String? {

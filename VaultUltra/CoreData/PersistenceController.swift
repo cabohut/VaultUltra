@@ -3,9 +3,10 @@
 //  VaultUltra
 //
 //  Created by bugs on 7/17/26.
-//
+//      10-30-2026 - updated to add the shared store and exposes privateStore and sharedStore
 
 import CoreData
+import CloudKit
 import Combine
 
 final class PersistenceController: ObservableObject {
@@ -15,23 +16,61 @@ final class PersistenceController: ObservableObject {
 
     let container: NSPersistentCloudKitContainer
 
+    private let privateStoreURL: URL?
+    private let sharedStoreURL: URL?
+
+    var privateStore: NSPersistentStore? {
+        if let privateStoreURL {
+            return container.persistentStoreCoordinator.persistentStore(for: privateStoreURL)
+        }
+        return container.persistentStoreCoordinator.persistentStores.first
+    }
+
+    var sharedStore: NSPersistentStore? {
+        guard let sharedStoreURL else { return nil }
+        return container.persistentStoreCoordinator.persistentStore(for: sharedStoreURL)
+    }
+
     init(inMemory: Bool = false) {
-        container = NSPersistentCloudKitContainer(name: "VaultUltra")
+        let cloudContainer = NSPersistentCloudKitContainer(name: "VaultUltra")
+        var privateURL: URL?
+        var sharedURL: URL?
 
         if inMemory {
-            container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
+            cloudContainer.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
         } else {
-            guard let description = container.persistentStoreDescriptions.first else {
+            guard let privateDescription = cloudContainer.persistentStoreDescriptions.first,
+                  let defaultURL = privateDescription.url
+            else {
                 fatalError("Failed to retrieve a persistent store description.")
             }
 
-            description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
-            description.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
+            let containerID = "iCloud.com.cabohut.VaultUltra"
 
-            description.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(
-                containerIdentifier: "iCloud.com.cabohut.VaultUltra"
+            privateDescription.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
+            privateDescription.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
+            let privateOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: containerID)
+            privateOptions.databaseScope = .private
+            privateDescription.cloudKitContainerOptions = privateOptions
+
+            let sharedDescription = NSPersistentStoreDescription(
+                url: defaultURL.deletingLastPathComponent().appendingPathComponent("vaultultra-shared.sqlite")
             )
+            sharedDescription.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
+            sharedDescription.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
+            let sharedOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: containerID)
+            sharedOptions.databaseScope = .shared
+            sharedDescription.cloudKitContainerOptions = sharedOptions
+
+            cloudContainer.persistentStoreDescriptions.append(sharedDescription)
+
+            privateURL = defaultURL
+            sharedURL = sharedDescription.url
         }
+
+        container = cloudContainer
+        privateStoreURL = privateURL
+        sharedStoreURL = sharedURL
 
         container.loadPersistentStores { _, error in
             if let error = error as NSError? {
@@ -64,6 +103,7 @@ final class PersistenceController: ObservableObject {
         let context = container.viewContext
         let request: NSFetchRequest<Folder> = Folder.fetchRequest()
         request.predicate = NSPredicate(format: "isSmartFolder == YES")
+        request.affectedStores = privateStore.map { [$0] }
 
         let existingCount = (try? context.count(for: request)) ?? 0
         guard existingCount == 0 else { return }
@@ -95,6 +135,7 @@ final class PersistenceController: ObservableObject {
             let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
             let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
             deleteRequest.resultType = .resultTypeObjectIDs
+            deleteRequest.affectedStores = privateStore.map { [$0] }
 
             do {
                 let result = try context.execute(deleteRequest) as? NSBatchDeleteResult
