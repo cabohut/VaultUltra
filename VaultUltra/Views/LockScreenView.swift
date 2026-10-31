@@ -70,7 +70,7 @@ struct LockScreenView: View {
             logo
 
             VStack(spacing: 6) {
-                Text("FamilyVault")
+                Text("Family Vault Ultra")
                     .font(.largeTitle.bold())
                 Text(isSuccess ? "Unlocked" : "Locked")
                     .font(.headline)
@@ -141,15 +141,6 @@ struct LockScreenView: View {
             }
             .primaryLockButton()
             .controlSize(.large)
-
-            Button("Use Passcode") {
-                lockManager.authenticate(allowPasscode: true)
-            }
-            .font(.subheadline.weight(.medium))
-            .buttonStyle(.plain)
-            .foregroundStyle(Color.accentColor)
-            .padding(.vertical, 8)
-            .contentShape(Rectangle())
         }
         .frame(maxWidth: 420) // keeps it tidy on iPad
         .disabled(isSuccess)

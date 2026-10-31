@@ -24,35 +24,23 @@ final class AppLockManager: ObservableObject {
     private var isAuthenticating = false
     private let reason = "Unlock your Vault."
 
-    /// - Parameter allowPasscode: When true, uses the device-owner policy
-    ///   (biometrics with passcode fallback). When false, tries biometrics
-    ///   only, and hands off to the passcode policy if the user taps the
-    ///   system sheet's fallback button or biometrics aren't available.
-    func authenticate(allowPasscode: Bool = false) {
+    /// Uses the device-owner policy: the system tries biometrics first, then
+    /// offers the passcode keypad itself if biometrics fail or are unavailable.
+    func authenticate() {
         guard !isAuthenticating else { return }
 
         let context = LAContext()
         var error: NSError?
 
-        let biometricsAvailable = context.canEvaluatePolicy(
-            .deviceOwnerAuthenticationWithBiometrics, error: nil
-        )
-        let policy: LAPolicy = (!allowPasscode && biometricsAvailable)
-            ? .deviceOwnerAuthenticationWithBiometrics
-            : .deviceOwnerAuthentication
-
-        guard context.canEvaluatePolicy(policy, error: &error) else {
+        guard context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error) else {
             authError = "Set a passcode on this device to use Vault."
             return
         }
 
-        // Label for the fallback button on the biometric sheet
-        context.localizedFallbackTitle = "Use Passcode"
-
         isAuthenticating = true
         authError = nil
 
-        context.evaluatePolicy(policy, localizedReason: reason) { success, evalError in
+        context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: reason) { success, evalError in
             Task { @MainActor in
                 if success {
                     await self.completeUnlock()
@@ -92,11 +80,8 @@ final class AppLockManager: ObservableObject {
         }
 
         switch laError.code {
-        case .userFallback:
-            // User tapped "Use Passcode" on the biometric sheet
-            authenticate(allowPasscode: true)
         case .userCancel, .appCancel, .systemCancel:
-            // Not a failure worth an error banner; the Unlock button is still there
+            // Not worth an error banner; the Unlock button is still there
             break
         default:
             authError = laError.localizedDescription
