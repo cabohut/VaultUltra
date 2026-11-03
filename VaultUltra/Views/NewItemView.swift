@@ -56,6 +56,7 @@ struct NewItemView: View {
 
     private func createItem(type: String?) {
         let item = Item(context: viewContext)
+        viewContext.assignStore(of: folder, to: item)
         item.title = ""
         item.itemType = type
         item.createdDate = Date()
@@ -63,7 +64,7 @@ struct NewItemView: View {
         item.addToFolders(folder)
 
         if let type {
-            ItemFieldTemplates.applyFields(for: type, to: item, context: viewContext)
+            ItemFieldTemplates.applyFields(for: type, to: item, folder: folder, context: viewContext)
         }
 
         do {

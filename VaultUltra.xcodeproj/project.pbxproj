@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		92042AC4309958C30036AF80 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92042AC3309958BC0036AF80 /* SplashView.swift */; };
+		92042AC630999BBC0036AF80 /* StoreAssignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92042AC530999BB70036AF80 /* StoreAssignment.swift */; };
 		9258AE0E3034191E008993A5 /* user-guide.md in Resources */ = {isa = PBXBuildFile; fileRef = 9258AE0D3034191E008993A5 /* user-guide.md */; };
 		9258AE103034196A008993A5 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9258AE0F30341960008993A5 /* AboutView.swift */; };
 		92989CA1300CA84C0034AD5D /* ItemFieldTemplates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92989CA0300CA8480034AD5D /* ItemFieldTemplates.swift */; };
@@ -41,6 +43,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		92042AC3309958BC0036AF80 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
+		92042AC530999BB70036AF80 /* StoreAssignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreAssignment.swift; sourceTree = "<group>"; };
 		9258AE0D3034191E008993A5 /* user-guide.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "user-guide.md"; sourceTree = "<group>"; };
 		9258AE0F30341960008993A5 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		9258AE1130396DC1008993A5 /* VaultUltra.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VaultUltra.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -139,6 +143,7 @@
 			isa = PBXGroup;
 			children = (
 				92B51882300B4197009FF0CB /* ContentView.swift */,
+				92042AC3309958BC0036AF80 /* SplashView.swift */,
 				92B518B7300B692E009FF0CB /* SettingsView.swift */,
 				92B518A5300B5633009FF0CB /* SearchView.swift */,
 				9258AE0F30341960008993A5 /* AboutView.swift */,
@@ -171,6 +176,7 @@
 		92B51892300B4262009FF0CB /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
+				92042AC530999BB70036AF80 /* StoreAssignment.swift */,
 				92B51884300B4197009FF0CB /* PersistenceController.swift */,
 			);
 			path = CoreData;
@@ -266,8 +272,10 @@
 				92B518AC300B5C96009FF0CB /* CustomFieldRow.swift in Sources */,
 				92B518AA300B5C76009FF0CB /* CustomField+Extensions.swift in Sources */,
 				92B518AE300B5CAB009FF0CB /* AddCustomFieldView.swift in Sources */,
+				92042AC4309958C30036AF80 /* SplashView.swift in Sources */,
 				92989CC13011DDFC0034AD5D /* SharingService.swift in Sources */,
 				92B5188D300B4197009FF0CB /* PersistenceController.swift in Sources */,
+				92042AC630999BBC0036AF80 /* StoreAssignment.swift in Sources */,
 				92B5189A300B4667009FF0CB /* AttachmentDetailView.swift in Sources */,
 				92B518B6300B68EE009FF0CB /* KeychainService.swift in Sources */,
 				92B518BC300C8471009FF0CB /* ExtractionReviewView.swift in Sources */,
@@ -291,18 +299,18 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = VaultUltra/VaultUltra.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = XLK8R657HJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VaultUltra/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Family Vault";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.reference";
 				INFOPLIST_KEY_NSCameraUsageDescription = "\"Family Vault Ultra needs camera access to scan documents.\"";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "\"Family Vault Ultra uses Face ID to securly unlock the app";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -329,18 +337,18 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = VaultUltra/VaultUltra.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = XLK8R657HJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VaultUltra/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Family Vault";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.reference";
 				INFOPLIST_KEY_NSCameraUsageDescription = "\"Family Vault Ultra needs camera access to scan documents.\"";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "\"Family Vault Ultra uses Face ID to securly unlock the app";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (

@@ -14,6 +14,8 @@ struct VaultApp: App {
     @StateObject private var lockManager = AppLockManager()
     @Environment(\.scenePhase) private var scenePhase
 
+    @State private var showSplash = true
+    
     init() {
         PersistenceController.shared.seedSmartFoldersIfNeeded()
     }
@@ -29,6 +31,13 @@ struct VaultApp: App {
                     LockScreenView(lockManager: lockManager)
                         .background(.ultraThinMaterial)
                         .transition(.opacity)
+                }
+                if showSplash {
+                    SplashView {
+                        withAnimation(.easeOut(duration: 0.35)) { showSplash = false }
+                    }
+                    .transition(.opacity)
+                    .zIndex(1)
                 }
             }
             .onChange(of: scenePhase) { _, newPhase in

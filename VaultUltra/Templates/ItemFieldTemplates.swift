@@ -198,10 +198,11 @@ enum ItemFieldTemplates {
         registry[typeName]
     }
 
-    static func applyFields(for typeName: String, to item: Item, context: NSManagedObjectContext) {
+    static func applyFields(for typeName: String, to item: Item, folder: Folder, context: NSManagedObjectContext) {
         guard let fields = fields(for: typeName) else { return }
         for templateField in fields {
             let field = CustomField(context: context)
+            context.assignStore(of: folder, to: field)
             field.key = templateField.key
             field.fieldType = templateField.type.rawValue
             field.isSensitive = templateField.isSensitive
@@ -211,5 +212,5 @@ enum ItemFieldTemplates {
     }
 
     /// Generic types available in folders without their own suggested item list (custom folders).
-    static let genericFallbackTypes = ["Bank Account", "Credit Card", "Insurance Policy", "Login / Account"]
+    static let genericFallbackTypes = ["Bank Account", "Credit Card", "Insurance Policy", "Account Login"]
 }

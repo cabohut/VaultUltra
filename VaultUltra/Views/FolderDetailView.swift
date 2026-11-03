@@ -150,14 +150,15 @@ struct FolderDetailView: View {
 
     private func createItemFromSuggestion(_ suggestionTitle: String) {
         let item = Item(context: viewContext)
+        viewContext.assignStore(of: folder, to: item)
         item.title = ""
         item.itemType = suggestionTitle
         item.createdDate = Date()
         item.modifiedDate = Date()
         item.addToFolders(folder)
 
-        ItemFieldTemplates.applyFields(for: suggestionTitle, to: item, context: viewContext)
-
+        ItemFieldTemplates.applyFields(for: suggestionTitle, to: item, folder: folder, context: viewContext)
+        
         do {
             try viewContext.save()
             removeSuggestion(suggestionTitle)

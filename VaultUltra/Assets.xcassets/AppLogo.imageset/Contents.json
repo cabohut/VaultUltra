@@ -1,16 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "FamilyVaultUltra-Icon-Any-1024.png",
+      "filename" : "AppIcon-168.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "FamilyVaultUltra-Icon-Any-512.png",
+      "filename" : "AppIcon-336.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "AppIcon-504.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

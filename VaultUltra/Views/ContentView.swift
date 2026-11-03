@@ -7,6 +7,8 @@
 
 import SwiftUI
 import CoreData
+import CloudKit
+import Combine
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -24,6 +26,7 @@ struct ContentView: View {
     @State private var navigationPath = NavigationPath()
     @State private var shareButtonFrames: [NSManagedObjectID: CGRect] = [:]
     @State private var isPreparingShare = false
+    @State private var sharedFolderIDs: Set<NSManagedObjectID> = []
     
     var body: some View {
         TabView {
@@ -71,6 +74,14 @@ struct ContentView: View {
                 .onDelete(perform: deleteFolders)
                 .onMove(perform: moveFolders)
             }
+            .navigationTitle("Folders")
+               .onAppear { refreshSharedFolders() }
+               .onChange(of: folders.count) { _, _ in refreshSharedFolders() }
+               .onReceive(
+                   NotificationCenter.default
+                       .publisher(for: NSPersistentCloudKitContainer.eventChangedNotification)
+                       .receive(on: DispatchQueue.main)
+               ) { _ in refreshSharedFolders() }
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
@@ -136,7 +147,9 @@ struct ContentView: View {
                     sourceRect: rect
                 )
             } label: {
-                Image(systemName: "person.crop.circle.badge.plus")
+                let isShared = sharedFolderIDs.contains(folder.objectID)
+                Image(systemName: isShared ? "person.2.fill" : "person.crop.circle.badge.plus")
+                    .foregroundStyle(isShared ? Color.green : Color.primary)
             }
             .buttonStyle(.plain)
             .accessibilityLabel(Text("Share folder"))
@@ -198,6 +211,16 @@ struct ContentView: View {
         } catch {
             print("Failed to save folder order: \(error)")
         }
+    }
+    
+    private func refreshSharedFolders() {
+        let ids = folders.map(\.objectID)
+        guard !ids.isEmpty,
+              let shares = try? persistenceController.container.fetchShares(matching: ids)
+        else { return }
+
+        // A share with only the owner isn't really shared yet
+        sharedFolderIDs = Set(shares.filter { $0.value.participants.count > 1 }.keys)
     }
     
     private func fallbackSourceRect() -> CGRect {
