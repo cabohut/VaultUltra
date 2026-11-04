@@ -11,7 +11,11 @@ struct ItemRowView: View {
     @ObservedObject var item: Item
 
     var body: some View {
-        Text(item.title?.isEmpty == false ? item.title! : "Untitled Item")
-            .foregroundStyle(.primary)
+        Label {
+            Text(item.title?.isEmpty == false ? item.title! : "Untitled Item")
+                .foregroundStyle(.primary)
+        } icon: {
+            Image(systemName: ItemFieldTemplates.symbol(for: item.itemType))
+        }
     }
 }

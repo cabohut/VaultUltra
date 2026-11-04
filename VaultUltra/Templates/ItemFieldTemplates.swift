@@ -211,6 +211,42 @@ enum ItemFieldTemplates {
         }
     }
 
+    private static let typeSymbols: [String: String] = [
+        "Will": "doc.text",
+        "Power of Attorney": "signature",
+        "Trust Documents": "briefcase",
+        "Healthcare Directive": "heart.text.square",
+        "Bank Accounts": "building.columns",
+        "Investment Accounts": "chart.line.uptrend.xyaxis",
+        "Retirement Accounts": "beach.umbrella",
+        "Tax Returns": "percent",
+        "Health Insurance Card": "creditcard",
+        "Medication List": "pills",
+        "Doctor Contacts": "stethoscope",
+        "Medical History": "waveform.path.ecg",
+        "Driver's License": "steeringwheel",
+        "Passport": "airplane",
+        "Social Security Card": "lock.shield",
+        "Birth Certificate": "birthday.cake",
+        "Home Deed": "house.and.flag",
+        "Mortgage Documents": "banknote",
+        "Homeowner's Insurance": "umbrella",
+        "Vehicle Titles": "car",
+        "Emergency Contacts": "staroflife",
+        "Last Wishes": "leaf",
+        "Digital Accounts List": "key",
+        "Safe Deposit Box Info": "lock.rectangle.stack",
+        "Bank Account": "building.columns",
+        "Credit Card": "creditcard",
+        "Insurance Policy": "shield",
+        "Account Login": "person.badge.key"
+    ]
+
+    static func symbol(for typeName: String?) -> String {
+        guard let typeName else { return "doc" }
+        return typeSymbols[typeName] ?? "doc"
+    }
+    
     /// Generic types available in folders without their own suggested item list (custom folders).
     static let genericFallbackTypes = ["Bank Account", "Credit Card", "Insurance Policy", "Account Login"]
 }

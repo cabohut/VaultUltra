@@ -125,6 +125,59 @@ final class PersistenceController: ObservableObject {
         }
     }
 
+    /// Rebuilds each smart folder's suggestion list from its template, leaving out
+    /// any type that already has an item in that folder. Recreates smart folders
+    /// that were deleted. Private store only.
+    @discardableResult
+    func restoreSuggestedItems() -> (folders: Int, suggestions: Int) {
+        guard let privateStore else { return (0, 0) }
+        let context = container.viewContext
+
+        let request: NSFetchRequest<Folder> = Folder.fetchRequest()
+        request.affectedStores = [privateStore]
+        let privateFolders = (try? context.fetch(request)) ?? []
+        var nextSortOrder = (privateFolders.map { Int($0.sortOrder) }.max() ?? -1) + 1
+
+        var foldersCreated = 0
+        var suggestionsAdded = 0
+
+        for template in SmartFolderTemplates.all {
+            let folder: Folder
+            if let existing = privateFolders.first(where: { $0.name == template.name }) {
+                // A custom folder that happens to share a name is left alone
+                guard existing.isSmartFolder else { continue }
+                folder = existing
+            } else {
+                folder = Folder(context: context)
+                context.assign(folder, to: privateStore)
+                folder.name = template.name
+                folder.icon = template.icon
+                folder.isSmartFolder = true
+                folder.sortOrder = Int16(nextSortOrder)
+                folder.createdDate = Date()
+                nextSortOrder += 1
+                foldersCreated += 1
+            }
+
+            let items = (folder.items as? Set<Item>) ?? []
+            let existingTypes = Set(items.compactMap { $0.itemType })
+            let oldPending = Set(folder.pendingSuggestions?.split(separator: ",").map(String.init) ?? [])
+            let newPending = template.suggestedItems.filter { !existingTypes.contains($0) }
+
+            suggestionsAdded += newPending.filter { !oldPending.contains($0) }.count
+            folder.pendingSuggestions = newPending.isEmpty ? nil : newPending.joined(separator: ",")
+        }
+
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
+                print("Failed to restore suggested items: \(error)")
+            }
+        }
+        return (foldersCreated, suggestionsAdded)
+    }
+    
     #if DEBUG
     func resetAllData() {
         let context = container.viewContext

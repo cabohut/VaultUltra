@@ -6,7 +6,7 @@ Family Vault Ultra keeps your family's important documents and information in on
 ## Folders
 - **Smart folders** (the original six) come with suggested items and ready-made fields.
 - **Custom folders**: tap **+** on the Folders screen to create your own.
-- **Suggested Items** appear at the top of a smart folder. Tap one to create it, or swipe left to skip it.
+- **Suggested Items** appear at the top of a smart folder. Tap one to create it, or swipe left to skip it (you can restore it in Settings).
 - **Reorder** folders with **Edit**, then drag them into place.
 - **Delete a folder** by swiping left. You'll be asked to confirm. The folder and every item that is only in that folder (with its attachments) are permanently deleted. If the folder is shared, it is removed for everyone.
 
@@ -68,4 +68,5 @@ Tap the person icon next to a folder to invite someone, such as a family member.
 
 ## Settings
 - **Help & About**: this guide.
+- **Restore Suggested Items**: restore skipped suggestions and deleted smart folder. 
 - **Anthropic API Key**: add or remove your key for AI-assisted extraction.

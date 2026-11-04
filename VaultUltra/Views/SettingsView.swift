@@ -11,6 +11,8 @@ struct SettingsView: View {
     @State private var apiKey: String = ""
     @State private var isKeySaved = false
     @State private var showingDeleteConfirmation = false
+    @State private var showingRestoreConfirmation = false
+    @State private var restoreResult: String?
 
     #if DEBUG
     @State private var showingResetConfirmation = false
@@ -24,7 +26,15 @@ struct SettingsView: View {
                         AboutView()
                     }
                 }
-                
+
+                Section {
+                    Button("Restore Suggested Items") {
+                        showingRestoreConfirmation = true
+                    }
+                } footer: {
+                    Text("Brings back skipped suggestions in your smart folders and recreates any smart folder you deleted. Types you already have an item for are not suggested again.")
+                }
+
                 Section {
                     SecureField("sk-ant-...", text: $apiKey)
                         .textInputAutocapitalization(.never)
@@ -75,6 +85,26 @@ struct SettingsView: View {
                 }
                 Button("Cancel", role: .cancel) {}
             }
+            .confirmationDialog(
+                "Restore suggested items?",
+                isPresented: $showingRestoreConfirmation,
+                titleVisibility: .visible
+            ) {
+                Button("Restore") { restoreSuggestions() }
+                Button("Cancel", role: .cancel) {}
+            }
+            .alert(
+                "Suggested Items",
+                isPresented: Binding(
+                    get: { restoreResult != nil },
+                    set: { if !$0 { restoreResult = nil } }
+                )
+            ) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text(restoreResult ?? "")
+            }
+            
             #if DEBUG
             .confirmationDialog(
                 "Delete all data?",
@@ -90,5 +120,19 @@ struct SettingsView: View {
             }
             #endif
         }
+    }
+
+    private func restoreSuggestions() {
+        let result = PersistenceController.shared.restoreSuggestedItems()
+        var parts: [String] = []
+        if result.suggestions > 0 {
+            parts.append("Added \(result.suggestions) suggested item\(result.suggestions == 1 ? "" : "s").")
+        }
+        if result.folders > 0 {
+            parts.append("Recreated \(result.folders) smart folder\(result.folders == 1 ? "" : "s").")
+        }
+        restoreResult = parts.isEmpty
+            ? "Nothing to restore. Every suggestion already has an item."
+            : parts.joined(separator: " ")
     }
 }

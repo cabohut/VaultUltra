@@ -65,7 +65,12 @@ struct FolderDetailView: View {
                         Button {
                             createItemFromSuggestion(suggestion)
                         } label: {
-                            Label(suggestion, systemImage: "plus.circle")
+                            HStack {
+                                Label(suggestion, systemImage: ItemFieldTemplates.symbol(for: suggestion))
+                                Spacer()
+                                Image(systemName: "plus.circle")
+                                    .imageScale(.large)
+                            }
                         }
                         .swipeActions(edge: .trailing) {
                             Button("Skip", role: .destructive) {
@@ -77,7 +82,7 @@ struct FolderDetailView: View {
             }
 
             ForEach(groupedItems, id: \.type) { group in
-                Section(group.type) {
+                Section {
                     ForEach(group.items) { item in
                         Button {
                             navigationPath.append(item)
@@ -88,6 +93,8 @@ struct FolderDetailView: View {
                     .onDelete { offsets in
                         requestDeletion(offsets, from: group.items)
                     }
+                } header: {
+                    Label(group.type, systemImage: ItemFieldTemplates.symbol(for: group.type))
                 }
             }
         }

@@ -40,7 +40,7 @@ struct NewItemView: View {
                     Button {
                         createItem(type: type)
                     } label: {
-                        Text(type)
+                        Label(type, systemImage: ItemFieldTemplates.symbol(for: type))
                     }
                     .foregroundStyle(.primary)
                 }

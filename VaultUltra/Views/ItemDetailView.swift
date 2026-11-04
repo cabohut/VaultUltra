@@ -122,11 +122,16 @@ struct ItemDetailView: View {
                 isShowingAddField = true
             } label: {
                 Label("Add Field", systemImage: "plus.circle")
+                    .imageScale(.large)
             }
         } header: {
             HStack {
-                Text(item.itemType?.isEmpty == false ? item.itemType! : "Details")
-
+                if let type = item.itemType, !type.isEmpty {
+                    Label(type, systemImage: ItemFieldTemplates.symbol(for: type))
+                } else {
+                    Text("Details")
+                }
+                
                 Spacer()
 
                 if hasSensitiveFields {
