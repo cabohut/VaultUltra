@@ -22,11 +22,10 @@ struct ContentView: View {
     @State private var selectedFolder: Folder?
     @State private var isShowingNewFolderAlert = false
     @State private var newFolderName = ""
-    @State private var shareButtonFrame: CGRect = .zero
     @State private var navigationPath = NavigationPath()
     @State private var shareButtonFrames: [NSManagedObjectID: CGRect] = [:]
-    @State private var isPreparingShare = false
     @State private var sharedFolderIDs: Set<NSManagedObjectID> = []
+    @State private var foldersPendingDeletion: [Folder] = []
     
     var body: some View {
         TabView {
@@ -45,23 +44,6 @@ struct ContentView: View {
                     Label("Settings", systemImage: "gear")
                 }
         }
-        .overlay {
-            if isPreparingShare {
-                ZStack {
-                    Color.black.opacity(0.25).ignoresSafeArea()
-                    VStack(spacing: 12) {
-                        ProgressView()
-                        Text("Preparing share…")
-                            .font(.callout)
-                            .foregroundStyle(.secondary)
-                    }
-                    .padding(16)
-                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
-                }
-                .transition(.opacity)
-            }
-        }
-        .animation(.default, value: isPreparingShare)
     }
 
     private var folderNavigationView: some View {
@@ -103,6 +85,18 @@ struct ContentView: View {
                     addFolder(name: newFolderName)
                     newFolderName = ""
                 }
+            }
+            .alert(
+                "Delete folder?",
+                isPresented: Binding(
+                    get: { !foldersPendingDeletion.isEmpty },
+                    set: { if !$0 { foldersPendingDeletion = [] } }
+                )
+            ) {
+                Button("Delete", role: .destructive) { confirmFolderDeletion() }
+                Button("Cancel", role: .cancel) { foldersPendingDeletion = [] }
+            } message: {
+                Text("The folder and all items and attachments in it will be permanently deleted. If it is shared, it will be removed for everyone.")
             }
         } detail: {
             NavigationStack(path: $navigationPath) {
@@ -151,7 +145,6 @@ struct ContentView: View {
                 Image(systemName: isShared ? "person.2.fill" : "person.crop.circle.badge.plus")
                     .foregroundStyle(isShared ? Color.green : Color.primary)
             }
-            .buttonStyle(.plain)
             .accessibilityLabel(Text("Share folder"))
             .buttonStyle(.plain)
             .background(
@@ -188,9 +181,22 @@ struct ContentView: View {
     }
 
     private func deleteFolders(at offsets: IndexSet) {
-        for index in offsets {
-            viewContext.delete(folders[index])
+        foldersPendingDeletion = offsets.map { folders[$0] }
+    }
+
+    private func confirmFolderDeletion() {
+        for folder in foldersPendingDeletion {
+            let items = folder.items as? Set<Item> ?? []
+            for item in items {
+                let folderCount = (item.folders as? Set<Folder>)?.count ?? 0
+                if folderCount <= 1 {
+                    viewContext.delete(item)
+                }
+            }
+            if selectedFolder == folder { selectedFolder = nil }
+            viewContext.delete(folder)
         }
+        foldersPendingDeletion = []
         do {
             try viewContext.save()
         } catch {

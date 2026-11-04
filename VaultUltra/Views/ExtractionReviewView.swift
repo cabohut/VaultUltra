@@ -72,6 +72,7 @@ struct ExtractionReviewView: View {
                 existing.displayValue = suggestion.value
             } else {
                 let field = CustomField(context: viewContext)
+                viewContext.assignStore(of: item, to: field)
                 field.key = suggestion.key
                 field.fieldType = CustomFieldType.text.rawValue
                 field.isSensitive = false

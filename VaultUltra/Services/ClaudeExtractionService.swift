@@ -32,6 +32,7 @@ enum ClaudeExtractionError: LocalizedError {
 
 enum ClaudeExtractionService {
     private static let endpoint = URL(string: "https://api.anthropic.com/v1/messages")!
+    private static let model = "claude-haiku-4-5-20251001" // update when this model is retired
 
     static func extractFields(from ocrText: String, existingFieldKeys: [String]) async throws -> [ExtractedField] {
         guard let apiKey = KeychainService.loadAPIKey(), !apiKey.isEmpty else {
@@ -52,7 +53,7 @@ enum ClaudeExtractionService {
         """
 
         let requestBody: [String: Any] = [
-            "model": "claude-haiku-4-5-20251001",
+            "model": model,
             "max_tokens": 1000,
             "messages": [
                 ["role": "user", "content": prompt]

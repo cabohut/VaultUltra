@@ -54,8 +54,8 @@ struct SearchView: View {
 
         let request: NSFetchRequest<Item> = Item.fetchRequest()
         request.predicate = NSPredicate(
-            format: "title CONTAINS[cd] %@ OR notes CONTAINS[cd] %@ OR ANY attachments.ocrText CONTAINS[cd] %@",
-            searchText, searchText, searchText
+            format: "title CONTAINS[cd] %@ OR notes CONTAINS[cd] %@ OR ANY attachments.ocrText CONTAINS[cd] %@ OR SUBQUERY(customFields, $f, $f.isSensitive == NO AND $f.stringValue CONTAINS[cd] %@).@count > 0",
+            searchText, searchText, searchText, searchText
         )
         request.sortDescriptors = [NSSortDescriptor(keyPath: \Item.title, ascending: true)]
 
@@ -71,6 +71,14 @@ struct SearchView: View {
         if let notes = item.notes, notes.localizedCaseInsensitiveContains(searchText) {
             return notes
         }
+        
+        let fieldSet = item.customFields as? Set<CustomField> ?? []
+        if let match = fieldSet.first(where: {
+            !$0.isSensitive && ($0.stringValue ?? "").localizedCaseInsensitiveContains(searchText)
+        }) {
+            return "\(match.key ?? "Field"): \(match.stringValue ?? "")"
+        }
+        
         let attachmentSet = item.attachments as? Set<Attachment> ?? []
         if let matching = attachmentSet.first(where: {
             ($0.ocrText ?? "").localizedCaseInsensitiveContains(searchText)

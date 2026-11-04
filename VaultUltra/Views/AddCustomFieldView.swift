@@ -64,6 +64,7 @@ struct AddCustomFieldView: View {
         guard !trimmedKey.isEmpty else { return }
 
         let field = CustomField(context: viewContext)
+        viewContext.assignStore(of: item, to: field)
         field.key = trimmedKey
         field.fieldType = fieldType.rawValue
         field.isSensitive = isSensitive

@@ -247,7 +247,8 @@ struct FolderDetailView: View {
         let allFieldsEmpty = fields.allSatisfy {
             ($0.stringValue ?? "").trimmingCharacters(in: .whitespaces).isEmpty
         }
-        return titleIsEmpty && attachments.isEmpty && allFieldsEmpty
+        let notesIsEmpty = (item.notes ?? "").trimmingCharacters(in: .whitespaces).isEmpty
+        return titleIsEmpty && notesIsEmpty && attachments.isEmpty && allFieldsEmpty
     }
 
     private func restoreSuggestion(_ suggestion: String, in targetFolder: Folder) {

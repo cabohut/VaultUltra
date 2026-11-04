@@ -20,7 +20,7 @@ struct SettingsView: View {
         NavigationStack {
             Form {
                 Section {
-                    NavigationLink("Getting Started") {
+                    NavigationLink("Help & About") {
                         AboutView()
                     }
                 }

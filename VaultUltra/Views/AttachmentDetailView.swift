@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct AttachmentDetailView: View {
     let attachment: Attachment
@@ -14,9 +15,11 @@ struct AttachmentDetailView: View {
     @State private var zoomScale: CGFloat = 1.0
 
     private var isImage: Bool {
-        attachment.mimeType?.hasPrefix("image/") == true
+        if attachment.mimeType?.hasPrefix("image/") == true { return true }
+        let ext = URL(fileURLWithPath: attachment.fileName ?? "").pathExtension
+        return UTType(filenameExtension: ext)?.conforms(to: .image) == true
     }
-
+    
     private var image: UIImage? {
         guard let data = attachment.fileData else { return nil }
         return UIImage(data: data)

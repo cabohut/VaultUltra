@@ -8,6 +8,7 @@
 import SwiftUI
 import CoreData
 import PhotosUI
+import UniformTypeIdentifiers
 
 struct ItemDetailView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -44,6 +45,7 @@ struct ItemDetailView: View {
     var body: some View {
         Form {
             detailsSection
+            notesSection
             attachmentsSection
         }
         .navigationTitle(item.title?.isEmpty == false ? item.title! : "New Item")
@@ -142,6 +144,28 @@ struct ItemDetailView: View {
         customFields.contains { $0.isSensitive }
     }
 
+    private var notesSection: some View {
+        Section("Notes") {
+            TextField("Notes", text: notesBinding, axis: .vertical)
+                .lineLimit(3...10)
+        }
+    }
+
+    private var notesBinding: Binding<String> {
+        Binding(
+            get: { item.notes ?? "" },
+            set: { newValue in
+                item.notes = newValue
+                item.modifiedDate = Date()
+                do {
+                    try viewContext.save()
+                } catch {
+                    print("Failed to save notes: \(error)")
+                }
+            }
+        )
+    }
+    
     private var attachmentsSection: some View {
         Section("Attachments") {
             ForEach(attachments) { attachment in
@@ -245,6 +269,7 @@ struct ItemDetailView: View {
         }
 
         let attachment = Attachment(context: viewContext)
+        viewContext.assignStore(of: item, to: attachment)
         attachment.fileName = "Photo-\(UUID().uuidString.prefix(6)).jpg"
         attachment.mimeType = "image/jpeg"
         attachment.fileData = data
@@ -267,6 +292,7 @@ struct ItemDetailView: View {
 
         for (index, data) in imageDataArray.enumerated() {
             let attachment = Attachment(context: viewContext)
+            viewContext.assignStore(of: item, to: attachment)
             attachment.fileName = "Scan-\(UUID().uuidString.prefix(6))-\(index + 1).jpg"
             attachment.mimeType = "image/jpeg"
             attachment.fileData = data
@@ -323,8 +349,10 @@ struct ItemDetailView: View {
         }
 
         let attachment = Attachment(context: viewContext)
+        viewContext.assignStore(of: item, to: attachment)
         attachment.fileName = url.lastPathComponent
-        attachment.mimeType = url.pathExtension.isEmpty ? "application/octet-stream" : "application/\(url.pathExtension)"
+        let type = UTType(filenameExtension: url.pathExtension)
+        attachment.mimeType = type?.preferredMIMEType ?? "application/octet-stream"
         attachment.fileData = data
         attachment.createdDate = Date()
         attachment.item = item
@@ -335,7 +363,7 @@ struct ItemDetailView: View {
             print("Failed to save imported file: \(error)")
         }
 
-        if attachment.mimeType?.contains("image") == true {
+        if type?.conforms(to: .image) == true {
             Task {
                 await runOCR(on: attachment, imageData: data)
             }
