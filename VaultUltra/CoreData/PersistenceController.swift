@@ -4,6 +4,10 @@
 //
 //  Created by bugs on 7/17/26.
 //      10-30-2026 - updated to add the shared store and exposes privateStore and sharedStore
+//      11-04-2026 - inMemory stores no longer use CloudKit
+//      11-04-2026 - added -UITesting launch argument support
+//      11-04-2026 - single shared NSManagedObjectModel to fix duplicate entity crash in tests
+//
 
 import CoreData
 import CloudKit
@@ -12,7 +16,24 @@ import Combine
 final class PersistenceController: ObservableObject {
     let objectWillChange = ObservableObjectPublisher()
 
-    static let shared = PersistenceController()
+    private static let sharedModel: NSManagedObjectModel = {
+        guard let url = Bundle.main.url(forResource: "VaultUltra", withExtension: "momd"),
+              let model = NSManagedObjectModel(contentsOf: url)
+        else {
+            fatalError("Failed to load the VaultUltra Core Data model.")
+        }
+        return model
+    }()
+
+    static let isUITesting: Bool = {
+        #if DEBUG
+        return ProcessInfo.processInfo.arguments.contains("-UITesting")
+        #else
+        return false
+        #endif
+    }()
+
+    static let shared = PersistenceController(inMemory: isUITesting)
 
     let container: NSPersistentCloudKitContainer
 
@@ -32,12 +53,14 @@ final class PersistenceController: ObservableObject {
     }
 
     init(inMemory: Bool = false) {
-        let cloudContainer = NSPersistentCloudKitContainer(name: "VaultUltra")
+        let cloudContainer = NSPersistentCloudKitContainer(name: "VaultUltra", managedObjectModel: Self.sharedModel)
         var privateURL: URL?
         var sharedURL: URL?
 
         if inMemory {
-            cloudContainer.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
+            let description = cloudContainer.persistentStoreDescriptions.first
+            description?.url = URL(fileURLWithPath: "/dev/null")
+            description?.cloudKitContainerOptions = nil
         } else {
             guard let privateDescription = cloudContainer.persistentStoreDescriptions.first,
                   let defaultURL = privateDescription.url

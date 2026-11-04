@@ -3,6 +3,7 @@
 //  VaultUltra
 //
 //  Created by bugs on 7/17/26.
+//      11-04-2026 - starts unlocked when launched for UI testing
 //
 
 import Foundation
@@ -23,6 +24,12 @@ final class AppLockManager: ObservableObject {
 
     private var isAuthenticating = false
     private let reason = "Unlock your Vault."
+    
+    init() {
+        #if DEBUG
+        if PersistenceController.isUITesting { isUnlocked = true }
+        #endif
+    }
 
     /// Uses the device-owner policy: the system tries biometrics first, then
     /// offers the passcode keypad itself if biometrics fail or are unavailable.

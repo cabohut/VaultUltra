@@ -3,6 +3,7 @@
 //  VaultUltra
 //
 //  Created by bugs on 7/18/26.
+//      11-04-2026 - URLSession made injectable for testing
 //
 
 import Foundation
@@ -34,7 +35,11 @@ enum ClaudeExtractionService {
     private static let endpoint = URL(string: "https://api.anthropic.com/v1/messages")!
     private static let model = "claude-haiku-4-5-20251001" // update when this model is retired
 
-    static func extractFields(from ocrText: String, existingFieldKeys: [String]) async throws -> [ExtractedField] {
+    static func extractFields(
+        from ocrText: String,
+        existingFieldKeys: [String],
+        session: URLSession = .shared
+    ) async throws -> [ExtractedField] {
         guard let apiKey = KeychainService.loadAPIKey(), !apiKey.isEmpty else {
             throw ClaudeExtractionError.missingAPIKey
         }
@@ -67,8 +72,8 @@ enum ClaudeExtractionService {
         request.setValue("2023-06-01", forHTTPHeaderField: "anthropic-version")
         request.httpBody = try JSONSerialization.data(withJSONObject: requestBody)
 
-        let (data, response) = try await URLSession.shared.data(for: request)
-
+        let (data, response) = try await session.data(for: request)
+        
         guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
             let statusCode = (response as? HTTPURLResponse)?.statusCode ?? -1
             throw ClaudeExtractionError.requestFailed("HTTP \(statusCode)")

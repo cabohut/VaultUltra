@@ -4,6 +4,7 @@
 //
 //  Created by bugs on 7/17/26.
 //      10-30-2026 - updated to delete items with blank entries and them to suggested list
+//      11-04-2026 - cleanup logic moved to ItemCleanup
 
 import SwiftUI
 import CoreData
@@ -228,7 +229,7 @@ struct FolderDetailView: View {
     private func cleanUpNewItems() {
         for record in newItemRecords {
             guard let item = try? viewContext.existingObject(with: record.objectID) as? Item,
-                  hasNoContent(item)
+                  ItemCleanup.hasNoContent(item)
             else { continue }
 
             viewContext.delete(item)
@@ -247,25 +248,10 @@ struct FolderDetailView: View {
         }
     }
 
-    private func hasNoContent(_ item: Item) -> Bool {
-        let titleIsEmpty = (item.title ?? "").trimmingCharacters(in: .whitespaces).isEmpty
-        let attachments = item.attachments as? Set<Attachment> ?? []
-        let fields = item.customFields as? Set<CustomField> ?? []
-        let allFieldsEmpty = fields.allSatisfy {
-            ($0.stringValue ?? "").trimmingCharacters(in: .whitespaces).isEmpty
-        }
-        let notesIsEmpty = (item.notes ?? "").trimmingCharacters(in: .whitespaces).isEmpty
-        return titleIsEmpty && notesIsEmpty && attachments.isEmpty && allFieldsEmpty
-    }
-
     private func restoreSuggestion(_ suggestion: String, in targetFolder: Folder) {
         let current = targetFolder.pendingSuggestions?.split(separator: ",").map(String.init) ?? []
         guard !current.contains(suggestion) else { return }
-
-        let original = SmartFolderTemplates.template(forFolderName: targetFolder.name ?? "")?.suggestedItems ?? []
-        let restored = (current + [suggestion]).sorted {
-            (original.firstIndex(of: $0) ?? Int.max) < (original.firstIndex(of: $1) ?? Int.max)
-        }
+        let restored = ItemCleanup.restoredSuggestions(suggestion, current: current, folderName: targetFolder.name ?? "")
         targetFolder.pendingSuggestions = restored.joined(separator: ",")
     }
 }

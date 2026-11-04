@@ -3,9 +3,8 @@
 //  VaultUltra
 //
 //  Created by bugs on 8/17/26.
+//      11-04-2026 - GuideLoader.parse split out for testing
 //
-
-import SwiftUI
 
 import SwiftUI
 
@@ -36,7 +35,10 @@ enum GuideLoader {
         else {
             return [plain("Could not load the user guide.")]
         }
+        return parse(raw)
+    }
 
+    static func parse(_ raw: String) -> [GuideBlock] {
         let options = AttributedString.MarkdownParsingOptions(
             interpretedSyntax: .full,
             failurePolicy: .returnPartiallyParsedIfPossible)
@@ -46,7 +48,7 @@ enum GuideLoader {
         }
         return blocks(from: parsed)
     }
-
+    
     private static func plain(_ s: String) -> GuideBlock {
         GuideBlock(kind: .paragraph, depth: 0, text: AttributedString(s))
     }

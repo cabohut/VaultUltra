@@ -31,6 +31,14 @@ struct SettingsView: View {
                     Button("Restore Suggested Items") {
                         showingRestoreConfirmation = true
                     }
+                    .confirmationDialog(
+                        "Restore suggested items?",
+                        isPresented: $showingRestoreConfirmation,
+                        titleVisibility: .visible
+                    ) {
+                        Button("Restore") { restoreSuggestions() }
+                        Button("Cancel", role: .cancel) {}
+                    }
                 } footer: {
                     Text("Brings back skipped suggestions in your smart folders and recreates any smart folder you deleted. Types you already have an item for are not suggested again.")
                 }
@@ -51,6 +59,17 @@ struct SettingsView: View {
                         Button("Remove Saved Key", role: .destructive) {
                             showingDeleteConfirmation = true
                         }
+                        .confirmationDialog(
+                            "Remove API key?",
+                            isPresented: $showingDeleteConfirmation,
+                            titleVisibility: .visible
+                        ) {
+                            Button("Remove", role: .destructive) {
+                                KeychainService.deleteAPIKey()
+                                isKeySaved = false
+                            }
+                            Button("Cancel", role: .cancel) {}
+                        }
                     }
                 } header: {
                     Text("Anthropic API Key")
@@ -63,6 +82,18 @@ struct SettingsView: View {
                     Button("Reset All Data", role: .destructive) {
                         showingResetConfirmation = true
                     }
+                    .confirmationDialog(
+                        "Delete all data?",
+                        isPresented: $showingResetConfirmation,
+                        titleVisibility: .visible
+                    ) {
+                        Button("Delete Everything", role: .destructive) {
+                            PersistenceController.shared.resetAllData()
+                        }
+                        Button("Cancel", role: .cancel) {}
+                    } message: {
+                        Text("This cannot be undone.")
+                    }
                 } header: {
                     Text("Debug")
                 } footer: {
@@ -73,25 +104,6 @@ struct SettingsView: View {
             .navigationTitle("Settings")
             .onAppear {
                 isKeySaved = KeychainService.loadAPIKey() != nil
-            }
-            .confirmationDialog(
-                "Remove API key?",
-                isPresented: $showingDeleteConfirmation,
-                titleVisibility: .visible
-            ) {
-                Button("Remove", role: .destructive) {
-                    KeychainService.deleteAPIKey()
-                    isKeySaved = false
-                }
-                Button("Cancel", role: .cancel) {}
-            }
-            .confirmationDialog(
-                "Restore suggested items?",
-                isPresented: $showingRestoreConfirmation,
-                titleVisibility: .visible
-            ) {
-                Button("Restore") { restoreSuggestions() }
-                Button("Cancel", role: .cancel) {}
             }
             .alert(
                 "Suggested Items",
@@ -104,21 +116,6 @@ struct SettingsView: View {
             } message: {
                 Text(restoreResult ?? "")
             }
-            
-            #if DEBUG
-            .confirmationDialog(
-                "Delete all data?",
-                isPresented: $showingResetConfirmation,
-                titleVisibility: .visible
-            ) {
-                Button("Delete Everything", role: .destructive) {
-                    PersistenceController.shared.resetAllData()
-                }
-                Button("Cancel", role: .cancel) {}
-            } message: {
-                Text("This cannot be undone.")
-            }
-            #endif
         }
     }
 

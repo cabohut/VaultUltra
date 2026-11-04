@@ -3,6 +3,7 @@
 //  VaultUltra
 //
 //  Created by bugs on 7/17/26.
+//      11-04-2026 - UI testing launch support
 //
 
 import SwiftUI
@@ -14,12 +15,17 @@ struct VaultApp: App {
     @StateObject private var lockManager = AppLockManager()
     @Environment(\.scenePhase) private var scenePhase
 
-    @State private var showSplash = true
+    @State private var showSplash = !PersistenceController.isUITesting
     
     init() {
         PersistenceController.shared.seedSmartFoldersIfNeeded()
+        #if DEBUG
+        if PersistenceController.isUITesting {
+            PersistenceController.shared.restoreSuggestedItems()
+        }
+        #endif
     }
-
+    
     var body: some Scene {
         WindowGroup {
             ZStack {

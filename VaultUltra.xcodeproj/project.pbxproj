@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		92042AC4309958C30036AF80 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92042AC3309958BC0036AF80 /* SplashView.swift */; };
 		92042AC630999BBC0036AF80 /* StoreAssignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92042AC530999BB70036AF80 /* StoreAssignment.swift */; };
+		92042AE8309BDD410036AF80 /* ItemCleanup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92042AE7309BDD340036AF80 /* ItemCleanup.swift */; };
+		92042AEC309BDE960036AF80 /* ItemSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92042AEB309BDE900036AF80 /* ItemSearch.swift */; };
 		9258AE0E3034191E008993A5 /* user-guide.md in Resources */ = {isa = PBXBuildFile; fileRef = 9258AE0D3034191E008993A5 /* user-guide.md */; };
 		9258AE103034196A008993A5 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9258AE0F30341960008993A5 /* AboutView.swift */; };
 		92989CA1300CA84C0034AD5D /* ItemFieldTemplates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92989CA0300CA8480034AD5D /* ItemFieldTemplates.swift */; };
@@ -42,9 +44,38 @@
 		92B518BC300C8471009FF0CB /* ExtractionReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B518BB300C846C009FF0CB /* ExtractionReviewView.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		92042ACF309BB58C0036AF80 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 92B51863300B4182009FF0CB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 92B5186A300B4182009FF0CB;
+			remoteInfo = VaultUltra;
+		};
+		92042ADC309BB91D0036AF80 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 92B51863300B4182009FF0CB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 92B5186A300B4182009FF0CB;
+			remoteInfo = VaultUltra;
+		};
+		92042AFB309BE3FB0036AF80 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 92B51863300B4182009FF0CB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 92B5186A300B4182009FF0CB;
+			remoteInfo = VaultUltra;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		92042AC3309958BC0036AF80 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		92042AC530999BB70036AF80 /* StoreAssignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreAssignment.swift; sourceTree = "<group>"; };
+		92042ACB309BB58C0036AF80 /* VaultUltraTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = VaultUltraTests.xctest; path = "/Users/bugs/Documents/Cabohut/apps/VaultUltra/app/VaultUltra/build/Debug-iphoneos/VaultUltra.app/PlugIns/VaultUltraTests.xctest"; sourceTree = "<absolute>"; };
+		92042AD8309BB91D0036AF80 /* TemplateIntegrityTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = TemplateIntegrityTests.xctest; path = "/Users/bugs/Documents/Cabohut/apps/VaultUltra/app/VaultUltra/build/Debug-iphoneos/VaultUltra.app/PlugIns/TemplateIntegrityTests.xctest"; sourceTree = "<absolute>"; };
+		92042AE7309BDD340036AF80 /* ItemCleanup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemCleanup.swift; sourceTree = "<group>"; };
+		92042AEB309BDE900036AF80 /* ItemSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemSearch.swift; sourceTree = "<group>"; };
+		92042AF7309BE3FB0036AF80 /* VaultUltraUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VaultUltraUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9258AE0D3034191E008993A5 /* user-guide.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "user-guide.md"; sourceTree = "<group>"; };
 		9258AE0F30341960008993A5 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		9258AE1130396DC1008993A5 /* VaultUltra.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VaultUltra.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -81,7 +112,41 @@
 		92B518BB300C846C009FF0CB /* ExtractionReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtractionReviewView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		92042ACC309BB58C0036AF80 /* VaultUltraTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = VaultUltraTests;
+			sourceTree = "<group>";
+		};
+		92042AF8309BE3FB0036AF80 /* VaultUltraUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = VaultUltraUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
+		92042AC8309BB58C0036AF80 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		92042AD5309BB91D0036AF80 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		92042AF4309BE3FB0036AF80 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		92B51868300B4182009FF0CB /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -105,6 +170,8 @@
 		92989CA4300CAB9B0034AD5D /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				92042AEB309BDE900036AF80 /* ItemSearch.swift */,
+				92042AE7309BDD340036AF80 /* ItemCleanup.swift */,
 				92989CC23011DE120034AD5D /* CloudSharingPresenter.swift */,
 				92989CC03011DDF60034AD5D /* SharingService.swift */,
 				92B5189D300B4696009FF0CB /* AppLockManager.swift */,
@@ -119,6 +186,9 @@
 			children = (
 				92B51888300B4197009FF0CB /* VaultUltra */,
 				9258AE1130396DC1008993A5 /* VaultUltra.app */,
+				92042ACC309BB58C0036AF80 /* VaultUltraTests */,
+				92042AF7309BE3FB0036AF80 /* VaultUltraUITests.xctest */,
+				92042AF8309BE3FB0036AF80 /* VaultUltraUITests */,
 			);
 			sourceTree = "<group>";
 		};
@@ -185,6 +255,72 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		92042ACA309BB58C0036AF80 /* VaultUltraTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 92042AD1309BB58C0036AF80 /* Build configuration list for PBXNativeTarget "VaultUltraTests" */;
+			buildPhases = (
+				92042AC7309BB58C0036AF80 /* Sources */,
+				92042AC8309BB58C0036AF80 /* Frameworks */,
+				92042AC9309BB58C0036AF80 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				92042AD0309BB58C0036AF80 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				92042ACC309BB58C0036AF80 /* VaultUltraTests */,
+			);
+			name = VaultUltraTests;
+			packageProductDependencies = (
+			);
+			productName = VaultUltraTests;
+			productReference = 92042ACB309BB58C0036AF80 /* VaultUltraTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		92042AD7309BB91D0036AF80 /* TemplateIntegrityTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 92042ADE309BB91D0036AF80 /* Build configuration list for PBXNativeTarget "TemplateIntegrityTests" */;
+			buildPhases = (
+				92042AD4309BB91D0036AF80 /* Sources */,
+				92042AD5309BB91D0036AF80 /* Frameworks */,
+				92042AD6309BB91D0036AF80 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				92042ADD309BB91D0036AF80 /* PBXTargetDependency */,
+			);
+			name = TemplateIntegrityTests;
+			packageProductDependencies = (
+			);
+			productName = TemplateIntegrityTests;
+			productReference = 92042AD8309BB91D0036AF80 /* TemplateIntegrityTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		92042AF6309BE3FB0036AF80 /* VaultUltraUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 92042AFD309BE3FB0036AF80 /* Build configuration list for PBXNativeTarget "VaultUltraUITests" */;
+			buildPhases = (
+				92042AF3309BE3FB0036AF80 /* Sources */,
+				92042AF4309BE3FB0036AF80 /* Frameworks */,
+				92042AF5309BE3FB0036AF80 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				92042AFC309BE3FB0036AF80 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				92042AF8309BE3FB0036AF80 /* VaultUltraUITests */,
+			);
+			name = VaultUltraUITests;
+			packageProductDependencies = (
+			);
+			productName = VaultUltraUITests;
+			productReference = 92042AF7309BE3FB0036AF80 /* VaultUltraUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		92B5186A300B4182009FF0CB /* VaultUltra */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 92B5187C300B4183009FF0CB /* Build configuration list for PBXNativeTarget "VaultUltra" */;
@@ -211,9 +347,21 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2660;
+				LastSwiftUpdateCheck = 2720;
 				LastUpgradeCheck = 2710;
 				TargetAttributes = {
+					92042ACA309BB58C0036AF80 = {
+						CreatedOnToolsVersion = 27.2;
+						TestTargetID = 92B5186A300B4182009FF0CB;
+					};
+					92042AD7309BB91D0036AF80 = {
+						CreatedOnToolsVersion = 27.2;
+						TestTargetID = 92B5186A300B4182009FF0CB;
+					};
+					92042AF6309BE3FB0036AF80 = {
+						CreatedOnToolsVersion = 27.2;
+						TestTargetID = 92B5186A300B4182009FF0CB;
+					};
 					92B5186A300B4182009FF0CB = {
 						CreatedOnToolsVersion = 26.6;
 					};
@@ -234,11 +382,35 @@
 			projectRoot = "";
 			targets = (
 				92B5186A300B4182009FF0CB /* VaultUltra */,
+				92042ACA309BB58C0036AF80 /* VaultUltraTests */,
+				92042AD7309BB91D0036AF80 /* TemplateIntegrityTests */,
+				92042AF6309BE3FB0036AF80 /* VaultUltraUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		92042AC9309BB58C0036AF80 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		92042AD6309BB91D0036AF80 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		92042AF5309BE3FB0036AF80 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		92B51869300B4182009FF0CB /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -251,6 +423,27 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		92042AC7309BB58C0036AF80 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		92042AD4309BB91D0036AF80 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		92042AF3309BE3FB0036AF80 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		92B51867300B4182009FF0CB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -258,6 +451,7 @@
 				92B518B8300B6931009FF0CB /* SettingsView.swift in Sources */,
 				92B5188C300B4197009FF0CB /* ContentView.swift in Sources */,
 				92B51896300B4639009FF0CB /* FolderDetailView.swift in Sources */,
+				92042AE8309BDD410036AF80 /* ItemCleanup.swift in Sources */,
 				9258AE103034196A008993A5 /* AboutView.swift in Sources */,
 				92989CC93011E57C0034AD5D /* QuickLookView.swift in Sources */,
 				92B5189C300B4685009FF0CB /* DocumentScannerView.swift in Sources */,
@@ -277,6 +471,7 @@
 				92B5188D300B4197009FF0CB /* PersistenceController.swift in Sources */,
 				92042AC630999BBC0036AF80 /* StoreAssignment.swift in Sources */,
 				92B5189A300B4667009FF0CB /* AttachmentDetailView.swift in Sources */,
+				92042AEC309BDE960036AF80 /* ItemSearch.swift in Sources */,
 				92B518B6300B68EE009FF0CB /* KeychainService.swift in Sources */,
 				92B518BC300C8471009FF0CB /* ExtractionReviewView.swift in Sources */,
 				92B518A6300B5636009FF0CB /* SearchView.swift in Sources */,
@@ -291,7 +486,155 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		92042AD0309BB58C0036AF80 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 92B5186A300B4182009FF0CB /* VaultUltra */;
+			targetProxy = 92042ACF309BB58C0036AF80 /* PBXContainerItemProxy */;
+		};
+		92042ADD309BB91D0036AF80 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 92B5186A300B4182009FF0CB /* VaultUltra */;
+			targetProxy = 92042ADC309BB91D0036AF80 /* PBXContainerItemProxy */;
+		};
+		92042AFC309BE3FB0036AF80 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 92B5186A300B4182009FF0CB /* VaultUltra */;
+			targetProxy = 92042AFB309BE3FB0036AF80 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		92042AD2309BB58C0036AF80 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = XLK8R657HJ;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cabohut.VaultUltraTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VaultUltra.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/VaultUltra";
+			};
+			name = Debug;
+		};
+		92042AD3309BB58C0036AF80 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = XLK8R657HJ;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cabohut.VaultUltraTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VaultUltra.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/VaultUltra";
+			};
+			name = Release;
+		};
+		92042ADF309BB91D0036AF80 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = XLK8R657HJ;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cabohut.TemplateIntegrityTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VaultUltra.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/VaultUltra";
+			};
+			name = Debug;
+		};
+		92042AE0309BB91D0036AF80 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = XLK8R657HJ;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cabohut.TemplateIntegrityTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VaultUltra.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/VaultUltra";
+			};
+			name = Release;
+		};
+		92042AFE309BE3FB0036AF80 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = XLK8R657HJ;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cabohut.VaultUltraUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = VaultUltra;
+			};
+			name = Debug;
+		};
+		92042AFF309BE3FB0036AF80 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = XLK8R657HJ;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cabohut.VaultUltraUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = VaultUltra;
+			};
+			name = Release;
+		};
 		92B5187D300B4183009FF0CB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -299,7 +642,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = VaultUltra/VaultUltra.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = XLK8R657HJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -337,7 +680,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = VaultUltra/VaultUltra.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = XLK8R657HJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -494,6 +837,33 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		92042AD1309BB58C0036AF80 /* Build configuration list for PBXNativeTarget "VaultUltraTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				92042AD2309BB58C0036AF80 /* Debug */,
+				92042AD3309BB58C0036AF80 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		92042ADE309BB91D0036AF80 /* Build configuration list for PBXNativeTarget "TemplateIntegrityTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				92042ADF309BB91D0036AF80 /* Debug */,
+				92042AE0309BB91D0036AF80 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		92042AFD309BE3FB0036AF80 /* Build configuration list for PBXNativeTarget "VaultUltraUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				92042AFE309BE3FB0036AF80 /* Debug */,
+				92042AFF309BE3FB0036AF80 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		92B51866300B4182009FF0CB /* Build configuration list for PBXProject "VaultUltra" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

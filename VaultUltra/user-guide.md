@@ -39,9 +39,19 @@ Each item can hold photos, scans, and files.
 
 ## AI-Assisted Field Extraction
 This is optional. Swipe left on an attachment that has recognized text and tap **Extract Info** to have key details suggested, such as a policy number from a scanned insurance card.
-- It needs your own Anthropic API key, added in **Settings**.
-- The recognized text from that document is sent to Anthropic to process it.
 - You review the suggestions first. Nothing is saved until you choose which to keep. Matching existing fields are overwritten.
+- When you use it, the recognized text from that document is sent to Anthropic, the company behind Claude, to process it.
+
+###  Anthropic API Key
+The feature runs on your own Anthropic account, so it needs your personal API key. The key is stored securely on your device and is used only for these requests. Without a key, the rest of the app works normally.
+
+To get one:
+1. Go to [console.anthropic.com](https://console.anthropic.com) and sign in or create an account.
+2. Add billing or buy a small amount of credit. API usage is pay-as-you-go and separate from any Claude chat subscription.
+3. Open **API keys**, tap **Create Key**, and copy the key (it starts with `sk-ant-`). It is only shown once.
+4. In the app, go to **Settings**, paste it into the key field, and tap **Save Key**.
+
+Use **Remove Saved Key** in Settings to delete it from your device. You can also revoke a key in your Anthropic console at any time.
 
 ## Search
 The **Search** tab looks across your whole vault:

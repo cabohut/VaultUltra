@@ -4,6 +4,7 @@
 //
 //  Created by bugs on 7/18/26.
 //      11-03-2026 - Fix for Issue 6 from Claud
+//      11-04-2026 - dateStorage made internal for testing
 //
 
 import SwiftUI
@@ -13,7 +14,7 @@ struct CustomFieldRow: View {
     @ObservedObject var field: CustomField
     let isRevealed: Bool
 
-    private static let dateStorage: ISO8601DateFormatter = {
+    static let dateStorage: ISO8601DateFormatter = {
         let f = ISO8601DateFormatter()
         f.formatOptions = [.withFullDate]
         f.timeZone = .current

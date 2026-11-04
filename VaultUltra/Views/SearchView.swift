@@ -3,6 +3,7 @@
 //  VaultUltra
 //
 //  Created by bugs on 7/17/26.
+//      11-04-2026 - search query moved to ItemSearch
 //
 
 import SwiftUI
@@ -50,21 +51,7 @@ struct SearchView: View {
     }
 
     private var searchResults: [Item] {
-        guard !searchText.isEmpty else { return [] }
-
-        let request: NSFetchRequest<Item> = Item.fetchRequest()
-        request.predicate = NSPredicate(
-            format: "title CONTAINS[cd] %@ OR notes CONTAINS[cd] %@ OR ANY attachments.ocrText CONTAINS[cd] %@ OR SUBQUERY(customFields, $f, $f.isSensitive == NO AND $f.stringValue CONTAINS[cd] %@).@count > 0",
-            searchText, searchText, searchText, searchText
-        )
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \Item.title, ascending: true)]
-
-        do {
-            return try viewContext.fetch(request)
-        } catch {
-            print("Search fetch failed: \(error)")
-            return []
-        }
+        ItemSearch.results(for: searchText, in: viewContext)
     }
 
     private func matchSnippet(for item: Item) -> String? {
