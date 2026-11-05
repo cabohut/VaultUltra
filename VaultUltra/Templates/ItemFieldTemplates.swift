@@ -220,7 +220,7 @@ enum ItemFieldTemplates {
         "Investment Accounts": "chart.line.uptrend.xyaxis",
         "Retirement Accounts": "beach.umbrella",
         "Tax Returns": "percent",
-        "Health Insurance Card": "creditcard",
+        "Health Insurance Card": "heart.rectangle",
         "Medication List": "pills",
         "Doctor Contacts": "stethoscope",
         "Medical History": "waveform.path.ecg",

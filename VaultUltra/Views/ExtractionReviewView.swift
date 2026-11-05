@@ -3,7 +3,7 @@
 //  VaultUltra
 //
 //  Created by bugs on 7/18/26.
-//
+//      11-04-2026 - now using on-device extraction
 
 import SwiftUI
 import CoreData
@@ -14,12 +14,14 @@ struct ExtractionReviewView: View {
 
     let item: Item
     let suggestions: [ExtractedField]
+    let wasTruncated: Bool
 
     @State private var selectedKeys: Set<UUID>
 
-    init(item: Item, suggestions: [ExtractedField]) {
+    init(item: Item, suggestions: [ExtractedField], wasTruncated: Bool = false) {
         self.item = item
         self.suggestions = suggestions
+        self.wasTruncated = wasTruncated
         _selectedKeys = State(initialValue: Set(suggestions.map { $0.id }))
     }
 
@@ -46,7 +48,8 @@ struct ExtractionReviewView: View {
                 } header: {
                     Text("Suggested Fields")
                 } footer: {
-                    Text("Only checked fields will be added or updated. Existing fields with matching names will be overwritten.")
+                    Text((wasTruncated ? "This document was long, so only the first part was analyzed. " : "")
+                         + "Check each value against your document. Only checked fields will be added or updated. Existing fields with matching names will be overwritten.")
                 }
             }
             .navigationTitle("Review Extraction")

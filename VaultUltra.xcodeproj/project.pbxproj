@@ -19,6 +19,7 @@
 		92989CC53011DE2C0034AD5D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92989CC43011DE2A0034AD5D /* AppDelegate.swift */; };
 		92989CC73011E3470034AD5D /* ItemRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92989CC63011E3400034AD5D /* ItemRowView.swift */; };
 		92989CC93011E57C0034AD5D /* QuickLookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92989CC83011E5790034AD5D /* QuickLookView.swift */; };
+		92A88D2C309C50BB007FADF1 /* OnDeviceExtractionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A88D2B309C50B3007FADF1 /* OnDeviceExtractionService.swift */; };
 		92B5188A300B4197009FF0CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 92B51881300B4197009FF0CB /* Assets.xcassets */; };
 		92B5188C300B4197009FF0CB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B51882300B4197009FF0CB /* ContentView.swift */; };
 		92B5188D300B4197009FF0CB /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B51884300B4197009FF0CB /* PersistenceController.swift */; };
@@ -38,9 +39,7 @@
 		92B518AC300B5C96009FF0CB /* CustomFieldRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B518AB300B5C93009FF0CB /* CustomFieldRow.swift */; };
 		92B518AE300B5CAB009FF0CB /* AddCustomFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B518AD300B5CA8009FF0CB /* AddCustomFieldView.swift */; };
 		92B518B2300B6004009FF0CB /* NewItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B518B1300B6001009FF0CB /* NewItemView.swift */; };
-		92B518B6300B68EE009FF0CB /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B518B5300B68EC009FF0CB /* KeychainService.swift */; };
 		92B518B8300B6931009FF0CB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B518B7300B692E009FF0CB /* SettingsView.swift */; };
-		92B518BA300C842F009FF0CB /* ClaudeExtractionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B518B9300C842C009FF0CB /* ClaudeExtractionService.swift */; };
 		92B518BC300C8471009FF0CB /* ExtractionReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B518BB300C846C009FF0CB /* ExtractionReviewView.swift */; };
 /* End PBXBuildFile section */
 
@@ -71,8 +70,8 @@
 /* Begin PBXFileReference section */
 		92042AC3309958BC0036AF80 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		92042AC530999BB70036AF80 /* StoreAssignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreAssignment.swift; sourceTree = "<group>"; };
-		92042ACB309BB58C0036AF80 /* VaultUltraTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = VaultUltraTests.xctest; path = "/Users/bugs/Documents/Cabohut/apps/VaultUltra/app/VaultUltra/build/Debug-iphoneos/VaultUltra.app/PlugIns/VaultUltraTests.xctest"; sourceTree = "<absolute>"; };
-		92042AD8309BB91D0036AF80 /* TemplateIntegrityTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = TemplateIntegrityTests.xctest; path = "/Users/bugs/Documents/Cabohut/apps/VaultUltra/app/VaultUltra/build/Debug-iphoneos/VaultUltra.app/PlugIns/TemplateIntegrityTests.xctest"; sourceTree = "<absolute>"; };
+		92042ACB309BB58C0036AF80 /* VaultUltraTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VaultUltraTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		92042AD8309BB91D0036AF80 /* TemplateIntegrityTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TemplateIntegrityTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		92042AE7309BDD340036AF80 /* ItemCleanup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemCleanup.swift; sourceTree = "<group>"; };
 		92042AEB309BDE900036AF80 /* ItemSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemSearch.swift; sourceTree = "<group>"; };
 		92042AF7309BE3FB0036AF80 /* VaultUltraUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VaultUltraUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -85,6 +84,7 @@
 		92989CC43011DE2A0034AD5D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		92989CC63011E3400034AD5D /* ItemRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemRowView.swift; sourceTree = "<group>"; };
 		92989CC83011E5790034AD5D /* QuickLookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLookView.swift; sourceTree = "<group>"; };
+		92A88D2B309C50B3007FADF1 /* OnDeviceExtractionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnDeviceExtractionService.swift; sourceTree = "<group>"; };
 		92B51881300B4197009FF0CB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		92B51882300B4197009FF0CB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		92B51883300B4197009FF0CB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -106,9 +106,7 @@
 		92B518AB300B5C93009FF0CB /* CustomFieldRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFieldRow.swift; sourceTree = "<group>"; };
 		92B518AD300B5CA8009FF0CB /* AddCustomFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCustomFieldView.swift; sourceTree = "<group>"; };
 		92B518B1300B6001009FF0CB /* NewItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewItemView.swift; sourceTree = "<group>"; };
-		92B518B5300B68EC009FF0CB /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
 		92B518B7300B692E009FF0CB /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		92B518B9300C842C009FF0CB /* ClaudeExtractionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeExtractionService.swift; sourceTree = "<group>"; };
 		92B518BB300C846C009FF0CB /* ExtractionReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtractionReviewView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -161,7 +159,6 @@
 			isa = PBXGroup;
 			children = (
 				92B518A1300B46C1009FF0CB /* SmartFolderTemplates.swift */,
-				92B518B5300B68EC009FF0CB /* KeychainService.swift */,
 				92989CA0300CA8480034AD5D /* ItemFieldTemplates.swift */,
 			);
 			path = Templates;
@@ -170,12 +167,12 @@
 		92989CA4300CAB9B0034AD5D /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				92A88D2B309C50B3007FADF1 /* OnDeviceExtractionService.swift */,
 				92042AEB309BDE900036AF80 /* ItemSearch.swift */,
 				92042AE7309BDD340036AF80 /* ItemCleanup.swift */,
 				92989CC23011DE120034AD5D /* CloudSharingPresenter.swift */,
 				92989CC03011DDF60034AD5D /* SharingService.swift */,
 				92B5189D300B4696009FF0CB /* AppLockManager.swift */,
-				92B518B9300C842C009FF0CB /* ClaudeExtractionService.swift */,
 				92B518A3300B52C5009FF0CB /* OCRService.swift */,
 			);
 			path = Services;
@@ -189,6 +186,8 @@
 				92042ACC309BB58C0036AF80 /* VaultUltraTests */,
 				92042AF7309BE3FB0036AF80 /* VaultUltraUITests.xctest */,
 				92042AF8309BE3FB0036AF80 /* VaultUltraUITests */,
+				92042ACB309BB58C0036AF80 /* VaultUltraTests.xctest */,
+				92042AD8309BB91D0036AF80 /* TemplateIntegrityTests.xctest */,
 			);
 			sourceTree = "<group>";
 		};
@@ -456,7 +455,6 @@
 				92989CC93011E57C0034AD5D /* QuickLookView.swift in Sources */,
 				92B5189C300B4685009FF0CB /* DocumentScannerView.swift in Sources */,
 				92989CC33011DE140034AD5D /* CloudSharingPresenter.swift in Sources */,
-				92B518BA300C842F009FF0CB /* ClaudeExtractionService.swift in Sources */,
 				92B51898300B464E009FF0CB /* ItemDetailView.swift in Sources */,
 				92B518A4300B52CD009FF0CB /* OCRService.swift in Sources */,
 				92989CC53011DE2C0034AD5D /* AppDelegate.swift in Sources */,
@@ -472,9 +470,9 @@
 				92042AC630999BBC0036AF80 /* StoreAssignment.swift in Sources */,
 				92B5189A300B4667009FF0CB /* AttachmentDetailView.swift in Sources */,
 				92042AEC309BDE960036AF80 /* ItemSearch.swift in Sources */,
-				92B518B6300B68EE009FF0CB /* KeychainService.swift in Sources */,
 				92B518BC300C8471009FF0CB /* ExtractionReviewView.swift in Sources */,
 				92B518A6300B5636009FF0CB /* SearchView.swift in Sources */,
+				92A88D2C309C50BB007FADF1 /* OnDeviceExtractionService.swift in Sources */,
 				92B518A8300B5C5D009FF0CB /* CustomFieldType.swift in Sources */,
 				92B5189E300B4699009FF0CB /* AppLockManager.swift in Sources */,
 				92B5188E300B4197009FF0CB /* VaultUltra.xcdatamodeld in Sources */,
@@ -642,7 +640,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = VaultUltra/VaultUltra.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = XLK8R657HJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -680,7 +678,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = VaultUltra/VaultUltra.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = XLK8R657HJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;

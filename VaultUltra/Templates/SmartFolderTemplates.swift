@@ -23,7 +23,7 @@ enum SmartFolderTemplates {
         SmartFolderTemplate(
             name: "Financial",
             icon: "dollarsign.circle",
-            suggestedItems: ["Bank Accounts", "Investment Accounts", "Retirement Accounts", "Tax Returns"]
+            suggestedItems: ["Bank Accounts", "Investment Accounts", "Retirement Accounts", "Credit Card", "Tax Returns"]
         ),
         SmartFolderTemplate(
             name: "Medical",

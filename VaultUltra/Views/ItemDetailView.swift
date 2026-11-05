@@ -4,6 +4,7 @@
 //
 //  Created by bugs on 7/17/26.
 //      10-30-2026 - added "Done" button
+//      11-04-2026 - added using OnDeviceExtractionService
 
 import SwiftUI
 import CoreData
@@ -28,6 +29,8 @@ struct ItemDetailView: View {
     @State private var extractionError: String?
 
     @State private var isSensitiveRevealed = false
+    
+    @State private var extractionWasTruncated = false
 
     init(item: Item, navigationPath: Binding<NavigationPath>) {
         self.item = item
@@ -81,7 +84,11 @@ struct ItemDetailView: View {
             .ignoresSafeArea()
         }
         .sheet(item: extractionSheetBinding) { wrapped in
-            ExtractionReviewView(item: item, suggestions: wrapped.fields)
+            ExtractionReviewView(
+                item: item,
+                suggestions: wrapped.fields,
+                wasTruncated: wrapped.wasTruncated
+            )
         }
         .alert("Extraction Failed", isPresented: extractionErrorBinding) {
             Button("OK", role: .cancel) {}
@@ -174,17 +181,35 @@ struct ItemDetailView: View {
     private var attachmentsSection: some View {
         Section("Attachments") {
             ForEach(attachments) { attachment in
-                Button {
-                    navigationPath.append(attachment)
-                } label: {
-                    HStack {
-                        Image(systemName: attachment.ocrText?.isEmpty == false ? "doc.text.fill" : "doc.fill")
-                        Text(attachment.fileName ?? "Attachment")
+                let ocrText = attachment.ocrText ?? ""
+                let canExtract = OnDeviceExtractionService.isAvailable && !ocrText.isEmpty
+
+                HStack {
+                    Button {
+                        navigationPath.append(attachment)
+                    } label: {
+                        HStack {
+                            Image(systemName: ocrText.isEmpty ? "doc.fill" : "doc.text.fill")
+                            Text(attachment.fileName ?? "Attachment")
+                            Spacer()
+                        }
+                        .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+
+                    if canExtract {
+                        Button {
+                            extractFields(from: ocrText)
+                        } label: {
+                            Label("Extract Info", systemImage: "sparkles")
+                                .labelStyle(.iconOnly)
+                        }
+                        .buttonStyle(.borderless)
+                        .tint(.purple)
                     }
                 }
-                .buttonStyle(.plain)
                 .swipeActions(edge: .trailing) {
-                    if let ocrText = attachment.ocrText, !ocrText.isEmpty {
+                    if canExtract {
                         Button {
                             extractFields(from: ocrText)
                         } label: {
@@ -232,7 +257,11 @@ struct ItemDetailView: View {
 
     private var extractionSheetBinding: Binding<IdentifiableSuggestions?> {
         Binding(
-            get: { extractionSuggestions.map { IdentifiableSuggestions(fields: $0) } },
+            get: {
+                extractionSuggestions.map {
+                    IdentifiableSuggestions(fields: $0, wasTruncated: extractionWasTruncated)
+                }
+            },
             set: { _ in extractionSuggestions = nil }
         )
     }
@@ -383,13 +412,14 @@ struct ItemDetailView: View {
 
         Task {
             do {
-                let results = try await ClaudeExtractionService.extractFields(
+                let result = try await OnDeviceExtractionService.extractFields(
                     from: ocrText,
                     existingFieldKeys: existingKeys
                 )
                 await MainActor.run {
                     isExtractingFields = false
-                    extractionSuggestions = results
+                    extractionWasTruncated = result.wasTruncated
+                    extractionSuggestions = result.fields
                 }
             } catch {
                 await MainActor.run {
@@ -404,4 +434,5 @@ struct ItemDetailView: View {
 private struct IdentifiableSuggestions: Identifiable {
     let id = UUID()
     let fields: [ExtractedField]
+    let wasTruncated: Bool
 }

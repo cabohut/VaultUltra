@@ -3,14 +3,12 @@
 //  VaultUltra
 //
 //  Created by bugs on 7/18/26.
+//      11-04-2026 - removed Anthropic key
 //
 
 import SwiftUI
 
 struct SettingsView: View {
-    @State private var apiKey: String = ""
-    @State private var isKeySaved = false
-    @State private var showingDeleteConfirmation = false
     @State private var showingRestoreConfirmation = false
     @State private var restoreResult: String?
 
@@ -43,40 +41,6 @@ struct SettingsView: View {
                     Text("Brings back skipped suggestions in your smart folders and recreates any smart folder you deleted. Types you already have an item for are not suggested again.")
                 }
 
-                Section {
-                    SecureField("sk-ant-...", text: $apiKey)
-                        .textInputAutocapitalization(.never)
-                        .autocorrectionDisabled()
-
-                    Button("Save Key") {
-                        KeychainService.saveAPIKey(apiKey)
-                        isKeySaved = true
-                        apiKey = ""
-                    }
-                    .disabled(apiKey.trimmingCharacters(in: .whitespaces).isEmpty)
-
-                    if isKeySaved || KeychainService.loadAPIKey() != nil {
-                        Button("Remove Saved Key", role: .destructive) {
-                            showingDeleteConfirmation = true
-                        }
-                        .confirmationDialog(
-                            "Remove API key?",
-                            isPresented: $showingDeleteConfirmation,
-                            titleVisibility: .visible
-                        ) {
-                            Button("Remove", role: .destructive) {
-                                KeychainService.deleteAPIKey()
-                                isKeySaved = false
-                            }
-                            Button("Cancel", role: .cancel) {}
-                        }
-                    }
-                } header: {
-                    Text("Anthropic API Key")
-                } footer: {
-                    Text("Used only for AI-assisted field extraction from scanned documents. Stored securely on this device and never leaves it except to call Anthropic's API directly.")
-                }
-
                 #if DEBUG
                 Section {
                     Button("Reset All Data", role: .destructive) {
@@ -102,9 +66,6 @@ struct SettingsView: View {
                 #endif
             }
             .navigationTitle("Settings")
-            .onAppear {
-                isKeySaved = KeychainService.loadAPIKey() != nil
-            }
             .alert(
                 "Suggested Items",
                 isPresented: Binding(
