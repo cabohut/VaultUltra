@@ -34,6 +34,11 @@ struct ContentView: View {
                     Label("Folders", systemImage: "folder")
                 }
 
+            MyDocumentsView()
+                .tabItem {
+                    Label("Documents", systemImage: "doc.on.doc")
+                }
+            
             SearchView()
                 .tabItem {
                     Label("Search", systemImage: "magnifyingglass")

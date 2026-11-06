@@ -20,6 +20,7 @@
 		92989CC73011E3470034AD5D /* ItemRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92989CC63011E3400034AD5D /* ItemRowView.swift */; };
 		92989CC93011E57C0034AD5D /* QuickLookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92989CC83011E5790034AD5D /* QuickLookView.swift */; };
 		92A88D2C309C50BB007FADF1 /* OnDeviceExtractionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A88D2B309C50B3007FADF1 /* OnDeviceExtractionService.swift */; };
+		92A88D2E309D4E32007FADF1 /* MyDocumentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A88D2D309D4E26007FADF1 /* MyDocumentsView.swift */; };
 		92B5188A300B4197009FF0CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 92B51881300B4197009FF0CB /* Assets.xcassets */; };
 		92B5188C300B4197009FF0CB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B51882300B4197009FF0CB /* ContentView.swift */; };
 		92B5188D300B4197009FF0CB /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B51884300B4197009FF0CB /* PersistenceController.swift */; };
@@ -71,7 +72,7 @@
 		92042AC3309958BC0036AF80 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		92042AC530999BB70036AF80 /* StoreAssignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreAssignment.swift; sourceTree = "<group>"; };
 		92042ACB309BB58C0036AF80 /* VaultUltraTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VaultUltraTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		92042AD8309BB91D0036AF80 /* TemplateIntegrityTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TemplateIntegrityTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		92042AD8309BB91D0036AF80 /* TemplateIntegrityTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = TemplateIntegrityTests.xctest; path = "/Users/bugs/Documents/Cabohut/apps/VaultUltra/app/VaultUltra/build/Debug-iphoneos/VaultUltra.app/PlugIns/TemplateIntegrityTests.xctest"; sourceTree = "<absolute>"; };
 		92042AE7309BDD340036AF80 /* ItemCleanup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemCleanup.swift; sourceTree = "<group>"; };
 		92042AEB309BDE900036AF80 /* ItemSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemSearch.swift; sourceTree = "<group>"; };
 		92042AF7309BE3FB0036AF80 /* VaultUltraUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VaultUltraUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -85,6 +86,7 @@
 		92989CC63011E3400034AD5D /* ItemRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemRowView.swift; sourceTree = "<group>"; };
 		92989CC83011E5790034AD5D /* QuickLookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLookView.swift; sourceTree = "<group>"; };
 		92A88D2B309C50B3007FADF1 /* OnDeviceExtractionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnDeviceExtractionService.swift; sourceTree = "<group>"; };
+		92A88D2D309D4E26007FADF1 /* MyDocumentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDocumentsView.swift; sourceTree = "<group>"; };
 		92B51881300B4197009FF0CB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		92B51882300B4197009FF0CB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		92B51883300B4197009FF0CB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -187,7 +189,6 @@
 				92042AF7309BE3FB0036AF80 /* VaultUltraUITests.xctest */,
 				92042AF8309BE3FB0036AF80 /* VaultUltraUITests */,
 				92042ACB309BB58C0036AF80 /* VaultUltraTests.xctest */,
-				92042AD8309BB91D0036AF80 /* TemplateIntegrityTests.xctest */,
 			);
 			sourceTree = "<group>";
 		};
@@ -213,6 +214,7 @@
 			children = (
 				92B51882300B4197009FF0CB /* ContentView.swift */,
 				92042AC3309958BC0036AF80 /* SplashView.swift */,
+				92A88D2D309D4E26007FADF1 /* MyDocumentsView.swift */,
 				92B518B7300B692E009FF0CB /* SettingsView.swift */,
 				92B518A5300B5633009FF0CB /* SearchView.swift */,
 				9258AE0F30341960008993A5 /* AboutView.swift */,
@@ -469,6 +471,7 @@
 				92B5188D300B4197009FF0CB /* PersistenceController.swift in Sources */,
 				92042AC630999BBC0036AF80 /* StoreAssignment.swift in Sources */,
 				92B5189A300B4667009FF0CB /* AttachmentDetailView.swift in Sources */,
+				92A88D2E309D4E32007FADF1 /* MyDocumentsView.swift in Sources */,
 				92042AEC309BDE960036AF80 /* ItemSearch.swift in Sources */,
 				92B518BC300C8471009FF0CB /* ExtractionReviewView.swift in Sources */,
 				92B518A6300B5636009FF0CB /* SearchView.swift in Sources */,
@@ -640,7 +643,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = VaultUltra/VaultUltra.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = XLK8R657HJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -678,7 +681,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = VaultUltra/VaultUltra.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = XLK8R657HJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;

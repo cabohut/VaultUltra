@@ -28,25 +28,17 @@ struct FolderDetailView: View {
 
     private var items: [Item] {
         let set = folder.items as? Set<Item> ?? []
-        return set.sorted { ($0.title ?? "") < ($1.title ?? "") }
+        return set.sorted {
+            let t0 = ($0.itemType ?? "").isEmpty ? "\u{FFFF}" : ($0.itemType ?? "")
+            let t1 = ($1.itemType ?? "").isEmpty ? "\u{FFFF}" : ($1.itemType ?? "")
+            if t0 != t1 { return t0 < t1 }
+            return ($0.title ?? "") < ($1.title ?? "")
+        }
     }
-
+    
     private var pendingSuggestionsList: [String] {
         guard let pending = folder.pendingSuggestions, !pending.isEmpty else { return [] }
         return pending.split(separator: ",").map(String.init)
-    }
-
-    private var groupedItems: [(type: String, items: [Item])] {
-        let grouped = Dictionary(grouping: items) { item in
-            item.itemType?.isEmpty == false ? item.itemType! : "Other"
-        }
-        return grouped
-            .sorted { lhs, rhs in
-                if lhs.key == "Other" { return false }
-                if rhs.key == "Other" { return true }
-                return lhs.key < rhs.key
-            }
-            .map { (type: $0.key, items: $0.value.sorted { ($0.title ?? "") < ($1.title ?? "") }) }
     }
 
     private var isShowingDeleteConfirmation: Binding<Bool> {
@@ -60,6 +52,21 @@ struct FolderDetailView: View {
 
     var body: some View {
         List {
+            if !items.isEmpty {
+                Section("My Documents") {
+                    ForEach(items) { item in
+                        Button {
+                            navigationPath.append(item)
+                        } label: {
+                            ItemRowView(item: item)
+                        }
+                    }
+                    .onDelete { offsets in
+                        requestDeletion(offsets, from: items)
+                    }
+                }
+            }
+
             if !pendingSuggestionsList.isEmpty {
                 Section("Suggested Items") {
                     ForEach(pendingSuggestionsList, id: \.self) { suggestion in
@@ -70,7 +77,6 @@ struct FolderDetailView: View {
                                 Label(suggestion, systemImage: ItemFieldTemplates.symbol(for: suggestion))
                                 Spacer()
                                 Image(systemName: "plus.circle")
-                                    .imageScale(.large)
                             }
                         }
                         .swipeActions(edge: .trailing) {
@@ -79,23 +85,6 @@ struct FolderDetailView: View {
                             }
                         }
                     }
-                }
-            }
-
-            ForEach(groupedItems, id: \.type) { group in
-                Section {
-                    ForEach(group.items) { item in
-                        Button {
-                            navigationPath.append(item)
-                        } label: {
-                            ItemRowView(item: item)
-                        }
-                    }
-                    .onDelete { offsets in
-                        requestDeletion(offsets, from: group.items)
-                    }
-                } header: {
-                    Label(group.type, systemImage: ItemFieldTemplates.symbol(for: group.type))
                 }
             }
         }

@@ -48,7 +48,7 @@ struct ItemDetailView: View {
     var body: some View {
         Form {
             detailsSection
-            notesSection
+            addAttachmentSection
             attachmentsSection
         }
         .navigationTitle(item.title?.isEmpty == false ? item.title! : "New Item")
@@ -125,6 +125,9 @@ struct ItemDetailView: View {
                     }
             }
 
+            TextField("Notes", text: notesBinding, axis: .vertical)
+                .lineLimit(1...4)
+            
             Button {
                 isShowingAddField = true
             } label: {
@@ -156,13 +159,65 @@ struct ItemDetailView: View {
         customFields.contains { $0.isSensitive }
     }
 
-    private var notesSection: some View {
-        Section("Notes") {
-            TextField("Notes", text: notesBinding, axis: .vertical)
-                .lineLimit(3...10)
+    private var addAttachmentSection: some View {
+        Section {
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: 12) { attachButtons }
+                VStack(spacing: 12) { attachButtons }
+            }
+            .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+            .listRowBackground(Color.clear)
+        } header: {
+            Text("Add Attachment")
         }
     }
 
+    @ViewBuilder
+    private var attachButtons: some View {
+        PhotosPicker(selection: $selectedPhoto, matching: .images) {
+            AttachTile(title: "Add Photo", systemImage: "photo")
+        }
+        .buttonStyle(.borderless)
+
+        Button {
+            isShowingFileImporter = true
+        } label: {
+            AttachTile(title: "Add File", systemImage: "folder")
+        }
+        .buttonStyle(.borderless)
+
+        Button {
+            isShowingScanner = true
+        } label: {
+            AttachTile(title: "Scan Document", systemImage: "doc.viewfinder")
+        }
+        .buttonStyle(.borderless)
+    }
+    
+    private struct AttachTile: View {
+        let title: String
+        let systemImage: String
+
+        var body: some View {
+            VStack(spacing: 6) {
+                Image(systemName: systemImage)
+                    .font(.title2)
+                Text(title)
+                    .font(.footnote)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+            }
+            .foregroundStyle(.tint)
+            .frame(maxWidth: .infinity, minHeight: 64)
+            .padding(.vertical, 6)
+            .background(
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .fill(Color(.secondarySystemGroupedBackground))
+            )
+            .contentShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+        }
+    }
+    
     private var notesBinding: Binding<String> {
         Binding(
             get: { item.notes ?? "" },
@@ -177,63 +232,50 @@ struct ItemDetailView: View {
             }
         )
     }
-    
+        
+    @ViewBuilder
     private var attachmentsSection: some View {
-        Section("Attachments") {
-            ForEach(attachments) { attachment in
-                let ocrText = attachment.ocrText ?? ""
-                let canExtract = OnDeviceExtractionService.isAvailable && !ocrText.isEmpty
+        if !attachments.isEmpty {
+            Section("Attachments") {
+                ForEach(attachments) { attachment in
+                    let ocrText = attachment.ocrText ?? ""
+                    let canExtract = OnDeviceExtractionService.isAvailable && !ocrText.isEmpty
 
-                HStack {
-                    Button {
-                        navigationPath.append(attachment)
-                    } label: {
-                        HStack {
-                            Image(systemName: ocrText.isEmpty ? "doc.fill" : "doc.text.fill")
-                            Text(attachment.fileName ?? "Attachment")
-                            Spacer()
-                        }
-                        .contentShape(Rectangle())
-                    }
-                    .buttonStyle(.plain)
-
-                    if canExtract {
+                    HStack {
                         Button {
-                            extractFields(from: ocrText)
+                            navigationPath.append(attachment)
                         } label: {
-                            Label("Extract Info", systemImage: "sparkles")
-                                .labelStyle(.iconOnly)
+                            HStack {
+                                Image(systemName: ocrText.isEmpty ? "doc.fill" : "doc.text.fill")
+                                Text(attachment.fileName ?? "Attachment")
+                                Spacer()
+                            }
+                            .contentShape(Rectangle())
                         }
-                        .buttonStyle(.borderless)
-                        .tint(.purple)
+                        .buttonStyle(.plain)
+
+                        if canExtract {
+                            Button {
+                                extractFields(from: ocrText)
+                            } label: {
+                                Label("Extract Info", systemImage: "sparkles")
+                                    .labelStyle(.iconOnly)
+                            }
+                            .buttonStyle(.borderless)
+                            .tint(.purple)
+                        }
+                    }
+                    .swipeActions(edge: .trailing) {
+                        if canExtract {
+                            Button {
+                                extractFields(from: ocrText)
+                            } label: {
+                                Label("Extract Info", systemImage: "sparkles")
+                            }
+                            .tint(.purple)
+                        }
                     }
                 }
-                .swipeActions(edge: .trailing) {
-                    if canExtract {
-                        Button {
-                            extractFields(from: ocrText)
-                        } label: {
-                            Label("Extract Info", systemImage: "sparkles")
-                        }
-                        .tint(.purple)
-                    }
-                }
-            }
-
-            PhotosPicker(selection: $selectedPhoto, matching: .images) {
-                Label("Add Photo", systemImage: "photo")
-            }
-
-            Button {
-                isShowingFileImporter = true
-            } label: {
-                Label("Attach File", systemImage: "folder")
-            }
-
-            Button {
-                isShowingScanner = true
-            } label: {
-                Label("Scan Document", systemImage: "doc.viewfinder")
             }
         }
     }
