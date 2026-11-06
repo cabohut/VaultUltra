@@ -21,7 +21,9 @@ final class AppLockManager: ObservableObject {
     @Published var authError: String?
     /// True during the brief success hold before the vault opens.
     @Published var didAuthenticate = false
-
+    /// Changes every time the vault locks. Used to rebuild the UI so nothing survives a lock.
+    @Published private(set) var lockEpoch = 0
+    
     private var isAuthenticating = false
     private let reason = "Unlock your Vault."
     
@@ -62,6 +64,7 @@ final class AppLockManager: ObservableObject {
     func lock() {
         isUnlocked = false
         didAuthenticate = false
+        lockEpoch += 1
     }
 
     private func completeUnlock() async {

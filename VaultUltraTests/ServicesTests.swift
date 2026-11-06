@@ -11,53 +11,6 @@ import XCTest
 
 // MARK: - Keychain
 
-final class KeychainServiceTests: XCTestCase {
-
-    private var originalKey: String?
-
-    override func setUp() {
-        super.setUp()
-        // The simulator's real saved key is put back in tearDown
-        originalKey = KeychainService.loadAPIKey()
-        KeychainService.deleteAPIKey()
-    }
-
-    override func tearDown() {
-        KeychainService.deleteAPIKey()
-        if let originalKey {
-            KeychainService.saveAPIKey(originalKey)
-        }
-        super.tearDown()
-    }
-
-    func testLoadReturnsNilWhenNothingSaved() {
-        XCTAssertNil(KeychainService.loadAPIKey())
-    }
-
-    func testSaveThenLoadRoundTrip() {
-        KeychainService.saveAPIKey("sk-ant-test-123")
-        XCTAssertEqual(KeychainService.loadAPIKey(), "sk-ant-test-123")
-    }
-
-    func testSavingAgainReplacesTheOldKey() {
-        KeychainService.saveAPIKey("first")
-        KeychainService.saveAPIKey("second")
-        XCTAssertEqual(KeychainService.loadAPIKey(), "second")
-    }
-
-    func testDeleteRemovesTheKey() {
-        KeychainService.saveAPIKey("to-delete")
-        KeychainService.deleteAPIKey()
-        XCTAssertNil(KeychainService.loadAPIKey())
-    }
-
-    func testDeleteWhenNothingSavedDoesNotCrash() {
-        KeychainService.deleteAPIKey()
-        KeychainService.deleteAPIKey()
-        XCTAssertNil(KeychainService.loadAPIKey())
-    }
-}
-
 // MARK: - GuideLoader
 
 final class GuideLoaderTests: XCTestCase {

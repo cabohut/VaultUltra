@@ -21,6 +21,7 @@
 		92989CC93011E57C0034AD5D /* QuickLookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92989CC83011E5790034AD5D /* QuickLookView.swift */; };
 		92A88D2C309C50BB007FADF1 /* OnDeviceExtractionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A88D2B309C50B3007FADF1 /* OnDeviceExtractionService.swift */; };
 		92A88D2E309D4E32007FADF1 /* MyDocumentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A88D2D309D4E26007FADF1 /* MyDocumentsView.swift */; };
+		92A88D32309D9066007FADF1 /* ExtractionApplier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A88D31309D905A007FADF1 /* ExtractionApplier.swift */; };
 		92B5188A300B4197009FF0CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 92B51881300B4197009FF0CB /* Assets.xcassets */; };
 		92B5188C300B4197009FF0CB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B51882300B4197009FF0CB /* ContentView.swift */; };
 		92B5188D300B4197009FF0CB /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B51884300B4197009FF0CB /* PersistenceController.swift */; };
@@ -87,6 +88,7 @@
 		92989CC83011E5790034AD5D /* QuickLookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLookView.swift; sourceTree = "<group>"; };
 		92A88D2B309C50B3007FADF1 /* OnDeviceExtractionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnDeviceExtractionService.swift; sourceTree = "<group>"; };
 		92A88D2D309D4E26007FADF1 /* MyDocumentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDocumentsView.swift; sourceTree = "<group>"; };
+		92A88D31309D905A007FADF1 /* ExtractionApplier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtractionApplier.swift; sourceTree = "<group>"; };
 		92B51881300B4197009FF0CB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		92B51882300B4197009FF0CB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		92B51883300B4197009FF0CB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -170,6 +172,7 @@
 			isa = PBXGroup;
 			children = (
 				92A88D2B309C50B3007FADF1 /* OnDeviceExtractionService.swift */,
+				92A88D31309D905A007FADF1 /* ExtractionApplier.swift */,
 				92042AEB309BDE900036AF80 /* ItemSearch.swift */,
 				92042AE7309BDD340036AF80 /* ItemCleanup.swift */,
 				92989CC23011DE120034AD5D /* CloudSharingPresenter.swift */,
@@ -477,6 +480,7 @@
 				92B518A6300B5636009FF0CB /* SearchView.swift in Sources */,
 				92A88D2C309C50BB007FADF1 /* OnDeviceExtractionService.swift in Sources */,
 				92B518A8300B5C5D009FF0CB /* CustomFieldType.swift in Sources */,
+				92A88D32309D9066007FADF1 /* ExtractionApplier.swift in Sources */,
 				92B5189E300B4699009FF0CB /* AppLockManager.swift in Sources */,
 				92B5188E300B4197009FF0CB /* VaultUltra.xcdatamodeld in Sources */,
 				92989CA1300CA84C0034AD5D /* ItemFieldTemplates.swift in Sources */,
@@ -643,7 +647,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = VaultUltra/VaultUltra.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = XLK8R657HJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -681,7 +685,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = VaultUltra/VaultUltra.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = XLK8R657HJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;

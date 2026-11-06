@@ -68,23 +68,8 @@ struct ExtractionReviewView: View {
     }
 
     private func applySelected() {
-        let existingFields = (item.customFields as? Set<CustomField>) ?? []
-
-        for suggestion in suggestions where selectedKeys.contains(suggestion.id) {
-            if let existing = existingFields.first(where: { $0.key == suggestion.key }) {
-                existing.displayValue = suggestion.value
-            } else {
-                let field = CustomField(context: viewContext)
-                viewContext.assignStore(of: item, to: field)
-                field.key = suggestion.key
-                field.fieldType = CustomFieldType.text.rawValue
-                field.isSensitive = false
-                field.item = item
-                field.displayValue = suggestion.value
-            }
-        }
-
-        item.modifiedDate = Date()
+        let chosen = suggestions.filter { selectedKeys.contains($0.id) }
+        ExtractionApplier.apply(chosen, to: item, context: viewContext)
 
         do {
             try viewContext.save()

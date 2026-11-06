@@ -5,6 +5,8 @@
 //  Created by bugs on 7/17/26.
 //      10-30-2026 - added "Done" button
 //      11-04-2026 - added using OnDeviceExtractionService
+//      11-05-2026 - extraction sheet item stored once so it no longer resets
+//
 
 import SwiftUI
 import CoreData
@@ -25,13 +27,10 @@ struct ItemDetailView: View {
     @State private var isShowingFileImporter = false
 
     @State private var isExtractingFields = false
-    @State private var extractionSuggestions: [ExtractedField]?
     @State private var extractionError: String?
-
+    @State private var extractionSheet: IdentifiableSuggestions?
     @State private var isSensitiveRevealed = false
     
-    @State private var extractionWasTruncated = false
-
     init(item: Item, navigationPath: Binding<NavigationPath>) {
         self.item = item
         self._navigationPath = navigationPath
@@ -83,7 +82,7 @@ struct ItemDetailView: View {
             )
             .ignoresSafeArea()
         }
-        .sheet(item: extractionSheetBinding) { wrapped in
+        .sheet(item: $extractionSheet) { wrapped in
             ExtractionReviewView(
                 item: item,
                 suggestions: wrapped.fields,
@@ -297,17 +296,6 @@ struct ItemDetailView: View {
         )
     }
 
-    private var extractionSheetBinding: Binding<IdentifiableSuggestions?> {
-        Binding(
-            get: {
-                extractionSuggestions.map {
-                    IdentifiableSuggestions(fields: $0, wasTruncated: extractionWasTruncated)
-                }
-            },
-            set: { _ in extractionSuggestions = nil }
-        )
-    }
-
     private var extractionErrorBinding: Binding<Bool> {
         Binding(
             get: { extractionError != nil },
@@ -460,8 +448,7 @@ struct ItemDetailView: View {
                 )
                 await MainActor.run {
                     isExtractingFields = false
-                    extractionWasTruncated = result.wasTruncated
-                    extractionSuggestions = result.fields
+                    extractionSheet = IdentifiableSuggestions(fields: result.fields, wasTruncated: result.wasTruncated)
                 }
             } catch {
                 await MainActor.run {

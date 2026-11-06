@@ -4,6 +4,7 @@
 //
 //  Created by bugs on 7/17/26.
 //      11-04-2026 - UI testing launch support
+//      11-05-2026 - merge duplicate smart folders at launch
 //
 
 import SwiftUI
@@ -16,9 +17,13 @@ struct VaultApp: App {
     @Environment(\.scenePhase) private var scenePhase
 
     @State private var showSplash = !PersistenceController.isUITesting
+    @State private var showPrivacyCover = false
     
     init() {
+        AttachmentDetailView.clearPreviewFiles()
         PersistenceController.shared.seedSmartFoldersIfNeeded()
+        PersistenceController.shared.deduplicateSmartFolders()
+        
         #if DEBUG
         if PersistenceController.isUITesting {
             PersistenceController.shared.restoreSuggestedItems()
@@ -32,12 +37,26 @@ struct VaultApp: App {
                 ContentView()
                     .environment(\.managedObjectContext, PersistenceController.shared.container.viewContext)
                     .environmentObject(PersistenceController.shared)
+                    .id(lockManager.lockEpoch)
 
                 if !lockManager.isUnlocked {
                     LockScreenView(lockManager: lockManager)
                         .background(.ultraThinMaterial)
                         .transition(.opacity)
                 }
+                
+                if showPrivacyCover && lockManager.isUnlocked {
+                    Color(.systemBackground)
+                        .overlay {
+                            Image("AppLogo")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 96, height: 96)
+                                .clipShape(RoundedRectangle(cornerRadius: 96 * 0.2237, style: .continuous))
+                        }
+                        .ignoresSafeArea()
+                }
+                
                 if showSplash {
                     SplashView {
                         withAnimation(.easeOut(duration: 0.35)) { showSplash = false }
@@ -47,6 +66,7 @@ struct VaultApp: App {
                 }
             }
             .onChange(of: scenePhase) { _, newPhase in
+                showPrivacyCover = (newPhase != .active)
                 if newPhase == .background {
                     lockManager.lock()
                 }

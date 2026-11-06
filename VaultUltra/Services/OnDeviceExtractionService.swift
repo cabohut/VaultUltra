@@ -3,6 +3,7 @@
 //  VaultUltra
 //
 //  Created by bugs on 11/4/26.
+//      11-04-2026 - truncation, cleanup and messages made testable
 //
 
 import Foundation
@@ -51,8 +52,23 @@ private struct GeneratedField {
 enum OnDeviceExtractionService {
     /// The on-device model has a small context window (about 4,096 tokens shared
     /// between the prompt and the answer), so long scans are cut to this length.
-    private static let maxCharacters = 6000
+    static let maxCharacters = 6000
 
+    static func truncated(_ text: String) -> (text: String, wasTruncated: Bool) {
+        guard text.count > maxCharacters else { return (text, false) }
+        return (String(text.prefix(maxCharacters)), true)
+    }
+
+    static func cleanedFields(_ raw: [(name: String, value: String)]) -> [ExtractedField] {
+        raw
+            .map { ExtractedField(
+                key: $0.name.trimmingCharacters(in: .whitespacesAndNewlines),
+                value: $0.value.trimmingCharacters(in: .whitespacesAndNewlines)
+            ) }
+            .filter { !$0.key.isEmpty && !$0.value.isEmpty }
+            .sorted { $0.key < $1.key }
+    }
+    
     static var isAvailable: Bool {
         if case .available = SystemLanguageModel.default.availability { return true }
         return false
@@ -63,9 +79,8 @@ enum OnDeviceExtractionService {
             throw ExtractionError.unavailable(message(for: reason))
         }
 
-        let wasTruncated = ocrText.count > maxCharacters
-        let text = wasTruncated ? String(ocrText.prefix(maxCharacters)) : ocrText
-
+        let (text, wasTruncated) = truncated(ocrText)
+        
         let fieldHint = existingFieldKeys.isEmpty
             ? "Choose short, clear field names."
             : "Prefer these existing field names where they match: \(existingFieldKeys.joined(separator: ", "))."
@@ -83,13 +98,7 @@ enum OnDeviceExtractionService {
                 generating: GeneratedFieldList.self
             )
 
-            let fields = response.content.fields
-                .map { ExtractedField(
-                    key: $0.name.trimmingCharacters(in: .whitespacesAndNewlines),
-                    value: $0.value.trimmingCharacters(in: .whitespacesAndNewlines)
-                ) }
-                .filter { !$0.key.isEmpty && !$0.value.isEmpty }
-                .sorted { $0.key < $1.key }
+            let fields = cleanedFields(response.content.fields.map { (name: $0.name, value: $0.value) })
 
             guard !fields.isEmpty else { throw ExtractionError.noContent }
             return ExtractionResult(fields: fields, wasTruncated: wasTruncated)
@@ -107,7 +116,7 @@ enum OnDeviceExtractionService {
         }
     }
 
-    private static func message(for reason: SystemLanguageModel.Availability.UnavailableReason) -> String {
+    static func message(for reason: SystemLanguageModel.Availability.UnavailableReason) -> String {
         switch reason {
         case .deviceNotEligible:
             return "This device doesn't support Apple Intelligence."

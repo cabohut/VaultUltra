@@ -3,6 +3,7 @@
 //  VaultUltra
 //
 //  Created by bugs on 7/17/26.
+//      11-05-2026 - new folders go to the private store, reordering skips shared folders
 //
 
 import SwiftUI
@@ -15,8 +16,12 @@ struct ContentView: View {
     @EnvironmentObject private var persistenceController: PersistenceController
 
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Folder.sortOrder, ascending: true)],
+        sortDescriptors: [
+            NSSortDescriptor(keyPath: \Folder.sortOrder, ascending: true),
+            NSSortDescriptor(keyPath: \Folder.createdDate, ascending: true)
+        ],
         animation: .default)
+ 
     private var folders: FetchedResults<Folder>
 
     @State private var selectedFolder: Folder?
@@ -171,10 +176,14 @@ struct ContentView: View {
         guard !trimmed.isEmpty else { return }
         withAnimation {
             let folder = Folder(context: viewContext)
+            if let privateStore = persistenceController.privateStore {
+                viewContext.assign(folder, to: privateStore)
+            }
+            
             folder.name = trimmed
             folder.icon = "folder"
             folder.isSmartFolder = false
-            folder.sortOrder = Int16(folders.count)
+            folder.sortOrder = Int16((folders.map { Int($0.sortOrder) }.max() ?? -1) + 1)
             folder.createdDate = Date()
 
             do {
@@ -213,10 +222,13 @@ struct ContentView: View {
         var reordered = folders.map { $0 }
         reordered.move(fromOffsets: source, toOffset: destination)
 
+        let sharedStore = persistenceController.sharedStore
         for (index, folder) in reordered.enumerated() {
+            // Folders shared with you belong to their owner, so don't rewrite their order
+            if folder.objectID.persistentStore === sharedStore, sharedStore != nil { continue }
             folder.sortOrder = Int16(index)
         }
-
+        
         do {
             try viewContext.save()
         } catch {

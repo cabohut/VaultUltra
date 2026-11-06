@@ -2,6 +2,7 @@
 //  VaultUltraUITests.swift
 //  VaultUltraUITests
 //      11-04-2026 - UI flows: folders, items, empty-item cleanup, search
+//      11-05-2026 - added Documents tab tests
 //
 
 import XCTest
@@ -49,10 +50,23 @@ final class VaultUltraUITests: XCTestCase {
         app.navigationBars.buttons["Done"].tap()
     }
 
+    /// Creates a folder, adds a blank item with the given title, and returns to the folder screen.
+    private func createFolderWithTitledItem(folder: String, title: String) {
+        createFolder(named: folder)
+        openFolder(named: folder)
+        createBlankItem()
+        let field = app.textFields["Title"]
+        field.tap()
+        field.typeText(title)
+        tapDone()
+        XCTAssertTrue(app.staticTexts[title].waitForExistence(timeout: 5))
+    }
+
     // MARK: - Tests
 
     func testLaunchSkipsLockAndShowsSeededFolders() {
         XCTAssertTrue(app.tabBars.buttons["Folders"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.tabBars.buttons["Documents"].exists)
         XCTAssertTrue(app.tabBars.buttons["Search"].exists)
         XCTAssertTrue(app.tabBars.buttons["Settings"].exists)
         XCTAssertTrue(app.staticTexts["Legal"].waitForExistence(timeout: 5))
@@ -114,15 +128,7 @@ final class VaultUltraUITests: XCTestCase {
     }
 
     func testSearchFindsItemByTitle() {
-        createFolder(named: "Test Folder")
-        openFolder(named: "Test Folder")
-
-        createBlankItem()
-        let title = app.textFields["Title"]
-        title.tap()
-        title.typeText("Passport Copy")
-        tapDone()
-        XCTAssertTrue(app.staticTexts["Passport Copy"].waitForExistence(timeout: 5))
+        createFolderWithTitledItem(folder: "Test Folder", title: "Passport Copy")
 
         app.tabBars.buttons["Search"].tap()
         let search = app.searchFields.firstMatch
@@ -134,15 +140,7 @@ final class VaultUltraUITests: XCTestCase {
     }
 
     func testSearchWithNoMatchShowsNoResults() {
-        createFolder(named: "Test Folder")
-        openFolder(named: "Test Folder")
-
-        createBlankItem()
-        let title = app.textFields["Title"]
-        title.tap()
-        title.typeText("Passport Copy")
-        tapDone()
-        XCTAssertTrue(app.staticTexts["Passport Copy"].waitForExistence(timeout: 5))
+        createFolderWithTitledItem(folder: "Test Folder", title: "Passport Copy")
 
         app.tabBars.buttons["Search"].tap()
         let search = app.searchFields.firstMatch
@@ -151,5 +149,18 @@ final class VaultUltraUITests: XCTestCase {
         search.typeText("zzzz")
 
         XCTAssertTrue(app.staticTexts["Passport Copy"].waitForNonExistence(timeout: 5))
+    }
+
+    func testDocumentsTabStartsEmpty() {
+        app.tabBars.buttons["Documents"].tap()
+        XCTAssertTrue(app.staticTexts["No Documents Yet"].waitForExistence(timeout: 5))
+    }
+
+    func testItemAppearsInDocumentsTab() {
+        createFolderWithTitledItem(folder: "Test Folder", title: "Listed Doc")
+
+        app.tabBars.buttons["Documents"].tap()
+        XCTAssertTrue(app.staticTexts["Listed Doc"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.staticTexts["No Documents Yet"].exists)
     }
 }

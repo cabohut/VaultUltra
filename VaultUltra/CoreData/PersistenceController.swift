@@ -7,6 +7,9 @@
 //      11-04-2026 - inMemory stores no longer use CloudKit
 //      11-04-2026 - added -UITesting launch argument support
 //      11-04-2026 - single shared NSManagedObjectModel to fix duplicate entity crash in tests
+//      11-05-2026 - duplicate smart folders are merged after import and at launch
+//      11-05-2026 - seeded smart folders assigned to the private store
+//      11-05-2026 - fallback seeding for offline or signed-out first launch
 //
 
 import CoreData
@@ -119,6 +122,21 @@ final class PersistenceController: ObservableObject {
             else { return }
 
             self.performSeedCheck()
+            self.deduplicateSmartFolders()
+        }
+        
+        // Fallback: with no iCloud account or no connection, no import event ever fires
+        guard let containerID = container.persistentStoreDescriptions.first?
+            .cloudKitContainerOptions?.containerIdentifier
+        else { return } // in-memory store, nothing to wait for
+
+        Task { @MainActor in
+            let status = try? await CKContainer(identifier: containerID).accountStatus()
+            if status == .available {
+                try? await Task.sleep(for: .seconds(15))
+            }
+            performSeedCheck()
+            deduplicateSmartFolders()
         }
     }
 
@@ -133,6 +151,8 @@ final class PersistenceController: ObservableObject {
 
         for (index, template) in SmartFolderTemplates.all.enumerated() {
             let folder = Folder(context: context)
+            if let privateStore { context.assign(folder, to: privateStore) }
+            
             folder.name = template.name
             folder.icon = template.icon
             folder.isSmartFolder = true
@@ -145,6 +165,41 @@ final class PersistenceController: ObservableObject {
             try context.save()
         } catch {
             print("Failed to seed smart folders: \(error)")
+        }
+    }
+    
+    /// Merges smart folders that share a name (left behind when a fresh install seeds
+    /// before CloudKit finishes downloading). The oldest copy is kept.
+    func deduplicateSmartFolders() {
+        guard let privateStore else { return }
+        let context = container.viewContext
+
+        let request: NSFetchRequest<Folder> = Folder.fetchRequest()
+        request.predicate = NSPredicate(format: "isSmartFolder == YES")
+        request.affectedStores = [privateStore]
+        request.sortDescriptors = [NSSortDescriptor(key: "createdDate", ascending: true)]
+        guard let folders = try? context.fetch(request) else { return }
+
+        var keepers: [String: Folder] = [:]
+        for folder in folders {
+            guard let name = folder.name else { continue }
+            guard let keeper = keepers[name] else {
+                keepers[name] = folder
+                continue
+            }
+            for item in (folder.items as? Set<Item>) ?? [] {
+                item.removeFromFolders(folder)
+                item.addToFolders(keeper)
+            }
+            context.delete(folder)
+        }
+
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
+                print("Failed to merge duplicate smart folders: \(error)")
+            }
         }
     }
 

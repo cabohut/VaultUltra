@@ -13,6 +13,7 @@ struct LockScreenView: View {
     @Environment(\.scenePhase) private var scenePhase
     @State private var biometry = BiometryKind.current
     @State private var shakeCount = 0
+    @State private var needsPromptWhenActive = false
 
     /// Name of the logo image set in Assets.xcassets
     private let logoAssetName = "AppLogo"
@@ -33,9 +34,21 @@ struct LockScreenView: View {
             .padding(.horizontal, 24)
             .padding(.bottom, 16)
         }
-        .onAppear { lockManager.authenticate() }
+        .onAppear {
+            if scenePhase == .active {
+                lockManager.authenticate()
+            } else {
+                needsPromptWhenActive = true
+            }
+        }
         .onChange(of: scenePhase) { _, phase in
-            if phase == .active { biometry = .current }
+            if phase == .active {
+                biometry = .current
+                if needsPromptWhenActive {
+                    needsPromptWhenActive = false
+                    lockManager.authenticate()
+                }
+            }
         }
         .onChange(of: lockManager.authError) { _, new in
             if new != nil { shakeCount += 1 }
