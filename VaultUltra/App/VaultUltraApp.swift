@@ -5,6 +5,7 @@
 //  Created by bugs on 7/17/26.
 //      11-04-2026 - UI testing launch support
 //      11-05-2026 - merge duplicate smart folders at launch
+//      11-06-2026 - pending edits are saved when the app leaves the foreground
 //
 
 import SwiftUI
@@ -66,6 +67,9 @@ struct VaultApp: App {
                 }
             }
             .onChange(of: scenePhase) { _, newPhase in
+                if newPhase != .active {
+                    DebouncedSave.flush(PersistenceController.shared.container.viewContext)
+                }
                 showPrivacyCover = (newPhase != .active)
                 if newPhase == .background {
                     lockManager.lock()

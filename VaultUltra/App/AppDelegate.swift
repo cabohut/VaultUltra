@@ -4,6 +4,8 @@
 //
 //  Created by bugs on 7/22/26.
 //      10-30-2026 - now using the correct AppDelegate for sharing to work
+//      11-05-2026 - share invitations that launch the app from closed are now accepted
+//
 
 import UIKit
 import CoreData
@@ -22,10 +24,26 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 }
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+    // Cold launch: the share arrives in the connection options
+    func scene(
+        _ scene: UIScene,
+        willConnectTo session: UISceneSession,
+        options connectionOptions: UIScene.ConnectionOptions
+    ) {
+        if let metadata = connectionOptions.cloudKitShareMetadata {
+            acceptShare(metadata)
+        }
+    }
+
+    // App already running
     func windowScene(
         _ windowScene: UIWindowScene,
         userDidAcceptCloudKitShareWith cloudKitShareMetadata: CKShare.Metadata
     ) {
+        acceptShare(cloudKitShareMetadata)
+    }
+
+    private func acceptShare(_ metadata: CKShare.Metadata) {
         let persistence = PersistenceController.shared
 
         guard let sharedStore = persistence.sharedStore else {
@@ -34,7 +52,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
 
         persistence.container.acceptShareInvitations(
-            from: [cloudKitShareMetadata],
+            from: [metadata],
             into: sharedStore
         ) { _, error in
             if let error {

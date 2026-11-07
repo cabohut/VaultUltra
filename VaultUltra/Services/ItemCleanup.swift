@@ -4,20 +4,24 @@
 //
 //  Created by bugs on 11/4/26.
 //      11-04-2026 - moved out of FolderDetailView so it can be unit tested
+//      11-05-2026 - hasNoContent also treats newlines as blank
 //
 
 import Foundation
 
 enum ItemCleanup {
     static func hasNoContent(_ item: Item) -> Bool {
-        let titleIsEmpty = (item.title ?? "").trimmingCharacters(in: .whitespaces).isEmpty
+        func isBlank(_ text: String?) -> Bool {
+            (text ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        }
+
         let attachments = item.attachments as? Set<Attachment> ?? []
         let fields = item.customFields as? Set<CustomField> ?? []
-        let allFieldsEmpty = fields.allSatisfy {
-            ($0.stringValue ?? "").trimmingCharacters(in: .whitespaces).isEmpty
-        }
-        let notesIsEmpty = (item.notes ?? "").trimmingCharacters(in: .whitespaces).isEmpty
-        return titleIsEmpty && notesIsEmpty && attachments.isEmpty && allFieldsEmpty
+
+        return isBlank(item.title)
+            && isBlank(item.notes)
+            && attachments.isEmpty
+            && fields.allSatisfy { isBlank($0.stringValue) }
     }
 
     /// Returns the suggestion list with `suggestion` added back, in the template's original order.

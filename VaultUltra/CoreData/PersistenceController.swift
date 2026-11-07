@@ -10,6 +10,7 @@
 //      11-05-2026 - duplicate smart folders are merged after import and at launch
 //      11-05-2026 - seeded smart folders assigned to the private store
 //      11-05-2026 - fallback seeding for offline or signed-out first launch
+//      11-06-2026 - Item now belongs to a single folder
 //
 
 import CoreData
@@ -188,8 +189,7 @@ final class PersistenceController: ObservableObject {
                 continue
             }
             for item in (folder.items as? Set<Item>) ?? [] {
-                item.removeFromFolders(folder)
-                item.addToFolders(keeper)
+                item.folder = keeper
             }
             context.delete(folder)
         }

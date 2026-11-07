@@ -6,12 +6,15 @@
 //      10-30-2026 - added "Done" button
 //      11-04-2026 - added using OnDeviceExtractionService
 //      11-05-2026 - extraction sheet item stored once so it no longer resets
+//      11-05-2026 - Scan Document is disabled when the scanner isn't supported
+//      11-06-2026 - title and notes save after a pause, flushed on leaving
 //
 
 import SwiftUI
 import CoreData
 import PhotosUI
 import UniformTypeIdentifiers
+import VisionKit
 
 struct ItemDetailView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -51,6 +54,7 @@ struct ItemDetailView: View {
             attachmentsSection
         }
         .navigationTitle(item.title?.isEmpty == false ? item.title! : "New Item")
+        .onDisappear { DebouncedSave.flush(viewContext) }
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Done") {
@@ -191,6 +195,7 @@ struct ItemDetailView: View {
             AttachTile(title: "Scan Document", systemImage: "doc.viewfinder")
         }
         .buttonStyle(.borderless)
+        .disabled(!VNDocumentCameraViewController.isSupported)
     }
     
     private struct AttachTile: View {
@@ -223,11 +228,7 @@ struct ItemDetailView: View {
             set: { newValue in
                 item.notes = newValue
                 item.modifiedDate = Date()
-                do {
-                    try viewContext.save()
-                } catch {
-                    print("Failed to save notes: \(error)")
-                }
+                DebouncedSave.schedule(viewContext)
             }
         )
     }
@@ -280,18 +281,13 @@ struct ItemDetailView: View {
     }
 
     // MARK: - Bindings
-
     private var titleBinding: Binding<String> {
         Binding(
             get: { item.title ?? "" },
             set: { newValue in
                 item.title = newValue
                 item.modifiedDate = Date()
-                do {
-                    try viewContext.save()
-                } catch {
-                    print("Failed to save title: \(error)")
-                }
+                DebouncedSave.schedule(viewContext)
             }
         )
     }

@@ -4,6 +4,8 @@
 //
 //  Created by bugs on 7/17/26.
 //      11-05-2026 - new folders go to the private store, reordering skips shared folders
+//      11-05-2026 - deleting a folder shared with you leaves the share instead
+//      11-06-2026 - folder deletion no longer checks other folders
 //
 
 import SwiftUI
@@ -106,7 +108,7 @@ struct ContentView: View {
                 Button("Delete", role: .destructive) { confirmFolderDeletion() }
                 Button("Cancel", role: .cancel) { foldersPendingDeletion = [] }
             } message: {
-                Text("The folder and all items and attachments in it will be permanently deleted. If it is shared, it will be removed for everyone.")
+                Text(folderDeletionMessage)
             }
         } detail: {
             NavigationStack(path: $navigationPath) {
@@ -199,23 +201,59 @@ struct ContentView: View {
     }
 
     private func confirmFolderDeletion() {
-        for folder in foldersPendingDeletion {
+        let sharedStore = persistenceController.sharedStore
+        let pending = foldersPendingDeletion
+        foldersPendingDeletion = []
+
+        for folder in pending {
+            if selectedFolder == folder { selectedFolder = nil }
+
+            // Folder shared with you: leave the share, don't delete the owner's data
+            if let sharedStore, folder.objectID.persistentStore === sharedStore {
+                leaveShare(for: folder, in: sharedStore)
+                continue
+            }
+
             let items = folder.items as? Set<Item> ?? []
             for item in items {
-                let folderCount = (item.folders as? Set<Folder>)?.count ?? 0
-                if folderCount <= 1 {
-                    viewContext.delete(item)
-                }
+                viewContext.delete(item)
             }
-            if selectedFolder == folder { selectedFolder = nil }
             viewContext.delete(folder)
         }
-        foldersPendingDeletion = []
+
         do {
             try viewContext.save()
         } catch {
             print("Failed to delete folder: \(error)")
         }
+    }
+    
+    private func leaveShare(for folder: Folder, in store: NSPersistentStore) {
+        let container = persistenceController.container
+        guard let share = try? container.fetchShares(matching: [folder.objectID])[folder.objectID] else {
+            print("Could not find the share for this folder")
+            return
+        }
+        container.purgeObjectsAndRecordsInZone(with: share.recordID.zoneID, in: store) { _, error in
+            if let error {
+                print("Failed to leave share: \(error)")
+            }
+        }
+    }
+
+    private var folderDeletionMessage: String {
+        let sharedStore = persistenceController.sharedStore
+        let incoming = foldersPendingDeletion.filter {
+            sharedStore != nil && $0.objectID.persistentStore === sharedStore
+        }
+        if !incoming.isEmpty && incoming.count == foldersPendingDeletion.count {
+            return "You'll leave this shared folder and lose access to it. The owner keeps their copy."
+        }
+        var message = "The folder and all items and attachments in it will be permanently deleted. If it is shared, it will be removed for everyone."
+        if !incoming.isEmpty {
+            message += " Folders shared with you will be left, not deleted."
+        }
+        return message
     }
     
     private func moveFolders(from source: IndexSet, to destination: Int) {

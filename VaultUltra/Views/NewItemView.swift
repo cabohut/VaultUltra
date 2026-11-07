@@ -3,6 +3,8 @@
 //  VaultUltra
 //
 //  Created by bugs on 7/18/26.
+//      11-05-2026 - only smart folders use template item types
+//      11-06-2026 - item.folder replaces addToFolders
 //
 
 import SwiftUI
@@ -19,7 +21,8 @@ struct NewItemView: View {
     var onItemCreated: ((Item) -> Void)?
 
     private var availableTypes: [String] {
-        if let smartTypes = SmartFolderTemplates.template(forFolderName: folder.name ?? "")?.suggestedItems,
+        if folder.isSmartFolder,
+           let smartTypes = SmartFolderTemplates.template(forFolderName: folder.name ?? "")?.suggestedItems,
            !smartTypes.isEmpty {
             return smartTypes
         }
@@ -61,8 +64,8 @@ struct NewItemView: View {
         item.itemType = type
         item.createdDate = Date()
         item.modifiedDate = Date()
-        item.addToFolders(folder)
-
+        item.folder = folder
+        
         if let type {
             ItemFieldTemplates.applyFields(for: type, to: item, folder: folder, context: viewContext)
         }

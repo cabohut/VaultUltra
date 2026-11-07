@@ -22,6 +22,7 @@
 		92A88D2C309C50BB007FADF1 /* OnDeviceExtractionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A88D2B309C50B3007FADF1 /* OnDeviceExtractionService.swift */; };
 		92A88D2E309D4E32007FADF1 /* MyDocumentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A88D2D309D4E26007FADF1 /* MyDocumentsView.swift */; };
 		92A88D32309D9066007FADF1 /* ExtractionApplier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A88D31309D905A007FADF1 /* ExtractionApplier.swift */; };
+		92A88D36309E9EC6007FADF1 /* DebouncedSave.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A88D35309E9EC2007FADF1 /* DebouncedSave.swift */; };
 		92B5188A300B4197009FF0CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 92B51881300B4197009FF0CB /* Assets.xcassets */; };
 		92B5188C300B4197009FF0CB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B51882300B4197009FF0CB /* ContentView.swift */; };
 		92B5188D300B4197009FF0CB /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B51884300B4197009FF0CB /* PersistenceController.swift */; };
@@ -89,6 +90,7 @@
 		92A88D2B309C50B3007FADF1 /* OnDeviceExtractionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnDeviceExtractionService.swift; sourceTree = "<group>"; };
 		92A88D2D309D4E26007FADF1 /* MyDocumentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDocumentsView.swift; sourceTree = "<group>"; };
 		92A88D31309D905A007FADF1 /* ExtractionApplier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtractionApplier.swift; sourceTree = "<group>"; };
+		92A88D35309E9EC2007FADF1 /* DebouncedSave.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebouncedSave.swift; sourceTree = "<group>"; };
 		92B51881300B4197009FF0CB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		92B51882300B4197009FF0CB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		92B51883300B4197009FF0CB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -171,6 +173,7 @@
 		92989CA4300CAB9B0034AD5D /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				92A88D35309E9EC2007FADF1 /* DebouncedSave.swift */,
 				92A88D2B309C50B3007FADF1 /* OnDeviceExtractionService.swift */,
 				92A88D31309D905A007FADF1 /* ExtractionApplier.swift */,
 				92042AEB309BDE900036AF80 /* ItemSearch.swift */,
@@ -478,6 +481,7 @@
 				92042AEC309BDE960036AF80 /* ItemSearch.swift in Sources */,
 				92B518BC300C8471009FF0CB /* ExtractionReviewView.swift in Sources */,
 				92B518A6300B5636009FF0CB /* SearchView.swift in Sources */,
+				92A88D36309E9EC6007FADF1 /* DebouncedSave.swift in Sources */,
 				92A88D2C309C50BB007FADF1 /* OnDeviceExtractionService.swift in Sources */,
 				92B518A8300B5C5D009FF0CB /* CustomFieldType.swift in Sources */,
 				92A88D32309D9066007FADF1 /* ExtractionApplier.swift in Sources */,
@@ -647,7 +651,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = VaultUltra/VaultUltra.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = XLK8R657HJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -685,7 +689,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = VaultUltra/VaultUltra.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = XLK8R657HJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;

@@ -4,6 +4,8 @@
 //
 //  Created by bugs on 7/17/26.
 //      11-04-2026 - search query moved to ItemSearch
+//      11-05-2026 - empty titles show as Untitled Item
+//      11-06-2026 - search fetches once per render
 //
 
 import SwiftUI
@@ -15,14 +17,15 @@ struct SearchView: View {
     @State private var navigationPath = NavigationPath()
 
     var body: some View {
+        let results = searchResults
         NavigationStack(path: $navigationPath) {
             List {
-                ForEach(searchResults) { item in
+                ForEach(results) { item in
                     Button {
                         navigationPath.append(item)
                     } label: {
                         VStack(alignment: .leading) {
-                            Text(item.title ?? "Untitled Item")
+                            Text(item.title?.isEmpty == false ? item.title! : "Untitled Item")
                             if let matchingSnippet = matchSnippet(for: item) {
                                 Text(matchingSnippet)
                                     .font(.caption)
@@ -43,8 +46,7 @@ struct SearchView: View {
             }
             .searchable(text: $searchText, prompt: "Search items and documents")
             .overlay {
-                if !searchText.isEmpty && searchResults.isEmpty {
-                    ContentUnavailableView.search(text: searchText)
+                if !searchText.isEmpty && results.isEmpty {                    ContentUnavailableView.search(text: searchText)
                 }
             }
         }

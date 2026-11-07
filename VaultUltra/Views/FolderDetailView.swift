@@ -5,6 +5,8 @@
 //  Created by bugs on 7/17/26.
 //      10-30-2026 - updated to delete items with blank entries and them to suggested list
 //      11-04-2026 - cleanup logic moved to ItemCleanup
+//      11-06-2026 - item.folder replaces addToFolders
+//
 
 import SwiftUI
 import CoreData
@@ -152,8 +154,8 @@ struct FolderDetailView: View {
         item.itemType = suggestionTitle
         item.createdDate = Date()
         item.modifiedDate = Date()
-        item.addToFolders(folder)
-
+        item.folder = folder
+        
         ItemFieldTemplates.applyFields(for: suggestionTitle, to: item, folder: folder, context: viewContext)
         
         do {

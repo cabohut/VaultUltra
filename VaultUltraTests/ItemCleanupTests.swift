@@ -122,4 +122,11 @@ final class ItemCleanupTests: XCTestCase {
         XCTAssertEqual(Set(result), ["Will", "Passport"])
         XCTAssertEqual(result.count, 2)
     }
+    
+    func testNewlinesOnlyNotesCountAsEmpty() {
+        let item = Item(context: context)
+        item.title = ""
+        item.notes = "\n \n"
+        XCTAssertTrue(ItemCleanup.hasNoContent(item))
+    }
 }

@@ -39,7 +39,7 @@ final class FieldTemplateApplyTests: XCTestCase {
         item.itemType = type
         item.createdDate = Date()
         item.modifiedDate = Date()
-        item.addToFolders(folder)
+        item.folder = folder
         return item
     }
 

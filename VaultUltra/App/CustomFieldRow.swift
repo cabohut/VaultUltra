@@ -5,6 +5,7 @@
 //  Created by bugs on 7/18/26.
 //      11-03-2026 - Fix for Issue 6 from Claud
 //      11-04-2026 - dateStorage made internal for testing
+//      11-06-2026 - text edits save after a pause instead of per keystroke
 //
 
 import SwiftUI
@@ -101,21 +102,20 @@ struct CustomFieldRow: View {
     }
 
     // MARK: - Saving
-
     private var textBinding: Binding<String> {
         Binding(
             get: { field.displayValue },
-            set: { save($0) }
+            set: { save($0, immediate: false) }
         )
     }
 
-    private func save(_ newValue: String) {
+    private func save(_ newValue: String, immediate: Bool = true) {
         field.displayValue = newValue
         field.item?.modifiedDate = Date()
-        do {
-            try field.managedObjectContext?.save()
-        } catch {
-            print("Failed to save field value: \(error)")
+        if immediate {
+            DebouncedSave.flush(field.managedObjectContext)
+        } else {
+            DebouncedSave.schedule(field.managedObjectContext)
         }
     }
 }

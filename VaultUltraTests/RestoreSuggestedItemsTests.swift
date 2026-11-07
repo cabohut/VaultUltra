@@ -93,7 +93,7 @@ final class RestoreSuggestedItemsTests: XCTestCase {
         item.itemType = "Will"
         item.createdDate = Date()
         item.modifiedDate = Date()
-        item.addToFolders(legal)
+        item.folder = legal
         try context.save()
 
         _ = persistence.restoreSuggestedItems()
@@ -114,7 +114,7 @@ final class RestoreSuggestedItemsTests: XCTestCase {
             item.itemType = type
             item.createdDate = Date()
             item.modifiedDate = Date()
-            item.addToFolders(legal)
+            item.folder = legal
         }
         try context.save()
 
