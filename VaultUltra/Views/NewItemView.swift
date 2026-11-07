@@ -10,9 +10,6 @@
 import SwiftUI
 import CoreData
 
-import SwiftUI
-import CoreData
-
 struct NewItemView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) private var dismiss

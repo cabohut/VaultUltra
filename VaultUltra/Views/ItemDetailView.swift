@@ -330,8 +330,10 @@ struct ItemDetailView: View {
 
         let attachment = Attachment(context: viewContext)
         viewContext.assignStore(of: item, to: attachment)
-        attachment.fileName = "Photo-\(UUID().uuidString.prefix(6)).jpg"
-        attachment.mimeType = "image/jpeg"
+        let type = pickerItem.supportedContentTypes.first { $0.conforms(to: .image) }
+        let ext = type?.preferredFilenameExtension ?? "jpg"
+        attachment.fileName = "Photo-\(UUID().uuidString.prefix(6)).\(ext)"
+        attachment.mimeType = type?.preferredMIMEType ?? "image/jpeg"
         attachment.fileData = data
         attachment.createdDate = Date()
         attachment.item = item
@@ -442,15 +444,11 @@ struct ItemDetailView: View {
                     from: ocrText,
                     existingFieldKeys: existingKeys
                 )
-                await MainActor.run {
-                    isExtractingFields = false
-                    extractionSheet = IdentifiableSuggestions(fields: result.fields, wasTruncated: result.wasTruncated)
-                }
+                isExtractingFields = false
+                extractionSheet = IdentifiableSuggestions(fields: result.fields, wasTruncated: result.wasTruncated)
             } catch {
-                await MainActor.run {
-                    isExtractingFields = false
-                    extractionError = error.localizedDescription
-                }
+                isExtractingFields = false
+                extractionError = error.localizedDescription
             }
         }
     }

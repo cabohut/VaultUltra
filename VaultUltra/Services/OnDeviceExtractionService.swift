@@ -4,6 +4,7 @@
 //
 //  Created by bugs on 11/4/26.
 //      11-04-2026 - truncation, cleanup and messages made testable
+//      11-06-2026 - retries with half the text when the context window overflows
 //
 
 import Foundation
@@ -79,8 +80,8 @@ enum OnDeviceExtractionService {
             throw ExtractionError.unavailable(message(for: reason))
         }
 
-        let (text, wasTruncated) = truncated(ocrText)
-        
+        var (text, wasTruncated) = truncated(ocrText)
+
         let fieldHint = existingFieldKeys.isEmpty
             ? "Choose short, clear field names."
             : "Prefer these existing field names where they match: \(existingFieldKeys.joined(separator: ", "))."
@@ -91,27 +92,35 @@ enum OnDeviceExtractionService {
         \(fieldHint)
         """
 
-        do {
-            let session = LanguageModelSession(instructions: instructions)
-            let response = try await session.respond(
-                to: "Document text:\n\(text)",
-                generating: GeneratedFieldList.self
-            )
+        while true {
+            do {
+                let session = LanguageModelSession(instructions: instructions)
+                let response = try await session.respond(
+                    to: "Document text:\n\(text)",
+                    generating: GeneratedFieldList.self
+                )
 
-            let fields = cleanedFields(response.content.fields.map { (name: $0.name, value: $0.value) })
+                let fields = cleanedFields(response.content.fields.map { (name: $0.name, value: $0.value) })
 
-            guard !fields.isEmpty else { throw ExtractionError.noContent }
-            return ExtractionResult(fields: fields, wasTruncated: wasTruncated)
-        } catch let error as LanguageModelSession.GenerationError {
-            switch error {
-            case .exceededContextWindowSize:
-                throw ExtractionError.failed("This document is too long for on-device analysis.")
-            case .guardrailViolation:
-                throw ExtractionError.failed("Apple's on-device model couldn't process this document.")
-            case .unsupportedLanguageOrLocale:
-                throw ExtractionError.failed("This document's language isn't supported for on-device analysis.")
-            default:
-                throw ExtractionError.failed("The on-device model couldn't process this document. Please try again.")
+                guard !fields.isEmpty else { throw ExtractionError.noContent }
+                return ExtractionResult(fields: fields, wasTruncated: wasTruncated)
+            } catch let error as LanguageModelSession.GenerationError {
+                switch error {
+                case .exceededContextWindowSize:
+                    // Dense text can overflow even under the character cap: halve it and retry
+                    if text.count > 500 {
+                        text = String(text.prefix(text.count / 2))
+                        wasTruncated = true
+                        continue
+                    }
+                    throw ExtractionError.failed("This document is too long for on-device analysis.")
+                case .guardrailViolation:
+                    throw ExtractionError.failed("Apple's on-device model couldn't process this document.")
+                case .unsupportedLanguageOrLocale:
+                    throw ExtractionError.failed("This document's language isn't supported for on-device analysis.")
+                default:
+                    throw ExtractionError.failed("The on-device model couldn't process this document. Please try again.")
+                }
             }
         }
     }

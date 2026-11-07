@@ -9,13 +9,14 @@
 import Foundation
 import Combine
 import LocalAuthentication
+import SwiftUI
 
 @MainActor
 final class AppLockManager: ObservableObject {
     let objectWillChange = ObservableObjectPublisher()
 
     /// How long the lock screen stays up (showing "Unlocked") after a successful auth.
-    static let unlockHoldDuration: Double = 0
+    static let unlockHoldDuration: Double = 0.5
 
     @Published var isUnlocked = false
     @Published var authError: String?
@@ -78,7 +79,9 @@ final class AppLockManager: ObservableObject {
             isAuthenticating = false
             return
         }
-        isUnlocked = true
+        withAnimation(.easeInOut(duration: 0.5)) {
+            isUnlocked = true
+        }
         didAuthenticate = false
         isAuthenticating = false
     }

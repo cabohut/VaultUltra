@@ -6,6 +6,8 @@
 //      11-05-2026 - new folders go to the private store, reordering skips shared folders
 //      11-05-2026 - deleting a folder shared with you leaves the share instead
 //      11-06-2026 - folder deletion no longer checks other folders
+//      11-06-2026 - shared-folder refresh only after a finished event, debounced
+//      11-06-2026 - share popover anchored to the button's UIView, GeometryReader removed
 //
 
 import SwiftUI
@@ -30,7 +32,6 @@ struct ContentView: View {
     @State private var isShowingNewFolderAlert = false
     @State private var newFolderName = ""
     @State private var navigationPath = NavigationPath()
-    @State private var shareButtonFrames: [NSManagedObjectID: CGRect] = [:]
     @State private var sharedFolderIDs: Set<NSManagedObjectID> = []
     @State private var foldersPendingDeletion: [Folder] = []
     
@@ -74,7 +75,12 @@ struct ContentView: View {
                .onReceive(
                    NotificationCenter.default
                        .publisher(for: NSPersistentCloudKitContainer.eventChangedNotification)
-                       .receive(on: DispatchQueue.main)
+                       .compactMap {
+                           $0.userInfo?[NSPersistentCloudKitContainer.eventNotificationUserInfoKey]
+                               as? NSPersistentCloudKitContainer.Event
+                       }
+                       .filter { $0.endDate != nil }
+                       .debounce(for: .seconds(1), scheduler: DispatchQueue.main)
                ) { _ in refreshSharedFolders() }
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
@@ -145,31 +151,13 @@ struct ContentView: View {
 
             Spacer()
 
-            Button {
-                let rect = shareButtonFrames[folder.objectID] ?? fallbackSourceRect()
+            ShareFolderButton(isShared: sharedFolderIDs.contains(folder.objectID)) { anchorView in
                 CloudSharingPresenter.present(
                     folder: folder,
                     persistentContainer: persistenceController.container,
-                    sourceRect: rect
+                    sourceView: anchorView
                 )
-            } label: {
-                let isShared = sharedFolderIDs.contains(folder.objectID)
-                Image(systemName: isShared ? "person.2.fill" : "person.crop.circle.badge.plus")
-                    .foregroundStyle(isShared ? Color.green : Color.primary)
             }
-            .accessibilityLabel(Text("Share folder"))
-            .buttonStyle(.plain)
-            .background(
-                GeometryReader { geo in
-                    Color.clear
-                        .onAppear {
-                            shareButtonFrames[folder.objectID] = geo.frame(in: .global)
-                        }
-                        .onChange(of: geo.frame(in: .global)) { _, newFrame in
-                            shareButtonFrames[folder.objectID] = newFrame
-                        }
-                }
-            )
         }
     }
 
@@ -283,13 +271,44 @@ struct ContentView: View {
         // A share with only the owner isn't really shared yet
         sharedFolderIDs = Set(shares.filter { $0.value.participants.count > 1 }.keys)
     }
-    
-    private func fallbackSourceRect() -> CGRect {
-        UIApplication.shared.connectedScenes
-            .compactMap { $0 as? UIWindowScene }
-            .first?.windows
-            .first(where: { $0.isKeyWindow })?
-            .bounds ?? CGRect(x: 0, y: 0, width: 400, height: 800)
+}
+
+// MARK: - Share button anchor
+
+private final class AnchorBox {
+    weak var view: UIView?
+}
+
+private struct AnchorView: UIViewRepresentable {
+    let box: AnchorBox
+
+    func makeUIView(context: Context) -> UIView {
+        let view = UIView()
+        view.isUserInteractionEnabled = false
+        box.view = view
+        return view
+    }
+
+    func updateUIView(_ uiView: UIView, context: Context) {
+        box.view = uiView
+    }
+}
+
+private struct ShareFolderButton: View {
+    let isShared: Bool
+    let action: (UIView?) -> Void
+    @State private var anchor = AnchorBox()
+
+    var body: some View {
+        Button {
+            action(anchor.view)
+        } label: {
+            Image(systemName: isShared ? "person.2.fill" : "person.crop.circle.badge.plus")
+                .foregroundStyle(isShared ? Color.green : Color.primary)
+        }
+        .accessibilityLabel(Text("Share folder"))
+        .buttonStyle(.plain)
+        .background(AnchorView(box: anchor))
     }
 }
 

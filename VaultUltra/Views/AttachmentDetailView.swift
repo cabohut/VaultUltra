@@ -4,6 +4,7 @@
 //
 //  Created by bugs on 7/17/26.
 //      11-05-2026 - image zoom keeps its scale between pinches, added pan and double-tap reset
+//      11-06-2026 - image decoded once instead of on every body pass
 //
 
 import SwiftUI
@@ -19,7 +20,9 @@ struct AttachmentDetailView: View {
     @State private var baseScale: CGFloat = 1.0
     @State private var offset: CGSize = .zero
     @State private var baseOffset: CGSize = .zero
-
+    @State private var image: UIImage?
+    @State private var imageLoaded = false
+    
     private static let previewRoot = FileManager.default.temporaryDirectory
         .appendingPathComponent("VaultPreview", isDirectory: true)
 
@@ -34,11 +37,6 @@ struct AttachmentDetailView: View {
         return UTType(filenameExtension: ext)?.conforms(to: .image) == true
     }
     
-    private var image: UIImage? {
-        guard let data = attachment.fileData else { return nil }
-        return UIImage(data: data)
-    }
-
     var body: some View {
         Group {
             if isImage {
@@ -53,11 +51,13 @@ struct AttachmentDetailView: View {
                             .gesture(zoomGesture)
                             .simultaneousGesture(panGesture)
                             .onTapGesture(count: 2) { resetZoom() }
-                    } else {
+                    } else if imageLoaded {
                         ContentUnavailableView(
                             "Can't Load Attachment",
                             systemImage: "exclamationmark.triangle"
                         )
+                    } else {
+                        ProgressView()
                     }
                 }
             } else if let temporaryFileURL {
@@ -69,7 +69,12 @@ struct AttachmentDetailView: View {
         .navigationTitle(attachment.fileName ?? "Attachment")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
-            if !isImage && temporaryFileURL == nil {
+            if isImage {
+                if !imageLoaded {
+                    image = attachment.fileData.flatMap { UIImage(data: $0) }
+                    imageLoaded = true
+                }
+            } else if temporaryFileURL == nil {
                 writeTemporaryFile()
             }
         }

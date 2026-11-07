@@ -4,6 +4,8 @@
 //
 //  Created by bugs on 7/22/26.
 //      10-30-2026 - updated to fix sharing and to use a new sharing dialogue sheet
+//      11-06-2026 - popover anchors to the tapped button's view
+//
 
 import UIKit
 import CloudKit
@@ -15,7 +17,7 @@ enum CloudSharingPresenter {
     static func present(
         folder: Folder,
         persistentContainer: NSPersistentCloudKitContainer,
-        sourceRect: CGRect
+        sourceView: UIView?
     ) {
         guard let windowScene = UIApplication.shared.connectedScenes
             .compactMap({ $0 as? UIWindowScene })
@@ -74,8 +76,18 @@ enum CloudSharingPresenter {
 
         sharingController.modalPresentationStyle = .popover
         if let popover = sharingController.popoverPresentationController {
-            popover.sourceView = presenter.view
-            popover.sourceRect = sourceRect
+            if let sourceView {
+                popover.sourceView = sourceView
+                popover.sourceRect = sourceView.bounds
+            } else {
+                popover.sourceView = presenter.view
+                popover.sourceRect = CGRect(
+                    x: presenter.view.bounds.midX,
+                    y: presenter.view.bounds.midY,
+                    width: 0,
+                    height: 0
+                )
+            }
             popover.delegate = sharingCoordinator
         }
 

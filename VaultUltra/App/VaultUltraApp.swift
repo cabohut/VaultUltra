@@ -42,8 +42,8 @@ struct VaultApp: App {
 
                 if !lockManager.isUnlocked {
                     LockScreenView(lockManager: lockManager)
-                        .background(.ultraThinMaterial)
                         .transition(.opacity)
+                        .zIndex(1)
                 }
                 
                 if showPrivacyCover && lockManager.isUnlocked {
@@ -70,7 +70,7 @@ struct VaultApp: App {
                 if newPhase != .active {
                     DebouncedSave.flush(PersistenceController.shared.container.viewContext)
                 }
-                showPrivacyCover = (newPhase != .active)
+                showPrivacyCover = (newPhase != .active) && lockManager.isUnlocked
                 if newPhase == .background {
                     lockManager.lock()
                 }

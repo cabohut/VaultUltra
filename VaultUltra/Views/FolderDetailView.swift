@@ -6,6 +6,7 @@
 //      10-30-2026 - updated to delete items with blank entries and them to suggested list
 //      11-04-2026 - cleanup logic moved to ItemCleanup
 //      11-06-2026 - item.folder replaces addToFolders
+//      11-06-2026 - items come from a folder-filtered fetch, sorted once per render
 //
 
 import SwiftUI
@@ -17,11 +18,21 @@ struct FolderDetailView: View {
     @EnvironmentObject private var persistenceController: PersistenceController
     @ObservedObject var folder: Folder
     @Binding var navigationPath: NavigationPath
-
+    @FetchRequest private var fetchedItems: FetchedResults<Item>
+    
     @State private var isShowingNewItemSheet = false
     @State private var newItemRecords: [NewItemRecord] = []
     @State private var itemPendingDeletion: Item?
 
+    init(folder: Folder, navigationPath: Binding<NavigationPath>) {
+        self.folder = folder
+        self._navigationPath = navigationPath
+        _fetchedItems = FetchRequest(
+            sortDescriptors: [NSSortDescriptor(keyPath: \Item.title, ascending: true)],
+            predicate: NSPredicate(format: "folder == %@", folder)
+        )
+    }
+    
     private struct NewItemRecord {
         let objectID: NSManagedObjectID
         let folder: Folder
@@ -29,8 +40,7 @@ struct FolderDetailView: View {
     }
 
     private var items: [Item] {
-        let set = folder.items as? Set<Item> ?? []
-        return set.sorted {
+        fetchedItems.sorted {
             let t0 = ($0.itemType ?? "").isEmpty ? "\u{FFFF}" : ($0.itemType ?? "")
             let t1 = ($1.itemType ?? "").isEmpty ? "\u{FFFF}" : ($1.itemType ?? "")
             if t0 != t1 { return t0 < t1 }
@@ -53,6 +63,7 @@ struct FolderDetailView: View {
     }
 
     var body: some View {
+        let items = self.items
         List {
             if !items.isEmpty {
                 Section("My Documents") {

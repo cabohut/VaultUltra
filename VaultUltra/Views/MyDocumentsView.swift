@@ -3,6 +3,7 @@
 //  VaultUltra
 //
 //  Created by bugs on 11/5/26.
+//      11-06-2026 - items come from a folder-filtered fetch, sorted once per render
 //
 
 import SwiftUI
@@ -14,10 +15,13 @@ struct MyDocumentsView: View {
         animation: .default)
     private var folders: FetchedResults<Folder>
 
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Item.createdDate, ascending: true)])
+    private var allItems: FetchedResults<Item>
+    
     @State private var navigationPath = NavigationPath()
 
     private var hasAnyItems: Bool {
-        folders.contains { !(($0.items as? Set<Item>) ?? []).isEmpty }
+        allItems.contains { $0.folder != nil }
     }
 
     var body: some View {
@@ -50,7 +54,17 @@ struct MyDocumentsView: View {
 private struct DocumentsFolderSection: View {
     @ObservedObject var folder: Folder
     @Binding var navigationPath: NavigationPath
+    @FetchRequest private var fetchedItems: FetchedResults<Item>
 
+    init(folder: Folder, navigationPath: Binding<NavigationPath>) {
+        self.folder = folder
+        self._navigationPath = navigationPath
+        _fetchedItems = FetchRequest(
+            sortDescriptors: [NSSortDescriptor(keyPath: \Item.title, ascending: true)],
+            predicate: NSPredicate(format: "folder == %@", folder)
+        )
+    }
+    
     private var items: [Item] {
         let set = folder.items as? Set<Item> ?? []
         return set.sorted {
