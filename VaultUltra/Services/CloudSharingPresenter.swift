@@ -8,6 +8,7 @@
 //      11-06-2026 - share is created first with a spinner, controller always opens on the existing-share path
 //      11-06-2026 - share() now runs on a background context
 //      11-06-2026 - busy spinner is now a presented view controller
+//      11-06-2026 - AppFolder thumbnail written onto the CKShare for folder sharing
 //
 
 import UIKit
@@ -35,7 +36,7 @@ enum CloudSharingPresenter {
         }
 
         let folderTitle = folder.name ?? "Vault Folder"
-        let thumbnailData = UIImage(named: "ShareThumbnail")?.pngData()
+        let thumbnailData = UIImage(named: "AppFolder")?.pngData()
 
         // Already shared: open straight away
         if let existingShare = SharingService.existingShare(for: folder, in: persistentContainer) {
@@ -62,6 +63,7 @@ enum CloudSharingPresenter {
         busyPresenter.present(busy, animated: false)
 
         let folderID = folder.objectID
+        let shareStore = folder.objectID.persistentStore
         let backgroundContext = persistentContainer.newBackgroundContext()
 
         func finish(share: CKShare?, container: CKContainer?, error: Error?) {
@@ -104,8 +106,26 @@ enum CloudSharingPresenter {
 
             persistentContainer.share([backgroundFolder], to: nil) { _, share, container, error in
                 withExtendedLifetime(backgroundContext) {}
-                DispatchQueue.main.async {
-                    finish(share: share, container: container, error: error)
+
+                guard error == nil, let share, let container, let shareStore else {
+                    DispatchQueue.main.async {
+                        finish(share: share, container: container, error: error)
+                    }
+                    return
+                }
+
+                share[CKShare.SystemFieldKey.title] = folderTitle as CKRecordValue
+                if let thumbnailData {
+                    share[CKShare.SystemFieldKey.thumbnailImageData] = thumbnailData as CKRecordValue
+                }
+
+                persistentContainer.persistUpdatedShare(share, in: shareStore) { updated, persistError in
+                    DispatchQueue.main.async {
+                        if let persistError {
+                            print("Failed to persist share metadata: \(persistError)")
+                        }
+                        finish(share: updated ?? share, container: container, error: nil)
+                    }
                 }
             }
         }
