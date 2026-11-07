@@ -5,6 +5,9 @@
 //  Created by bugs on 7/22/26.
 //      10-30-2026 - updated to fix sharing and to use a new sharing dialogue sheet
 //      11-06-2026 - popover anchors to the tapped button's view
+//      11-06-2026 - share is created first with a spinner, controller always opens on the existing-share path
+//      11-06-2026 - share() now runs on a background context
+//      11-06-2026 - busy spinner is now a presented view controller
 //
 
 import UIKit
@@ -13,12 +16,15 @@ import CoreData
 
 enum CloudSharingPresenter {
     private static var coordinator: Coordinator?
+    private static var isPreparing = false
 
     static func present(
         folder: Folder,
         persistentContainer: NSPersistentCloudKitContainer,
         sourceView: UIView?
     ) {
+        guard !isPreparing else { return }
+
         guard let windowScene = UIApplication.shared.connectedScenes
             .compactMap({ $0 as? UIWindowScene })
             .first,
@@ -31,39 +37,93 @@ enum CloudSharingPresenter {
         let folderTitle = folder.name ?? "Vault Folder"
         let thumbnailData = UIImage(named: "ShareThumbnail")?.pngData()
 
-        let sharingController: UICloudSharingController
-
+        // Already shared: open straight away
         if let existingShare = SharingService.existingShare(for: folder, in: persistentContainer) {
-            let containerID = persistentContainer.persistentStoreDescriptions.first?.cloudKitContainerOptions?.containerIdentifier ?? ""
-            let ckContainer = CKContainer(identifier: containerID)
-            sharingController = UICloudSharingController(share: existingShare, container: ckContainer)
-        } else {
-            sharingController = UICloudSharingController { _, completion in
-                persistentContainer.share([folder], to: nil) { _, share, container, error in
-                    DispatchQueue.main.async {
-                        if let error {
-                            completion(nil, nil, error)
-                            return
-                        }
-                        guard let share, let container else {
-                            completion(nil, nil, NSError(
-                                domain: "SharingService",
-                                code: -1,
-                                userInfo: [NSLocalizedDescriptionKey: "No share returned"]
-                            ))
-                            return
-                        }
-                        share[CKShare.SystemFieldKey.title] = folderTitle as CKRecordValue
-                        if let thumbnailData {
-                            share[CKShare.SystemFieldKey.thumbnailImageData] = thumbnailData as CKRecordValue
-                        }
-                        completion(share, container, nil)
-                    }
+            let containerID = persistentContainer.persistentStoreDescriptions.first?
+                .cloudKitContainerOptions?.containerIdentifier ?? ""
+            show(
+                share: existingShare,
+                container: CKContainer(identifier: containerID),
+                title: folderTitle,
+                thumbnailData: thumbnailData,
+                sourceView: sourceView,
+                from: rootViewController
+            )
+            return
+        }
+
+        // Not shared yet: create the share first, then open the controller on it
+        isPreparing = true
+        let busy = makeBusyController()
+        var busyPresenter = rootViewController
+        while let presented = busyPresenter.presentedViewController {
+            busyPresenter = presented
+        }
+        busyPresenter.present(busy, animated: false)
+
+        let folderID = folder.objectID
+        let backgroundContext = persistentContainer.newBackgroundContext()
+
+        func finish(share: CKShare?, container: CKContainer?, error: Error?) {
+            busy.dismiss(animated: false) {
+                isPreparing = false
+
+                if let error {
+                    print("Failed to create share: \(error)")
+                    showError(error.localizedDescription, from: rootViewController)
+                    return
                 }
+                guard let share, let container else {
+                    print("Share creation returned no share")
+                    showError("Couldn't create the share. Please try again.", from: rootViewController)
+                    return
+                }
+
+                show(
+                    share: share,
+                    container: container,
+                    title: folderTitle,
+                    thumbnailData: thumbnailData,
+                    sourceView: sourceView,
+                    from: rootViewController
+                )
             }
         }
 
-        let sharingCoordinator = Coordinator(title: folderTitle, thumbnailData: thumbnailData)
+        backgroundContext.perform {
+            guard let backgroundFolder = try? backgroundContext.existingObject(with: folderID) as? Folder else {
+                DispatchQueue.main.async {
+                    finish(share: nil, container: nil, error: NSError(
+                        domain: "SharingService",
+                        code: -2,
+                        userInfo: [NSLocalizedDescriptionKey: "Couldn't find this folder to share."]
+                    ))
+                }
+                return
+            }
+
+            persistentContainer.share([backgroundFolder], to: nil) { _, share, container, error in
+                withExtendedLifetime(backgroundContext) {}
+                DispatchQueue.main.async {
+                    finish(share: share, container: container, error: error)
+                }
+            }
+        }
+    }
+
+    // MARK: - Presenting
+
+    private static func show(
+        share: CKShare,
+        container: CKContainer,
+        title: String,
+        thumbnailData: Data?,
+        sourceView: UIView?,
+        from rootViewController: UIViewController
+    ) {
+        let sharingController = UICloudSharingController(share: share, container: container)
+
+        let sharingCoordinator = Coordinator(title: title, thumbnailData: thumbnailData)
         coordinator = sharingCoordinator
 
         sharingController.delegate = sharingCoordinator
@@ -93,6 +153,41 @@ enum CloudSharingPresenter {
 
         presenter.present(sharingController, animated: true)
     }
+
+    // MARK: - Busy screen and errors
+    private static func makeBusyController() -> UIViewController {
+        let vc = UIViewController()
+        vc.modalPresentationStyle = .overFullScreen
+        vc.view.backgroundColor = UIColor.black.withAlphaComponent(0.15)
+
+        let box = UIVisualEffectView(effect: UIBlurEffect(style: .systemMaterial))
+        box.layer.cornerRadius = 14
+        box.clipsToBounds = true
+        box.frame = CGRect(x: 0, y: 0, width: 88, height: 88)
+        box.center = CGPoint(x: vc.view.bounds.midX, y: vc.view.bounds.midY)
+        box.autoresizingMask = [.flexibleTopMargin, .flexibleBottomMargin,
+                                .flexibleLeftMargin, .flexibleRightMargin]
+
+        let spinner = UIActivityIndicatorView(style: .large)
+        spinner.center = CGPoint(x: box.bounds.midX, y: box.bounds.midY)
+        spinner.startAnimating()
+
+        box.contentView.addSubview(spinner)
+        vc.view.addSubview(box)
+        return vc
+    }
+
+    private static func showError(_ message: String, from rootViewController: UIViewController) {
+        var presenter = rootViewController
+        while let presented = presenter.presentedViewController {
+            presenter = presented
+        }
+        let alert = UIAlertController(title: "Sharing Failed", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+        presenter.present(alert, animated: true)
+    }
+
+    // MARK: - Delegate
 
     class Coordinator: NSObject, UICloudSharingControllerDelegate, UIPopoverPresentationControllerDelegate {
         private let title: String
